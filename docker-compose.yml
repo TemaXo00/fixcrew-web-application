@@ -1,0 +1,109 @@
+services:
+  redis:
+    image: redis:8.6.1-alpine
+    container_name: fixcrew-redis
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - backend
+
+  minio:
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    container_name: fixcrew-minio
+    ports:
+      - "${MINIO_API_PORT}:9000"
+      - "${MINIO_UI_PORT}:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+    networks:
+      - storage
+      - backend
+
+  ui-main:
+    build:
+      context: .
+      dockerfile: ./docker-files/UiMain.Dockerfile
+      args:
+        UI_MAIN_PATH: ${UI_MAIN_PATH}
+    container_name: fixcrew-ui-main
+    ports:
+      - "${UI_MAIN_PORT}:5173"
+    volumes:
+      - ./ui/fixcrew-main:/app/
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - frontend
+      - backend
+
+  ui-admin:
+    build:
+      context: .
+      dockerfile: ./docker-files/UiAdmin.Dockerfile
+      args:
+        UI_ADMIN_PATH: ${UI_ADMIN_PATH}
+    container_name: fixcrew-ui-admin
+    ports:
+      - "${UI_ADMIN_PORT}:5173"
+    volumes:
+      - ./ui/fixcrew-admin:/app/
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - frontend
+      - backend
+
+  api_gateway:
+    build:
+      context: .
+      dockerfile: ./docker-files/ServicesGateaway.Dockerfile
+      args:
+        GATEWAY_PATH: ${GATEWAY_PATH}
+    container_name: fixcrew-gateway
+    ports:
+      - "${GATEWAY_PORT}:3000"
+    volumes:
+      - ./backend/gateway:/app/
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - backend
+
+  file-service:
+    build:
+      context: .
+      dockerfile: ./docker-files/FileService.Dockerfile
+      args:
+        FILE_SERVICE_PATH: ${FILE_SERVICE_PATH}
+    container_name: fixcrew-file-service
+    ports:
+      - "${FILE_SERVICE_PORT}:3000"
+    volumes:
+      - ./backend/file-service:/app/
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - backend
+      - storage
+
+networks:
+  frontend:
+  backend:
+  storage:
+  monitoring:
+
+volumes:
+  redis_data:
+  minio_data:
+  prometheus_data:
+  netdata_config:
+  netdata_lib:
