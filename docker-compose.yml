@@ -99,11 +99,7 @@ networks:
   frontend:
   backend:
   storage:
-  monitoring:
 
 volumes:
   redis_data:
   minio_data:
-  prometheus_data:
-  netdata_config:
-  netdata_lib:
