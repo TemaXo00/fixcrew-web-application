@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import TopHeader from "@/components/TopHeader.vue";
+</script>
 
 <template>
-  <h1 class="text-center text-3xl">FixCrew-Main</h1>
+  <TopHeader />
 </template>
 
 <style scoped></style>

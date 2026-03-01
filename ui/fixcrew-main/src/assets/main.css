@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@theme {
+  --color-muted: #2B9AB0;
+  --color-main: #00B4D8;
+
+  --font-sans: 'Inter', sans-serif;
+}
+/*.section__request-wrapper {*/
+/*  max-width: 1440px;*/
+/*  margin: 0 auto;*/
+/*  padding: 100px 195px 80px;*/
+/*  text-align: center;*/
+/*}*/
+
+/*.section__request {*/
+/*  background-image: url("../assets/back.png");*/
+/*  width: 100vw;*/
+/*  margin-left: calc(50% - 50vw);*/
+/*  background-repeat: no-repeat;*/
+/*  background-size: cover;*/
+/*  background-position: center;*/
+/*}*/
