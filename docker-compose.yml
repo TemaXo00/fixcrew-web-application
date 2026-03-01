@@ -28,6 +28,69 @@ services:
       - storage
       - backend
 
+  grafana:
+    image: grafana/grafana-oss:12.4.0
+    container_name: fixcrew-grafana
+    ports:
+      - "${GF_PORT}:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GF_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_ADMIN_PASSWORD}
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+      - loki
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v3.10.0
+    container_name: fixcrew-prometheus
+    ports:
+      - "${PROM_PORT}:9090"
+    env_file:
+      - .env
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  loki:
+    image: grafana/loki:main-d36987e
+    container_name: fixcrew-loki
+    ports:
+      - "${LOKI_PORT}:3100"
+    env_file:
+      - .env
+    command: -config.file=/etc/loki/loki-config.yml
+    volumes:
+      - ./config/loki-config.yml:/etc/loki/loki-config.yml
+      - loki-data:/loki
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:main-d36987e
+    container_name: fixcrew-promtail
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - monitoring
+    restart: unless-stopped
+
   ui-main:
     build:
       context: .
@@ -99,7 +162,11 @@ networks:
   frontend:
   backend:
   storage:
+  monitoring:
 
 volumes:
   redis_data:
   minio_data:
+  grafana-data:
+  prometheus-data:
+  loki-data:
