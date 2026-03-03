@@ -1,0 +1,13 @@
+FROM node:25-alpine
+
+WORKDIR /app
+
+ARG GATEWAY_SERVICE_PATH
+
+COPY ${GATEWAY_SERVICE_PATH}/package*.json ./
+RUN npm ci
+
+COPY ${GATEWAY_SERVICE_PATH}/ .
+
+EXPOSE 3000
+CMD sh -c "npm run start:dev"

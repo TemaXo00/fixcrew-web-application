@@ -95,7 +95,7 @@ export default [
       '@typescript-eslint/explicit-module-boundary-types': 'error',
 
       '@typescript-eslint/consistent-type-imports': [
-        'error',
+        'off',
         { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
       ],
 

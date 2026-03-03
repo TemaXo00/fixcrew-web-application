@@ -19,10 +19,11 @@ Thumbs.db
 .editorconfig
 .gitattributes
 .oxlintrc.json
-eslint.config.mjs
+eslint..c.onfig.mjs
 eslint.config.ts
 README.md
 
+.nx/
 .git/
 *.md
 LICENSE

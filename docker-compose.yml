@@ -2,11 +2,9 @@ services:
   redis:
     image: redis:8.6.1-alpine
     container_name: fixcrew-redis
-    ports:
-      - "${REDIS_PORT}:6379"
     volumes:
       - redis_data:/data
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly yes --maxmemory-policy allkeys-lru
     restart: unless-stopped
     networks:
       - backend
@@ -28,6 +26,47 @@ services:
       - storage
       - backend
 
+  prometheus:
+    image: prom/prometheus:v3.10.0
+    container_name: fixcrew-prometheus
+    ports:
+      - "${PROM_PORT}:9090"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+    networks:
+      - monitoring
+
+  loki:
+    image: grafana/loki:main-d36987e
+    container_name: fixcrew-loki
+    ports:
+      - "${LOKI_PORT}:3100"
+    command: -config.file=/etc/loki/loki-config.yml
+    volumes:
+      - ./config/loki-config.yml:/etc/loki/loki-config.yml:ro
+      - loki-data:/loki
+    restart: unless-stopped
+    networks:
+      - monitoring
+
+  promtail:
+    image: grafana/promtail:main-d36987e
+    container_name: fixcrew-promtail
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/promtail-config.yml:/etc/promtail/config.yml:ro
+    command: -config.file=/etc/promtail/config.yml
+    restart: unless-stopped
+    networks:
+      - monitoring
+    depends_on:
+      - loki
+
   grafana:
     image: grafana/grafana-oss:12.4.0
     container_name: fixcrew-grafana
@@ -41,55 +80,12 @@ services:
       GF_PLUGINS_PREINSTALL_DISABLED: "true"
     volumes:
       - grafana-data:/var/lib/grafana
+    restart: unless-stopped
     networks:
       - monitoring
     depends_on:
       - prometheus
       - loki
-    restart: unless-stopped
-
-  prometheus:
-    image: prom/prometheus:v3.10.0
-    container_name: fixcrew-prometheus
-    ports:
-      - "${PROM_PORT}:9090"
-    env_file:
-      - .env
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-    volumes:
-      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus-data:/prometheus
-    networks:
-      - monitoring
-    restart: unless-stopped
-
-  loki:
-    image: grafana/loki:main-d36987e
-    container_name: fixcrew-loki
-    ports:
-      - "${LOKI_PORT}:3100"
-    env_file:
-      - .env
-    command: -config.file=/etc/loki/loki-config.yml
-    volumes:
-      - ./config/loki-config.yml:/etc/loki/loki-config.yml
-      - loki-data:/loki
-    networks:
-      - monitoring
-    restart: unless-stopped
-
-  promtail:
-    image: grafana/promtail:main-d36987e
-    container_name: fixcrew-promtail
-    volumes:
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./config/promtail-config.yml:/etc/promtail/config.yml
-    command: -config.file=/etc/promtail/config.yml
-    networks:
-      - monitoring
-    restart: unless-stopped
 
   ui-main:
     build:
@@ -101,12 +97,11 @@ services:
     ports:
       - "${UI_MAIN_PORT}:5173"
     volumes:
-      - ./ui/fixcrew-main:/app/
+      - ./ui/fixcrew-main:/app
       - /app/node_modules
     restart: unless-stopped
     networks:
       - frontend
-      - backend
 
   ui-admin:
     build:
@@ -118,28 +113,64 @@ services:
     ports:
       - "${UI_ADMIN_PORT}:5173"
     volumes:
-      - ./ui/fixcrew-admin:/app/
+      - ./ui/fixcrew-admin:/app
       - /app/node_modules
     restart: unless-stopped
     networks:
       - frontend
-      - backend
 
-  api_gateway:
+  gateway-service:
     build:
       context: .
-      dockerfile: ./docker-files/ServicesGateaway.Dockerfile
+      dockerfile: ./docker-files/GatewayService.Dockerfile
       args:
-        GATEWAY_PATH: ${GATEWAY_PATH}
+        GATEWAY_SERVICE_PATH: ${GATEWAY_SERVICE_PATH}
     container_name: fixcrew-gateway
     ports:
-      - "${GATEWAY_PORT}:3000"
+      - "${GATEWAY_SERVICE_PORT}:3000"
     volumes:
-      - ./backend/gateway:/app/
+      - ./backend/gateway-service:/app
       - /app/node_modules
     restart: unless-stopped
     networks:
       - backend
+      - frontend
+    depends_on:
+      - redis
+      - file-service
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: ./docker-files/AuthService.Dockerfile
+      args:
+        AUTH_SERVICE_PATH: ${AUTH_SERVICE_PATH}
+    container_name: fixcrew-auth-service
+    volumes:
+      - ./backend/auth-service:/app
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - backend
+    depends_on:
+      - redis
+
+  blog-service:
+    build:
+      context: .
+      dockerfile: ./docker-files/BlogService.Dockerfile
+      args:
+        BLOG_SERVICE_PATH: ${BLOG_SERVICE_PATH}
+    container_name: fixcrew-blog-service
+    volumes:
+      - ./backend/blog-service:/app
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - backend
+      - storage
+    depends_on:
+      - redis
 
   file-service:
     build:
@@ -148,21 +179,90 @@ services:
       args:
         FILE_SERVICE_PATH: ${FILE_SERVICE_PATH}
     container_name: fixcrew-file-service
-    ports:
-      - "${FILE_SERVICE_PORT}:3000"
     volumes:
-      - ./backend/file-service:/app/
+      - ./backend/file-service:/app
       - /app/node_modules
     restart: unless-stopped
     networks:
       - backend
       - storage
+    depends_on:
+      - redis
+      - minio
+
+  info-service:
+    build:
+      context: .
+      dockerfile: ./docker-files/InfoService.Dockerfile
+      args:
+        INFO_SERVICE_PATH: ${INFO_SERVICE_PATH}
+    container_name: fixcrew-info-service
+    volumes:
+      - ./backend/info-service:/app
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - backend
+    depends_on:
+      - redis
+
+  mail-service:
+    build:
+      context: .
+      dockerfile: ./docker-files/MailService.Dockerfile
+      args:
+        MAIL_SERVICE_PATH: ${MAIL_SERVICE_PATH}
+    container_name: fixcrew-mail-service
+    volumes:
+      - ./backend/mail-service:/app
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - backend
+    depends_on:
+      - redis
+
+  order-service:
+    build:
+      context: .
+      dockerfile: ./docker-files/OrderService.Dockerfile
+      args:
+        ORDER_SERVICE_PATH: ${ORDER_SERVICE_PATH}
+    container_name: fixcrew-order-service
+    volumes:
+      - ./backend/order-service:/app
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - backend
+    depends_on:
+      - redis
+
+  user-service:
+    build:
+      context: .
+      dockerfile: ./docker-files/UserService.Dockerfile
+      args:
+        USER_SERVICE_PATH: ${USER_SERVICE_PATH}
+    container_name: fixcrew-user-service
+    volumes:
+      - ./backend/user-service:/app
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - backend
+    depends_on:
+      - redis
 
 networks:
   frontend:
+    driver: bridge
   backend:
+    driver: bridge
   storage:
+    driver: bridge
   monitoring:
+    driver: bridge
 
 volumes:
   redis_data:
