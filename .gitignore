@@ -21,3 +21,4 @@ coverage/
 tmp/
 temp/
 .cache/
+docker-compose-*.yml
