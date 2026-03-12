@@ -9,5 +9,7 @@ RUN npm ci
 
 COPY ${AUTH_SERVICE_PATH}/ .
 
+RUN npx prisma generate
+
 EXPOSE 3000
-CMD sh -c "npm run start:dev"
+CMD ["npm", "run", "start:dev"]

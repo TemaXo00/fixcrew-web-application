@@ -135,9 +135,6 @@ services:
     networks:
       - backend
       - frontend
-    depends_on:
-      - redis
-      - file-service
 
   auth-service:
     build:
@@ -146,6 +143,8 @@ services:
       args:
         AUTH_SERVICE_PATH: ${AUTH_SERVICE_PATH}
     container_name: fixcrew-auth-service
+    environment:
+      DATABASE_URL: ${AUTH_DB_URL}
     volumes:
       - ./backend/auth-service:/app
       - /app/node_modules
@@ -254,6 +253,24 @@ services:
     depends_on:
       - redis
 
+  auth_db:
+    image: postgres:18.3-alpine
+    container_name: fixcrew-auth_db
+    environment:
+      POSTGRES_USER: ${AUTH_DB_USER}
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD}
+      POSTGRES_DB: ${AUTH_DB_NAME}
+    volumes:
+      - auth_data:/var/lib/postgresql/
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${AUTH_DB_USER} -d ${AUTH_DB_NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+
 networks:
   frontend:
     driver: bridge
@@ -270,3 +287,5 @@ volumes:
   grafana-data:
   prometheus-data:
   loki-data:
+
+  auth_data:
