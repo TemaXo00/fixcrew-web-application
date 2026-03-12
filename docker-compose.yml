@@ -39,6 +39,7 @@ services:
     restart: unless-stopped
     networks:
       - monitoring
+      - backend
 
   loki:
     image: grafana/loki:main-d36987e
@@ -94,6 +95,8 @@ services:
       args:
         UI_MAIN_PATH: ${UI_MAIN_PATH}
     container_name: fixcrew-ui-main
+    environment:
+      GATEWAY_PORT: ${GATEWAY_PORT}
     ports:
       - "${UI_MAIN_PORT}:5173"
     volumes:
@@ -110,6 +113,8 @@ services:
       args:
         UI_ADMIN_PATH: ${UI_ADMIN_PATH}
     container_name: fixcrew-ui-admin
+    environment:
+      GATEWAY_PORT: ${GATEWAY_PORT}
     ports:
       - "${UI_ADMIN_PORT}:5173"
     volumes:
@@ -126,6 +131,8 @@ services:
       args:
         GATEWAY_SERVICE_PATH: ${GATEWAY_SERVICE_PATH}
     container_name: fixcrew-gateway
+    environment:
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
     ports:
       - "${GATEWAY_SERVICE_PORT}:3000"
     volumes:
@@ -244,8 +251,6 @@ services:
       POSTGRES_USER: ${USER_DB_USER}
       POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
       POSTGRES_DB: ${USER_DB_NAME}
-    ports:
-      - "3001:3000"
     volumes:
       - user_data:/var/lib/postgresql/
     healthcheck:
