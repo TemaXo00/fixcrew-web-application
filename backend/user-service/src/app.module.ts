@@ -5,6 +5,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { LoggerModule } from 'nestjs-pino';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { LoggerModule } from 'nestjs-pino';
     }),
     PrismaModule,
     AuthModule,
+    RedisModule,
   ],
   controllers: [],
   providers: [],

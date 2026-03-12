@@ -4,7 +4,10 @@ services:
     container_name: fixcrew-redis
     volumes:
       - redis_data:/data
-    command: redis-server --appendonly yes --maxmemory-policy allkeys-lru
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory-policy allkeys-lru
     restart: unless-stopped
     networks:
       - backend
@@ -235,6 +238,9 @@ services:
     container_name: fixcrew-user-service
     environment:
       DATABASE_URL: ${USER_DB_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_TTL: ${REDIS_TTL}
     volumes:
       - ./backend/user-service:/app
       - /app/node_modules
