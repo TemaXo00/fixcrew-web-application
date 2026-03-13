@@ -9,7 +9,7 @@ async function bootstrap() {
 
   const rabbitUser = configService.get<string>('RABBIT_MQ_USER');
   const rabbitPass = configService.get<string>('RABBIT_MQ_PASSWORD');
-  const rabbitHost = configService.get<string>('rabbitmq');
+  const rabbitHost = 'rabbitmq';
   const mailQueue = configService.get<string>('MAIL_QUEUE');
 
   app.connectMicroservice<MicroserviceOptions>({
