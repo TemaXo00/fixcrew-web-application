@@ -23,3 +23,4 @@ temp/
 .cache/
 docker-compose-*.yml
 backend/*/prisma/generated/
+.nx/
