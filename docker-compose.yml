@@ -11,6 +11,11 @@ services:
     restart: unless-stopped
     networks:
       - backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   minio:
     image: minio/minio:RELEASE.2025-09-07T16-13-09Z
@@ -28,6 +33,11 @@ services:
     networks:
       - storage
       - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   prometheus:
     image: prom/prometheus:v3.10.0
@@ -70,6 +80,20 @@ services:
       - monitoring
     depends_on:
       - loki
+
+  rabbitmq:
+    image: rabbitmq:4.2.4-alpine
+    container_name: fixcrew-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBIT_MQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_MQ_PASSWORD}
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   grafana:
     image: grafana/grafana-oss:12.4.0
@@ -146,6 +170,91 @@ services:
       - backend
       - frontend
 
+  user-db:
+    image: postgres:18.3-alpine
+    container_name: fixcrew-user-db
+    environment:
+      POSTGRES_USER: ${USER_DB_USER}
+      POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
+      POSTGRES_DB: ${USER_DB_NAME}
+    volumes:
+      - user_data:/var/lib/postgresql
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${USER_DB_USER} -d ${USER_DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  blog-db:
+    image: postgres:18.3-alpine
+    container_name: fixcrew-blog-db
+    environment:
+      POSTGRES_USER: ${BLOG_DB_USER}
+      POSTGRES_PASSWORD: ${BLOG_DB_PASSWORD}
+      POSTGRES_DB: ${BLOG_DB_NAME}
+    volumes:
+      - blog_data:/var/lib/postgresql
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${BLOG_DB_USER} -d ${BLOG_DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  info-db:
+    image: postgres:18.3-alpine
+    container_name: fixcrew-info-db
+    environment:
+      POSTGRES_USER: ${INFO_DB_USER}
+      POSTGRES_PASSWORD: ${INFO_DB_PASSWORD}
+      POSTGRES_DB: ${INFO_DB_NAME}
+    volumes:
+      - info_data:/var/lib/postgresql
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${INFO_DB_USER} -d ${INFO_DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  order-db:
+    image: postgres:18.3-alpine
+    container_name: fixcrew-order-db
+    environment:
+      POSTGRES_USER: ${ORDER_DB_USER}
+      POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD}
+      POSTGRES_DB: ${ORDER_DB_NAME}
+    volumes:
+      - order_data:/var/lib/postgresql
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${ORDER_DB_USER} -d ${ORDER_DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  file-db:
+    image: postgres:18.3-alpine
+    container_name: fixcrew-file-db
+    environment:
+      POSTGRES_USER: ${FILE_DB_USER}
+      POSTGRES_PASSWORD: ${FILE_DB_PASSWORD}
+      POSTGRES_DB: ${FILE_DB_NAME}
+    volumes:
+      - file_data:/var/lib/postgresql
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${FILE_DB_USER} -d ${FILE_DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   blog-service:
     build:
       context: .
@@ -153,6 +262,14 @@ services:
       args:
         BLOG_SERVICE_PATH: ${BLOG_SERVICE_PATH}
     container_name: fixcrew-blog-service
+    environment:
+      DATABASE_URL: ${BLOG_DB_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_TTL: ${REDIS_TTL}
+      RABBIT_MQ_USER: ${RABBIT_MQ_USER}
+      RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
+      BLOG_QUEUE: ${BLOG_QUEUE}
     volumes:
       - ./backend/blog-service:/app
       - /app/node_modules
@@ -162,6 +279,8 @@ services:
       - storage
     depends_on:
       - redis
+      - rabbitmq
+      - blog-db
 
   file-service:
     build:
@@ -170,6 +289,16 @@ services:
       args:
         FILE_SERVICE_PATH: ${FILE_SERVICE_PATH}
     container_name: fixcrew-file-service
+    environment:
+      DATABASE_URL: ${FILE_DB_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_TTL: ${REDIS_TTL}
+      RABBIT_MQ_USER: ${RABBIT_MQ_USER}
+      RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
+      FILE_QUEUE: ${FILE_QUEUE}
+      MINIO_API_PORT: ${MINIO_API_PORT}
+      MINIO_UI_PORT: ${MINIO_UI_PORT}
     volumes:
       - ./backend/file-service:/app
       - /app/node_modules
@@ -180,6 +309,8 @@ services:
     depends_on:
       - redis
       - minio
+      - rabbitmq
+      - file-db
 
   info-service:
     build:
@@ -188,6 +319,14 @@ services:
       args:
         INFO_SERVICE_PATH: ${INFO_SERVICE_PATH}
     container_name: fixcrew-info-service
+    environment:
+      DATABASE_URL: ${INFO_DB_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_TTL: ${REDIS_TTL}
+      RABBIT_MQ_USER: ${RABBIT_MQ_USER}
+      RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
+      INFO_QUEUE: ${INFO_QUEUE}
     volumes:
       - ./backend/info-service:/app
       - /app/node_modules
@@ -196,6 +335,8 @@ services:
       - backend
     depends_on:
       - redis
+      - rabbitmq
+      - info-db
 
   mail-service:
     build:
@@ -207,6 +348,9 @@ services:
     environment:
       MAIL_USER: ${MAIL_USER}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
+      RABBIT_MQ_USER: ${RABBIT_MQ_USER}
+      RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
+      MAIL_QUEUE: ${MAIL_QUEUE}
     volumes:
       - ./backend/mail-service:/app
       - /app/node_modules
@@ -215,6 +359,7 @@ services:
       - backend
     depends_on:
       - redis
+      - rabbitmq
 
   order-service:
     build:
@@ -223,6 +368,14 @@ services:
       args:
         ORDER_SERVICE_PATH: ${ORDER_SERVICE_PATH}
     container_name: fixcrew-order-service
+    environment:
+      DATABASE_URL: ${ORDER_DB_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_TTL: ${REDIS_TTL}
+      RABBIT_MQ_USER: ${RABBIT_MQ_USER}
+      RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
+      ORDER_QUEUE: ${ORDER_QUEUE}
     volumes:
       - ./backend/order-service:/app
       - /app/node_modules
@@ -231,6 +384,8 @@ services:
       - backend
     depends_on:
       - redis
+      - rabbitmq
+      - order-db
 
   user-service:
     build:
@@ -244,6 +399,12 @@ services:
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
       REDIS_TTL: ${REDIS_TTL}
+      RABBIT_MQ_USER: ${RABBIT_MQ_USER}
+      RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
+      MAIL_QUEUE: ${MAIL_QUEUE}
+      BLOG_QUEUE: ${BLOG_QUEUE}
+      INFO_QUEUE: ${INFO_QUEUE}
+      ORDER_QUEUE: ${ORDER_QUEUE}
     volumes:
       - ./backend/user-service:/app
       - /app/node_modules
@@ -252,24 +413,8 @@ services:
       - backend
     depends_on:
       - redis
-
-  user-db:
-    image: postgres:18.3-alpine
-    container_name: fixcrew-user_db
-    environment:
-      POSTGRES_USER: ${USER_DB_USER}
-      POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
-      POSTGRES_DB: ${USER_DB_NAME}
-    volumes:
-      - user_data:/var/lib/postgresql/
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${USER_DB_USER} -d ${USER_DB_NAME}" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    networks:
-      - backend
-
+      - rabbitmq
+      - user-db
 
 networks:
   frontend:
@@ -287,5 +432,8 @@ volumes:
   grafana-data:
   prometheus-data:
   loki-data:
-
   user_data:
+  blog_data:
+  info_data:
+  order_data:
+  file_data:
