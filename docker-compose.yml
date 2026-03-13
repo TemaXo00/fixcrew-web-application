@@ -204,6 +204,9 @@ services:
       args:
         MAIL_SERVICE_PATH: ${MAIL_SERVICE_PATH}
     container_name: fixcrew-mail-service
+    environment:
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
     volumes:
       - ./backend/mail-service:/app
       - /app/node_modules
