@@ -5,6 +5,7 @@
   --color-main: #00B4D8;
 
   --font-sans: 'Inter', sans-serif;
+  --font-highlite: 'sans-serif', 'Inter', 'text-2xl'
 }
 /*.section__request-wrapper {*/
 /*  max-width: 1440px;*/

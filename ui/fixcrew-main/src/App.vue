@@ -2,13 +2,15 @@
 import TopHeader from '@/components/TopHeader.vue'
 import BottomHeader from '@/components/BottomHeader.vue'
 import Slider from '@/components/universalComp/Slider.vue'
+import ServiceBlock from '@/components/mainPage/ServiceBlock.vue'
 </script>
 
 <template>
     <TopHeader />
     <BottomHeader/>
-  <main class="px-[10%]">
+  <main class="px-[10%] flex flex-col gap-7">
     <Slider/>
+    <ServiceBlock/>
   </main>
 </template>
 

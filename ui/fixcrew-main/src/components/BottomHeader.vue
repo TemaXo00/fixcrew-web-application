@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import Button from '@/components/universalComp/Button.vue'
 
 const isOpen = ref(false)
 
@@ -30,43 +31,39 @@ const toggleMenu = () => {
           <div class="flex flex-col gap-1 p-3 sm:p-4 font-sans">
             <div class="border-b border-white/20 pb-3 flex flex-col gap-1">
               <span
-                class="hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
+                class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
                 >Air conditioning</span
               >
               <span
-                class="hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
+                class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
                 >Heating</span
               >
               <span
-                class="hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
+                class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
                 >Electrical</span
               >
               <span
-                class="hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
+                class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
                 >Plumbing</span
               >
               <span
-                class="hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
+                class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
                 >Prices</span
               >
             </div>
 
             <div class="border-b border-white/20 pb-3 flex flex-col gap-1">
               <span
-                class="hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
+                class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
                 >COMMERCIAL REPAIR</span
               >
               <span
-                class="hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
+                class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
                 >RESIDENTAL REPAIR</span
               >
             </div>
 
-            <button
-              class="bg-[#0077B6] hover:bg-[#006AA2] rounded-md w-full py-2.5 sm:py-3 mt-2 transition-colors duration-200 font-medium text-sm sm:text-base"
-            >
-              Book Now
-            </button>
+<Button></Button>
           </div>
         </div>
       </div>
@@ -77,19 +74,31 @@ const toggleMenu = () => {
         <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap">
           Air conditioning
         </li>
-        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap">Heating</li>
-        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap">Electrical</li>
-        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap">Plumbing</li>
-        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap">Prices</li>
+        <li class="  hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
+          Heating
+        </li>
+        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
+          Electrical
+        </li>
+        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
+          Plumbing
+        </li>
+        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
+          Prices
+        </li>
       </ul>
 
       <ul class="hidden md:flex flex-row gap-3 xl:gap-5 text-white font-sans cursor-pointer">
-        <li class="hover:text-[#EAEAEA] text-xs xl:text-sm whitespace-nowrap">COMMERCIAL REPAIR</li>
-        <li class="hover:text-[#EAEAEA] text-xs xl:text-sm whitespace-nowrap">RESIDENTAL REPAIR</li>
+        <li class="hover:text-[#EAEAEA] text-xs xl:text-sm whitespace-nowrap font-sans">
+          COMMERCIAL REPAIR
+        </li>
+        <li class="hover:text-[#EAEAEA] text-xs xl:text-sm whitespace-nowrap font-sans">
+          RESIDENTAL REPAIR
+        </li>
       </ul>
 
       <button
-        class="text-white font-sans bg-[#0077B6] rounded-[10px] px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base hover:bg-[#006AA2] whitespace-nowrap"
+        class="text-white font-sans bg-[#0077B6] rounded-[10px] px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base hover:bg-[#006AA2] whitespace-nowrap font-sans"
       >
         Book Now
       </button>
@@ -112,5 +121,4 @@ const toggleMenu = () => {
 .animate-fadeIn {
   animation: fadeIn 0.2s ease-out;
 }
-
 </style>
