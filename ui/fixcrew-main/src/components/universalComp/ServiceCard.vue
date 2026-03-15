@@ -1,3 +1,6 @@
+
 <template>
-  <div class="bg-white w-[330px] h-[770px] rounded-2xl relative"></div>
+  <div class="bg-white h-max rounded-2xl relative flex-1">
+
+  </div>
 </template>
