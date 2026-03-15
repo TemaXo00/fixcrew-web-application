@@ -8,7 +8,7 @@ import ServiceBlock from '@/components/mainPage/ServiceBlock.vue'
 <template>
     <TopHeader />
     <BottomHeader/>
-  <main class="px-[10%] flex flex-col gap-7">
+  <main class="px-[10%] flex flex-col gap-10">
     <Slider/>
     <ServiceBlock/>
   </main>
