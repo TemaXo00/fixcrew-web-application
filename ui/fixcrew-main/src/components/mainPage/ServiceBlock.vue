@@ -8,7 +8,6 @@ import CommercialRepair from '@/assets/images/commercial.jpg'
   <div
     class="w-full px-4 sm:px-6 md:px-7 py-6 sm:py-8 md:py-10 flex flex-col items-center gap-6 sm:gap-8 md:gap-10"
   >
-    <!-- Заголовок и описание -->
     <div class="flex flex-col gap-3 sm:gap-4 md:gap-5 text-center max-w-4xl px-2 sm:px-4">
       <div class="text-2xl sm:text-3xl md:text-4xl text-[#626262] font-semibold">
         Our expert service
@@ -19,11 +18,9 @@ import CommercialRepair from '@/assets/images/commercial.jpg'
       </p>
     </div>
 
-    <!-- Карточки услуг -->
     <div
       class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-10 xl:gap-30 w-full max-w-6xl mx-auto auto-rows-fr"
     >
-      <!-- Residential Card -->
       <ServiceCard
         title="Residental Repair"
         subtitle="Home appliance solutions"
@@ -98,7 +95,6 @@ import CommercialRepair from '@/assets/images/commercial.jpg'
         </template>
       </ServiceCard>
 
-      <!-- Commercial Card -->
       <ServiceCard
         title="Commercial Repair"
         subtitle="Business equipment solutions"
@@ -167,14 +163,12 @@ import CommercialRepair from '@/assets/images/commercial.jpg'
 </template>
 
 <style scoped>
-/* Дополнительные стили для очень маленьких экранов */
 @media (min-width: 480px) {
   .xs\:flex-row {
     flex-direction: row;
   }
 }
 
-/* Улучшение читаемости на мобильных устройствах */
 @media (max-width: 640px) {
   .list-disc li {
     margin-left: 0.5rem;
