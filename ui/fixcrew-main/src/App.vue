@@ -7,12 +7,15 @@ import EmergencyPhone from '@/components/mainPage/EmergencyPhone.vue'
 </script>
 
 <template>
-    <TopHeader />
-    <BottomHeader/>
-  <main class="px-[0%] flex flex-col gap-10">
-    <Slider/>
-    <ServiceBlock/>
-    <EmergencyPhone/>
+  <TopHeader />
+  <BottomHeader />
+  <main class="px-[%] flex flex-col gap-10">
+    <div class="px-[3%]">
+      <Slider />
+      <ServiceBlock />
+    </div>
+
+    <EmergencyPhone />
   </main>
 </template>
 
