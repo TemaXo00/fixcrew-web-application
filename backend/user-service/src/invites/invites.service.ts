@@ -1,14 +1,16 @@
-import { createHash, randomBytes } from 'node:crypto';
+import { randomBytes, createHash } from 'node:crypto';
 
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { Invite } from '@prisma-gen/client';
 
 import { InviteCreateDto } from './dto/invite-create.dto';
-import {
-  PaginatedResponseDto,
-  PaginationDto,
-} from '../common/dto/pagination.dto';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -18,68 +20,147 @@ export class InvitesService {
     private readonly prisma: PrismaService,
   ) {}
 
-  async getWorkingInvites(
-    pagination: PaginationDto,
-  ): Promise<PaginatedResponseDto<Invite>> {
-    const [invites, total] = await Promise.all([
-      this.prisma.invite.findMany({
-        where: {
-          status: 'CREATED',
-        },
-        skip: pagination.skip,
-        take: pagination.take,
-        orderBy: { created_at: 'desc' },
-      }),
-      this.prisma.invite.count({
-        where: {
-          status: 'CREATED',
-        },
-      }),
-    ]);
-
-    return new PaginatedResponseDto(invites, total, pagination);
+  private generateToken(): string {
+    return randomBytes(32).toString('hex');
   }
 
-  async createInvite(dto: InviteCreateDto): Promise<Invite> {
-    const token = randomBytes(20).toString('hex');
-    const hashToken = createHash('sha256').update(token).digest('hex');
+  private hashToken(token: string): string {
+    return createHash('sha256').update(token).digest('hex');
+  }
 
-    const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 24);
+  async getInviteByToken(rawToken: string): Promise<Invite> {
+    const hashedToken = this.hashToken(rawToken);
 
-    const invite = await this.prisma.invite.create({
-      data: {
-        token: hashToken,
-        email: dto.email,
-        expires_at: expiresAt,
+    const invite = await this.prisma.invite.findFirst({
+      where: {
+        token: hashedToken,
+        status: 'CREATED',
       },
     });
 
-    this.mail.emit('invite.created', {
-      ...invite,
-      rawToken: token,
-    });
-
-    return invite;
-  }
-
-  async getInviteByToken(token: string): Promise<Invite | null> {
-    const hashToken = createHash('sha256').update(token).digest('hex');
-
-    const invite = await this.prisma.invite.findUnique({
-      where: { token: hashToken },
-    });
-
-    if (!invite) {return null;}
+    if (!invite) {
+      throw new NotFoundException('Invite not found');
+    }
 
     if (invite.expires_at < new Date()) {
       await this.prisma.invite.update({
         where: { id: invite.id },
         data: { status: 'EXPIRED' },
       });
-      return null;
+
+      throw new ConflictException('Invite expired');
     }
 
     return invite;
+  }
+
+  async createInvite(dto: InviteCreateDto): Promise<Invite> {
+    const rawToken = this.generateToken();
+    const hashedToken = this.hashToken(rawToken);
+
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 1);
+
+    const existing = await this.prisma.invite.findFirst({
+      where: {
+        email: dto.email,
+        status: 'CREATED',
+      },
+    });
+
+    if (existing !== null) {
+      throw new ConflictException('Invite for this email already exists');
+    }
+
+    const invite = await this.prisma.invite.create({
+      data: {
+        token: hashedToken,
+        email: dto.email,
+        expires_at: expiresAt,
+      },
+    });
+
+    this.mail.emit('invite.created', {
+      email: dto.email,
+      token: rawToken,
+      expiresAt,
+    });
+
+    return invite;
+  }
+
+  async useInvite(rawToken: string): Promise<Invite> {
+    const hashedToken = this.hashToken(rawToken);
+
+    return this.prisma.$transaction(async (tx) => {
+      const invite = await tx.invite.findFirst({
+        where: {
+          token: hashedToken,
+        },
+      });
+
+      if (!invite) {
+        throw new NotFoundException('Invite not found');
+      }
+
+      if (invite.status !== 'CREATED') {
+        throw new ConflictException('Invite already used/revoked');
+      }
+
+      if (invite.expires_at < new Date()) {
+        await tx.invite.update({
+          where: { id: invite.id },
+          data: { status: 'EXPIRED' },
+        });
+
+        throw new ConflictException('Invite expired');
+      }
+
+      return tx.invite.update({
+        where: { id: invite.id },
+        data: { status: 'USED' },
+      });
+    });
+  }
+
+  async revokeInvite(rawToken: string): Promise<Invite> {
+    const hashedToken = this.hashToken(rawToken);
+
+    const invite = await this.prisma.invite.findFirst({
+      where: {
+        token: hashedToken,
+      },
+    });
+
+    if (!invite) {
+      throw new NotFoundException('Invite not found');
+    }
+
+    if (invite.status !== 'CREATED') {
+      throw new ConflictException('Cannot revoke this invite');
+    }
+
+    return this.prisma.invite.update({
+      where: { id: invite.id },
+      data: { status: 'REVOKED' },
+    });
+  }
+
+  @Cron(CronExpression.EVERY_WEEK)
+  async deleteExpiredInvites(): Promise<void> {
+    await this.prisma.invite.deleteMany({
+      where: {
+        OR: [
+          { status: 'EXPIRED' },
+          { status: 'USED' },
+          { status: 'REVOKED' },
+          {
+            expires_at: {
+              lt: new Date(),
+            },
+          },
+        ],
+      },
+    });
   }
 }

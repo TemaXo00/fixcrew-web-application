@@ -4,6 +4,7 @@ import { ClientProviderOptions, ClientsModule, Transport } from '@nestjs/microse
 
 import { InvitesController } from './invites.controller';
 import { InvitesService } from './invites.service';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { InvitesService } from './invites.service';
         }
       },
     ]),
+    ScheduleModule.forRoot()
   ],
   controllers: [InvitesController],
   providers: [InvitesService],

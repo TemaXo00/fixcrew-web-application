@@ -32,7 +32,7 @@ model Invite {
   id String @id @default(uuid(4))
 
   token      String       @unique
-  email      String       @unique
+  email      String
   status     InviteStatus @default(CREATED)
   expires_at DateTime
 
