@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import slide1 from '@/assets/images/slider1pick.jpg'
 import slide2 from '@/assets/images/sliderpick2.jpg'
 import slide3 from '@/assets/images/sliderpick3.jpg'
@@ -28,6 +28,7 @@ const slides = ref([
 ])
 
 const currentSlide = ref(0)
+let intervalId: number | null = null
 
 const nextSlide = () => {
   currentSlide.value = (currentSlide.value + 1) % slides.value.length
@@ -40,10 +41,35 @@ const prevSlide = () => {
 const goToSlide = (index: number) => {
   currentSlide.value = index
 }
+
+const startAutoPlay = () => {
+  intervalId = setInterval(() => {
+    nextSlide()
+  }, 5000)
+}
+
+const stopAutoPlay = () => {
+  if (intervalId) {
+    clearInterval(intervalId)
+    intervalId = null
+  }
+}
+
+onMounted(() => {
+  startAutoPlay()
+})
+
+onUnmounted(() => {
+  stopAutoPlay()
+})
 </script>
 
 <template>
-  <div class="relative w-full overflow-hidden rounded-xl mt-4 sm:mt-6 md:mt-8 shadow-lg">
+  <div
+    class="relative w-full overflow-hidden rounded-xl mt-4 sm:mt-6 md:mt-8 shadow-lg"
+    @mouseenter="stopAutoPlay"
+    @mouseleave="startAutoPlay"
+  >
     <div
       class="flex transition-transform duration-500 ease-out"
       :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
