@@ -2,16 +2,21 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 import { MailService } from './mail.service';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Controller()
 export class MailController {
-  constructor(private readonly mailService: MailService) {}
+  constructor(
+    private readonly mailService: MailService,
+    private readonly mail: MailerService
+  ) {}
 
-  @MessagePattern('user.test')
-  handleUserTest(@Payload() data: { msg: string }):object {
-    return {
-      "returned": true,
-      "message": data.msg,
-    }
+  @MessagePattern('invite.created')
+  async sendInviteMail(@Payload() data: any) {
+    await this.mail.sendMail({
+      to: 'nuweby345@gmail.com',
+      subject: 'Invite',
+      text: data.email,
+    })
   }
 }
