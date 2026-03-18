@@ -2,6 +2,7 @@
 import ServiceCard from '@/components/universalComp/ServiceCard.vue'
 import residentalImage from '@/assets/images/residental.jpg'
 import CommercialRepair from '@/assets/images/commercial.jpg'
+import Booking from '@/assets/images/booking.jpg'
 </script>
 
 <template>
@@ -19,7 +20,7 @@ import CommercialRepair from '@/assets/images/commercial.jpg'
     </div>
 
     <div
-      class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-10 xl:gap-30 w-full max-w-6xl mx-auto auto-rows-fr"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10 w-full max-w-8xl auto-rows-fr"
     >
       <ServiceCard
         title="Residental Repair"
@@ -156,6 +157,50 @@ import CommercialRepair from '@/assets/images/commercial.jpg'
               </div>
             </li>
           </ul>
+        </template>
+      </ServiceCard>
+
+      <ServiceCard title="How to book?" subtitle="24/7 response" :image="Booking">
+        <template #content>
+          <div class="flex flex-col gap-4 sm:gap-5 md:gap-6">
+            <div class="text-sm sm:text-base md:text-lg text-[#626262] font-semibold">
+              1. You can call
+              <span>
+                <a
+                  href="tel:6507197300"
+                  class="text-[#0077B6] text-1xl font-semibold whitespace-nowrap"
+                >
+                  650-719-7300
+                </a>
+              </span>
+              or use our <span class="text-[#0077B6]">form</span>
+            </div>
+            <div class="text-sm sm:text-base md:text-lg text-[#626262] font-semibold">
+              2. Tell us about your problem
+            </div>
+            <div class="text-sm sm:text-base md:text-lg text-[#626262] font-semibold">
+              3. Choose the most convenient time and a day for you
+            </div>
+            <div class="text-sm sm:text-base md:text-lg text-[#626262] font-semibold">
+              4. Done! We will be as soon as possible
+            </div>
+
+            <div class="text-xs sm:text-sm md:text-base text-[#999999] font-semibold">
+              Get In Touch Call Us
+              <div
+                class="font-sans text-[#0077B6] font-bold underline text-xs sm:text-sm md:text-base"
+              >
+                <a href="tel:6507197300" class="hover:text-red-700 transition-colors"
+                  >(650)719-7300</a
+                >
+              </div>
+              Available 24/7 for emergency repairs
+              <span class="text-sm sm:text-base md:text-lg text-[#626262] font-semibold">
+                Service Areas Los Gatos, San Jose, Cupertino, Los Altos, Mountain View, Campbell,
+                Palo Alto
+              </span>
+            </div>
+          </div>
         </template>
       </ServiceCard>
     </div>
