@@ -49,18 +49,18 @@ export class InvitesService {
 
   async getInvitesStats(): Promise<object> {
     const [created, used, revoked, expired] = await Promise.all([
-      this.prisma.invite.count({ where: {status: 'CREATED'}}),
-      this.prisma.invite.count({where: {status: 'USED'}}),
-      this.prisma.invite.count({where: {status: 'REVOKED'}}),
-      this.prisma.invite.count({where: {status: 'EXPIRED'}}),
-    ])
+      this.prisma.invite.count({ where: { status: 'CREATED' } }),
+      this.prisma.invite.count({ where: { status: 'USED' } }),
+      this.prisma.invite.count({ where: { status: 'REVOKED' } }),
+      this.prisma.invite.count({ where: { status: 'EXPIRED' } }),
+    ]);
 
     return {
-      "Created": created,
-      "Used": used,
-      "Revoked": revoked,
-      "Expired": expired,
-    }
+      Created: created,
+      Used: used,
+      Revoked: revoked,
+      Expired: expired,
+    };
   }
 
   private async getInviteByToken(token: string): Promise<Invite> {
@@ -127,16 +127,16 @@ export class InvitesService {
 
     const invite = await this.getInviteByToken(hashedToken);
 
-      return this.prisma.invite.update({
-        where: { id: invite.id },
-        data: { status: 'USED' },
-      });
+    return this.prisma.invite.update({
+      where: { id: invite.id },
+      data: { status: 'USED' },
+    });
   }
 
   async revokeInvite(rawToken: string): Promise<Invite> {
     const hashedToken = this.hashToken(rawToken);
 
-    const invite = await this.getInviteByToken(hashedToken)
+    const invite = await this.getInviteByToken(hashedToken);
 
     return this.prisma.invite.update({
       where: { id: invite.id },
