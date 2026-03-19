@@ -12,7 +12,12 @@ import { MailModule } from './mail/mail.module';
       isGlobal: true,
     }),
     MailModule,
-    PrometheusModule,
+    PrometheusModule.register({
+      path: '/metrics',
+      defaultLabels: {
+        app: 'mail-service',
+      },
+    }),
     LoggerModule.forRoot({
       pinoHttp: {
         level: 'warn',
