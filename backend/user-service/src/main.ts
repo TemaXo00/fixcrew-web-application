@@ -1,10 +1,11 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ConsoleLogger, ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
 
-async function bootstrap() {
+import { AppModule } from './app.module';
+
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, {
     logger: new ConsoleLogger({
       prefix: 'User Service',

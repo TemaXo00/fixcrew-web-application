@@ -111,6 +111,7 @@ services:
     restart: unless-stopped
     networks:
       - monitoring
+      - backend
     depends_on:
       - prometheus
       - loki
@@ -348,6 +349,7 @@ services:
     environment:
       MAIL_USER: ${MAIL_USER}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_UI_LINK: ${MAIL_UI_LINK}
       RABBIT_MQ_USER: ${RABBIT_MQ_USER}
       RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
       MAIL_QUEUE: ${MAIL_QUEUE}
