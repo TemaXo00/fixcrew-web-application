@@ -1,23 +1,39 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { LoggerModule } from 'nestjs-pino';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { PrismaModule } from './prisma/prisma.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
     PrometheusModule.register({
       path: '/metrics',
       defaultLabels: {
-        app: 'file-service',
+        app: 'order-service',
       },
     }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: 'warn',
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            colorize: true,
+            singleLine: false,
+            translateTime: 'yyyy-mm-dd HH:MM:ss.l',
+          },
+        },
+      },
+    }),
+    PrismaModule,
+    RedisModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

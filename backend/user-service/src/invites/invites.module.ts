@@ -38,5 +38,6 @@ import { InvitesService } from './invites.service';
   ],
   controllers: [InvitesController],
   providers: [InvitesService],
+  exports: [InvitesService],
 })
 export class InvitesModule {}
