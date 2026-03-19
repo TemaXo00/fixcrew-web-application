@@ -11,6 +11,10 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { Invite } from '@prisma-gen/client';
 
 import { InviteCreateDto } from './dto/invite-create.dto';
+import {
+  PaginatedResponseDto,
+  PaginationDto,
+} from '../common/dto/pagination.dto';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -28,12 +32,41 @@ export class InvitesService {
     return createHash('sha256').update(token).digest('hex');
   }
 
-  async getInviteByToken(rawToken: string): Promise<Invite> {
-    const hashedToken = this.hashToken(rawToken);
+  async getInvites(
+    pagination: PaginationDto,
+  ): Promise<PaginatedResponseDto<Invite>> {
+    const [invites, total] = await Promise.all([
+      this.prisma.invite.findMany({
+        skip: pagination.skip,
+        take: pagination.take,
+        orderBy: { created_at: 'desc' },
+      }),
+      this.prisma.invite.count({}),
+    ]);
 
+    return new PaginatedResponseDto(invites, total, pagination);
+  }
+
+  async getInvitesStats(): Promise<object> {
+    const [created, used, revoked, expired] = await Promise.all([
+      this.prisma.invite.count({ where: {status: 'CREATED'}}),
+      this.prisma.invite.count({where: {status: 'USED'}}),
+      this.prisma.invite.count({where: {status: 'REVOKED'}}),
+      this.prisma.invite.count({where: {status: 'EXPIRED'}}),
+    ])
+
+    return {
+      "Created": created,
+      "Used": used,
+      "Revoked": revoked,
+      "Expired": expired,
+    }
+  }
+
+  private async getInviteByToken(token: string): Promise<Invite> {
     const invite = await this.prisma.invite.findFirst({
       where: {
-        token: hashedToken,
+        token: token,
         status: 'CREATED',
       },
     });
@@ -68,7 +101,7 @@ export class InvitesService {
       },
     });
 
-    if (existing !== null) {
+    if (existing) {
       throw new ConflictException('Invite for this email already exists');
     }
 
@@ -92,53 +125,18 @@ export class InvitesService {
   async useInvite(rawToken: string): Promise<Invite> {
     const hashedToken = this.hashToken(rawToken);
 
-    return this.prisma.$transaction(async (tx) => {
-      const invite = await tx.invite.findFirst({
-        where: {
-          token: hashedToken,
-        },
-      });
+    const invite = await this.getInviteByToken(hashedToken);
 
-      if (!invite) {
-        throw new NotFoundException('Invite not found');
-      }
-
-      if (invite.status !== 'CREATED') {
-        throw new ConflictException('Invite already used/revoked');
-      }
-
-      if (invite.expires_at < new Date()) {
-        await tx.invite.update({
-          where: { id: invite.id },
-          data: { status: 'EXPIRED' },
-        });
-
-        throw new ConflictException('Invite expired');
-      }
-
-      return tx.invite.update({
+      return this.prisma.invite.update({
         where: { id: invite.id },
         data: { status: 'USED' },
       });
-    });
   }
 
   async revokeInvite(rawToken: string): Promise<Invite> {
     const hashedToken = this.hashToken(rawToken);
 
-    const invite = await this.prisma.invite.findFirst({
-      where: {
-        token: hashedToken,
-      },
-    });
-
-    if (!invite) {
-      throw new NotFoundException('Invite not found');
-    }
-
-    if (invite.status !== 'CREATED') {
-      throw new ConflictException('Cannot revoke this invite');
-    }
+    const invite = await this.getInviteByToken(hashedToken)
 
     return this.prisma.invite.update({
       where: { id: invite.id },
@@ -146,8 +144,25 @@ export class InvitesService {
     });
   }
 
+  async manuallyDeleteExpiredInvites(): Promise<void> {
+    await this.prisma.invite.deleteMany({
+      where: {
+        OR: [
+          { status: 'EXPIRED' },
+          { status: 'USED' },
+          { status: 'REVOKED' },
+          {
+            expires_at: {
+              lt: new Date(),
+            },
+          },
+        ],
+      },
+    });
+  }
+
   @Cron(CronExpression.EVERY_WEEK)
-  async deleteExpiredInvites(): Promise<void> {
+  async automatedDeleteExpiredInvites(): Promise<void> {
     await this.prisma.invite.deleteMany({
       where: {
         OR: [

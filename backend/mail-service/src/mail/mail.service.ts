@@ -21,7 +21,7 @@ export class MailService {
       subject: 'Invitation to FixCrew admin service',
       template: 'invite-mail',
       context: {
-        ui_link: this.UI_LINK,
+        ui_link: `${this.UI_LINK}/user/invite`,
         token: dto.token,
       }
     });
