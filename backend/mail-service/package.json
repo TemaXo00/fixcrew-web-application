@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nx/eslint-plugin": "^22.5.4",
     "@willsoto/nestjs-prometheus": "^6.0.2",
+    "amqp-connection-manager": "^5.0.0",
     "amqplib": "^0.10.9",
     "bullmq": "^5.71.0",
     "eslint-plugin-import": "^2.32.0",

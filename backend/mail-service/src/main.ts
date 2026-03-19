@@ -1,10 +1,18 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ConsoleLogger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { Logger } from 'nestjs-pino';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+import { AppModule } from './app.module';
+
+async function bootstrap(): Promise<void> {
+  const app = await NestFactory.create(AppModule, {
+    logger: new ConsoleLogger({
+      prefix: 'Mail Service',
+    }),
+    bufferLogs: true,
+  });
   const configService = app.get(ConfigService);
 
   const rabbitUser = configService.get<string>('RABBIT_MQ_USER');
@@ -22,6 +30,8 @@ async function bootstrap() {
       },
     },
   });
+
+  app.useLogger(app.get(Logger));
 
   await app.startAllMicroservices();
   await app.listen(3000);
