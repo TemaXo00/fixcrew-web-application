@@ -97,11 +97,13 @@ onUnmounted(() => {
           >
             {{ slide.description }}
           </p>
-          <button
-            class="bg-[#0077B6] hover:bg-[#006AA2] text-white font-sans rounded-[10px] px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 text-xs sm:text-sm md:text-base lg:text-lg transition-colors duration-200"
-          >
-            {{ slide.buttonText }}
-          </button>
+          <RouterLink :to="{ name: 'Booking' }">
+            <button
+              class="bg-[#0077B6] hover:bg-[#006AA2] text-white font-sans rounded-[10px] px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 text-xs sm:text-sm md:text-base lg:text-lg transition-colors duration-200"
+            >
+              {{ slide.buttonText }}
+            </button>
+          </RouterLink>
         </div>
       </div>
     </div>

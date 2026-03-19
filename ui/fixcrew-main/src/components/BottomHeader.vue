@@ -63,7 +63,7 @@ const toggleMenu = () => {
               >
             </div>
 
-<Button></Button>
+            <Button></Button>
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@ const toggleMenu = () => {
         <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap">
           Air conditioning
         </li>
-        <li class="  hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
+        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
           Heating
         </li>
         <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
@@ -96,12 +96,13 @@ const toggleMenu = () => {
           RESIDENTAL REPAIR
         </li>
       </ul>
-
-      <button
-        class="text-white font-sans bg-[#0077B6] rounded-[10px] px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base hover:bg-[#006AA2] whitespace-nowrap font-sans"
-      >
-        Book Now
-      </button>
+      <RouterLink :to="{ name: 'Booking' }">
+        <button
+          class="text-white font-sans bg-[#0077B6] rounded-[10px] px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base hover:bg-[#006AA2] whitespace-nowrap font-sans"
+        >
+          Book Now
+        </button>
+      </RouterLink>
     </div>
   </div>
 </template>
