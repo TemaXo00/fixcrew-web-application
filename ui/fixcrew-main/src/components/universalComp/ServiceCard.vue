@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import Button from './Button.vue'
+import { ref } from 'vue'
+import Button from '@/components/universalComp/Button.vue'
 
 defineProps<{
   title: string
@@ -7,6 +8,8 @@ defineProps<{
   image: string
   imageHeight?: string
 }>()
+
+const isExpanded = ref(false)
 </script>
 
 <template>
@@ -24,7 +27,32 @@ defineProps<{
       </div>
 
       <div class="text-left flex-1 text-sm sm:text-base">
-        <slot name="content"></slot>
+        <div class="hidden lg:block">
+          <slot name="content"></slot>
+        </div>
+
+        <div class="lg:hidden">
+          <div
+            class="overflow-hidden transition-all duration-500 ease-in-out"
+            :class="[
+              isExpanded ? 'max-h-[1000px]' : 'max-h-[180px] sm:max-h-[160px] md:max-h-[200px]',
+            ]"
+          >
+            <div
+              class="relative"
+              :class="{ 'line-clamp-4 sm:line-clamp-3 md:line-clamp-4': !isExpanded }"
+            >
+              <slot name="content"></slot>
+            </div>
+          </div>
+
+          <button
+            @click="isExpanded = !isExpanded"
+            class="text-[#0077B6] font-semibold text-sm sm:text-base mt-2 hover:text-[#005b8c] transition-colors focus:outline-none lg:hidden"
+          >
+            {{ isExpanded ? 'Show less' : 'Read more...' }}
+          </button>
+        </div>
       </div>
 
       <div class="mt-6 sm:mt-8 md:mt-10">
