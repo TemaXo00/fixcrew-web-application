@@ -129,52 +129,122 @@ const services: Types[] = [
           {
             id: 1,
             title: 'Washer Diagnostic',
-            description: '',
+            description:
+              'Identify the root cause of unusual noises, leaks, or failure to start with a comprehensive machine assessment.',
           },
           {
             id: 2,
             title: 'Washer drain pump replacement',
-            description: '',
+            description:
+              'Remove standing water and resolve draining issues by replacing faulty or clogged drain pumps.',
           },
           {
             id: 3,
             title: 'Washer water inlet valve replacement',
-            description: '',
+            description:
+              'Fix slow filling, incorrect water temperature, or constant running by replacing the water inlet valve.',
           },
           {
             id: 4,
             title: 'Washer Door Lock replacement',
-            description: '',
+            description:
+              'Restore proper operation and safety by replacing a faulty door lock that prevents the cycle from starting.',
           },
           {
             id: 5,
             title: 'Washer lid switch replacement',
-            description: '',
+            description:
+              'Ensure the machine starts and stops safely by replacing a broken lid switch (for top-load models).',
           },
           {
             id: 6,
             title: 'Washer control board replacement',
-            description: '',
+            description:
+              'Fix unresponsive buttons, erratic cycles, or error codes by replacing the main electronic control board.',
           },
           {
             id: 7,
             title: 'Washer belt replacement',
-            description: '',
+            description:
+              'Eliminate slipping, squeaking, or failure to spin by replacing a worn or broken drive belt.',
           },
           {
             id: 8,
             title: 'Washer shock absorber replacement',
-            description: '',
+            description:
+              'Reduce excessive vibration and loud banging during the spin cycle by replacing worn shock absorbers.',
           },
           {
             id: 9,
             title: 'Washer suspension rod replacement',
-            description: '',
+            description:
+              'Stabilize a shaking washer and prevent "walking" by replacing worn suspension rods (for top-load models).',
           },
           {
             id: 10,
             title: 'Washer bearing replacement',
-            description: '',
+            description:
+              'Quiet loud rumbling or grinding noises by replacing worn-out drum bearings.',
+          },
+        ],
+      },
+      {
+        id: 3,
+        title: 'Dryer',
+        subCategories: [
+          {
+            id: 1,
+            title: 'Dryer diagnostic',
+            description:
+              'Pinpoint the cause of no heat, tumbling issues, or unusual sounds with a thorough system assessment.',
+          },
+          {
+            id: 2,
+            title: 'Dryer heating element replacement',
+            description:
+              'Restore proper drying performance by replacing a burned-out heating element that fails to produce heat.',
+          },
+          {
+            id: 3,
+            title: 'Dryer thermal fuse replacement',
+            description:
+              "Fix a dryer that runs but won't start or overheats by replacing a blown thermal fuse (a common safety device).",
+          },
+          {
+            id: 4,
+            title: 'Dryer thermostat replacement',
+            description:
+              'Eliminate overheating or insufficient heat by replacing a faulty thermostat that fails to regulate temperature.',
+          },
+          {
+            id: 5,
+            title: 'Dryer belt replacement',
+            description:
+              "Fix a dryer that tumbles but doesn't spin or makes a squealing noise by replacing a broken or stretched belt.",
+          },
+          {
+            id: 6,
+            title: 'Dryer drum roller replacement',
+            description:
+              'Quiet loud thumping or squeaking sounds by replacing worn drum support rollers.',
+          },
+          {
+            id: 7,
+            title: 'Dryer idler pulley replacement',
+            description:
+              'Eliminate high-pitched squealing or scraping noises by replacing a worn idler pulley that maintains belt tension.',
+          },
+          {
+            id: 8,
+            title: 'Dryer vent cleaning',
+            description:
+              'Improve drying efficiency and reduce fire risk by removing lint buildup from the vent system.',
+          },
+          {
+            id: 9,
+            title: 'Dryer control board replacement',
+            description:
+              'Fix unresponsive controls, intermittent operation, or persistent error codes by replacing the main electronic control board.',
           },
         ],
       },
@@ -223,7 +293,7 @@ const goBack = () => {
       <div
         v-for="service in services"
         :key="service.id"
-        class="p-4 mb-3 border border-gray-300 cursor-pointer rounded-lg hover:bg-gray-100 transition"
+        class="p-4 mb-3 border border-[#00B4D8] cursor-pointer rounded-lg hover:bg-gray-100 transition"
         @click="selectService(service)"
       >
         {{ service.title }}
@@ -233,7 +303,7 @@ const goBack = () => {
     <div v-if="step === 2">
       <button
         @click="goBack"
-        class="mb-4 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+        class="mb-4 px-4 py-2 bg-[#00B4D8] text-white rounded-lg hover:bg-gray-300 transition"
       >
         Back
       </button>
@@ -251,7 +321,7 @@ const goBack = () => {
     <div v-if="step === 3">
       <button
         @click="goBack"
-        class="mb-4 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+        class="mb-4 px-4 py-2 bg-[#00B4D8] text-white rounded-lg hover:bg-gray-300 transition"
       >
         Back
       </button>
@@ -270,7 +340,7 @@ const goBack = () => {
     <div v-if="step === 4">
       <button
         @click="goBack"
-        class="mb-4 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+        class="mb-4 px-4 py-2 bg-[#00B4D8] rounded-lg hover:bg-gray-300 transition text-white"
       >
         Back
       </button>
