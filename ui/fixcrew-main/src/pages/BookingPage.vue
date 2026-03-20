@@ -248,6 +248,72 @@ const services: Types[] = [
           },
         ],
       },
+      {
+        id: 4,
+        title: 'Oven/Range',
+        subCategories: [
+          {
+            id: 1,
+            title: 'Oven Diagnostic',
+            description:
+              'Identify the source of uneven heating, temperature fluctuations, or complete failure to heat with a comprehensive assessment.',
+          },
+          {
+            id: 2,
+            title: 'Oven heating element replacement',
+            description:
+              'Restore proper baking and broiling by replacing a burned-out heating element that fails to heat or heats unevenly.',
+          },
+          {
+            id: 3,
+            title: 'Oven temperature sensor replacement',
+            description:
+              'Fix inaccurate temperatures, undercooked or burnt food by replacing a faulty sensor that misreads internal heat levels.',
+          },
+          {
+            id: 4,
+            title: 'Oven igniter replacement',
+            description:
+              'Resolve gas oven issues where the burner fails to light or takes too long to ignite by replacing a weak igniter.',
+          },
+          {
+            id: 5,
+            title: 'Oven control board replacement',
+            description:
+              'Fix unresponsive buttons, inaccurate temperature display, or erratic cooking cycles by replacing the main electronic control board.',
+          },
+          {
+            id: 6,
+            title: 'Oven thermostat replacement',
+            description:
+              'Eliminate temperature inconsistencies and ensure accurate heat regulation by replacing a faulty thermostat.',
+          },
+          {
+            id: 7,
+            title: 'Cooktop burner replacement',
+            description:
+              'Restore proper flame or heating performance by replacing a damaged or non-functional electric or gas burner.',
+          },
+          {
+            id: 8,
+            title: 'Cooktop infinite switch replacement',
+            description:
+              "Fix burners that won't turn off, fail to heat, or don't maintain consistent temperature by replacing the infinite control switch.",
+          },
+          {
+            id: 9,
+            title: 'Cooktop igniter replacement',
+            description:
+              "Resolve gas burners that click but won't light or require manual lighting by replacing a faulty spark igniter.",
+          },
+          {
+            id: 10,
+            title: 'Cooktop control board replacement',
+            description:
+              'Fix unresponsive touch controls, error codes, or intermittent operation on electric or induction cooktops by replacing the control board.',
+          },
+        ],
+      },
     ],
   },
 ]
