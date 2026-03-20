@@ -6,6 +6,7 @@ import { LoggerModule } from 'nestjs-pino';
 
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
+import { MastersModule } from './masters/masters.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { RedisModule } from './redis/redis.module';
     TerminusModule,
     PrismaModule,
     RedisModule,
+    MastersModule,
   ],
   controllers: [],
   providers: [],

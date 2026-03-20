@@ -20,13 +20,13 @@ async function bootstrap(): Promise<void> {
   const rabbitUser = configService.get<string>('RABBIT_MQ_USER');
   const rabbitPass = configService.get<string>('RABBIT_MQ_PASSWORD');
   const rabbitHost = 'rabbitmq';
-  const mailQueue = configService.get<string>('MAIL_QUEUE');
+  const orderQueue = configService.get<string>('ORDER_QUEUE');
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
       urls: [`amqp://${rabbitUser}:${rabbitPass}@${rabbitHost}:5672`],
-      queue: mailQueue,
+      queue: orderQueue,
       queueOptions: {
         durable: true,
       },
@@ -45,6 +45,8 @@ async function bootstrap(): Promise<void> {
   );
 
   app.useLogger(app.get(Logger));
+
+  await app.startAllMicroservices();
 
   await app.listen(3000);
 }
