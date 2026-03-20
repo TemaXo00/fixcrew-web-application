@@ -129,10 +129,55 @@ const services: Types[] = [
           {
             id: 1,
             title: 'Washer Diagnostic',
-            description: ''
-          }
-        ]
-      }
+            description: '',
+          },
+          {
+            id: 2,
+            title: 'Washer drain pump replacement',
+            description: '',
+          },
+          {
+            id: 3,
+            title: 'Washer water inlet valve replacement',
+            description: '',
+          },
+          {
+            id: 4,
+            title: 'Washer Door Lock replacement',
+            description: '',
+          },
+          {
+            id: 5,
+            title: 'Washer lid switch replacement',
+            description: '',
+          },
+          {
+            id: 6,
+            title: 'Washer control board replacement',
+            description: '',
+          },
+          {
+            id: 7,
+            title: 'Washer belt replacement',
+            description: '',
+          },
+          {
+            id: 8,
+            title: 'Washer shock absorber replacement',
+            description: '',
+          },
+          {
+            id: 9,
+            title: 'Washer suspension rod replacement',
+            description: '',
+          },
+          {
+            id: 10,
+            title: 'Washer bearing replacement',
+            description: '',
+          },
+        ],
+      },
     ],
   },
 ]
