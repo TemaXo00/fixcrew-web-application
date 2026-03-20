@@ -122,6 +122,17 @@ const services: Types[] = [
           },
         ],
       },
+      {
+        id: 2,
+        title: 'Washer',
+        subCategories: [
+          {
+            id: 1,
+            title: 'Washer Diagnostic',
+            description: ''
+          }
+        ]
+      }
     ],
   },
 ]
