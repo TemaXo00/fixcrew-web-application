@@ -387,7 +387,37 @@ export const services: Types[] = [
           },
         ],
       },
-
+      {
+        id: 7,
+        title: 'Hood',
+        subCategories: [
+          {
+            id: 1,
+            title: 'Hood Service',
+            description: ''
+          },
+          {
+            id: 2,
+            title: 'Range Hood Diagnostic',
+            description: ''
+          },
+          {
+            id: 3,
+            title: 'Range Hood Fan Motor Replacement',
+            description: ''
+          },
+          {
+            id: 4,
+            title: 'Range Hood Light Replacement',
+            description: ''
+          },
+          {
+            id: 5,
+            title: 'Range Hood Control Switch Replacement',
+            description: ''
+          }
+        ]
+      }
     ],
   },
 ]
