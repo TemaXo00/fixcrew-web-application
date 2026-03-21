@@ -238,44 +238,52 @@ export const services: Types[] = [
           {
             id: 1,
             title: 'Dishwasher Diagnostic',
-            description: ''
+            description:
+              'Identify the root cause of poor cleaning, leaks, error codes, or unusual noises with a complete system evaluation.',
           },
           {
             id: 2,
             title: 'Dishwasher Drain Pump Replacement',
-            description: ''
+            description:
+              'Eliminate standing water at the bottom of the tub by replacing a faulty drain pump that fails to expel water.',
           },
           {
             id: 3,
             title: 'Dishwasher Circulation Pump Replacement',
-            description: ''
+            description:
+              'Restore proper cleaning power by replacing a worn circulation pump that causes weak water spray or poor wash results.',
           },
           {
             id: 4,
             title: 'Dishwasher Water Inlet Valve Replacement',
-            description: ''
+            description:
+              'Fix slow filling, no water, or continuous running by replacing a malfunctioning water inlet valve.',
           },
           {
             id: 5,
             title: 'Dishwasher Door Latch Replacement',
-            description: ''
+            description:
+              'Resolve issues with the dishwasher not starting or stopping mid-cycle by replacing a broken or misaligned door latch.',
           },
           {
             id: 6,
             title: 'Dishwasher Control Board Replacement',
-            description: ''
+            description:
+              'Fix unresponsive buttons, random operation, or persistent error codes by replacing the main electronic control board.',
           },
           {
             id: 7,
             title: 'Dishwasher Float Switch Replacement',
-            description: ''
+            description:
+              'Prevent overfilling or water leaks by replacing a stuck or faulty float switch that fails to shut off water flow.',
           },
           {
             id: 8,
             title: 'Dishwasher Spray Arm Replacement',
-            description: ''
+            description:
+              'Improve cleaning coverage by replacing cracked, clogged, or spinning spray arms that leave dishes dirty.',
           },
-        ]
+        ],
       },
       {
         id: 5,
@@ -343,6 +351,43 @@ export const services: Types[] = [
           },
         ],
       },
+      {
+        id: 6,
+        title: 'Microwave',
+        subCategories: [
+          {
+            id: 1,
+            title: 'Microwave Diagnostic',
+            description:
+              'Pinpoint the cause of no heating, sparking, unusual noises, or unresponsive controls with a thorough system assessment.',
+          },
+          {
+            id: 2,
+            title: 'Microwave Magnetron Replacement',
+            description:
+              'Restore proper heating by replacing a failed magnetron that no longer generates the microwaves needed to cook food.',
+          },
+          {
+            id: 3,
+            title: 'Microwave Door Switch Replacement',
+            description:
+              "Fix a microwave that won't start, stops mid-cycle, or runs with the door open by replacing faulty door switches.",
+          },
+          {
+            id: 4,
+            title: 'Microwave Control Board Replacement',
+            description:
+              'Eliminate unresponsive buttons, incorrect cooking times, or persistent error codes by replacing the main control board.',
+          },
+          {
+            id: 5,
+            title: 'Microwave Turntable Motor Replacement',
+            description:
+              'Restore proper rotation of the glass tray by replacing a worn or seized turntable motor for even cooking.',
+          },
+        ],
+      },
+
     ],
   },
 ]
