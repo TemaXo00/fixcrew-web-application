@@ -477,6 +477,535 @@ export const services: Types[] = [
           },
         ],
       },
+      {
+        id: 9,
+        title: 'General Appliance',
+        subCategories: [
+          {
+            id: 1,
+            title: 'General Appliance Repair 1',
+            description:
+              'Comprehensive repair service for a wide range of household appliances, including diagnosis and basic repairs.',
+          },
+          {
+            id: 2,
+            title: 'General Appliance Repair 2',
+            description:
+              'Complete appliance repair service covering minor component replacements and system adjustments.',
+          },
+          {
+            id: 3,
+            title: 'General Appliance Repair 3',
+            description:
+              'Full-service repair for common appliance issues, from electrical problems to mechanical failures.',
+          },
+          {
+            id: 4,
+            title: 'General Appliance Repair 4',
+            description:
+              'Professional repair service addressing operational issues across all major appliance categories.',
+          },
+          {
+            id: 5,
+            title: 'General Appliance Repair 5',
+            description:
+              'Comprehensive troubleshooting and repair for appliances experiencing intermittent or consistent failures.',
+          },
+          {
+            id: 6,
+            title: 'General Appliance Repair 6',
+            description:
+              'Expert repair service covering all major components including motors, pumps, and control systems.',
+          },
+          {
+            id: 7,
+            title: 'General Appliance Repair 7',
+            description:
+              'Complete diagnostic and repair solution for appliances of any brand or model.',
+          },
+          {
+            id: 8,
+            title: 'General Appliance Repair 8',
+            description:
+              'Professional service addressing unusual noises, poor performance, and complete operational failures.',
+          },
+          {
+            id: 9,
+            title: 'General Appliance Repair 9',
+            description:
+              'Comprehensive repair service backed by thorough testing and quality replacement parts.',
+          },
+          {
+            id: 10,
+            title: 'General Appliance Repair 10',
+            description:
+              'Full-service appliance repair including disassembly, repair, and reassembly with proper calibration.',
+          },
+          {
+            id: 11,
+            title: 'General Appliance Repair 11',
+            description:
+              'Expert diagnostic and repair for appliances displaying error codes or performance issues.',
+          },
+          {
+            id: 12,
+            title: 'General Appliance Repair 12',
+            description:
+              'Complete repair solution covering electrical, mechanical, and electronic components.',
+          },
+          {
+            id: 13,
+            title: 'General Appliance Repair 13',
+            description:
+              'Professional service ensuring your appliances return to optimal operating condition.',
+          },
+          {
+            id: 14,
+            title: 'General Appliance Repair 14',
+            description:
+              'Comprehensive repair for major appliances including washers, dryers, refrigerators, and more.',
+          },
+          {
+            id: 15,
+            title: 'General Appliance Repair 15',
+            description:
+              'Expert troubleshooting and repair for appliances with complex failure modes.',
+          },
+          {
+            id: 16,
+            title: 'General Appliance Repair 16',
+            description:
+              'Complete diagnostic service followed by precise repair of identified issues.',
+          },
+          {
+            id: 17,
+            title: 'General Appliance Repair 17',
+            description:
+              'Professional repair service with focus on long-term reliability and performance.',
+          },
+          {
+            id: 18,
+            title: 'General Appliance Repair 18',
+            description:
+              'Comprehensive repair addressing both primary failures and underlying contributing factors.',
+          },
+          {
+            id: 19,
+            title: 'General Appliance Repair 19',
+            description:
+              'Expert service covering all appliance types with manufacturer-grade replacement parts.',
+          },
+          {
+            id: 20,
+            title: 'General Appliance Repair 20',
+            description:
+              'Complete repair solution for appliances exhibiting unusual sounds, leaks, or operational failures.',
+          },
+          {
+            id: 21,
+            title: 'General Appliance Repair 21',
+            description:
+              'Professional diagnostic and repair service with thorough post-repair testing.',
+          },
+          {
+            id: 22,
+            title: 'General Appliance Repair 22',
+            description:
+              'Comprehensive appliance repair ensuring all components function correctly before completion.',
+          },
+          {
+            id: 23,
+            title: 'General Appliance Repair 23',
+            description:
+              'Expert repair for appliances with intermittent issues that are difficult to diagnose.',
+          },
+          {
+            id: 24,
+            title: 'General Appliance Repair 24',
+            description:
+              'Complete service covering everything from minor adjustments to major component replacements.',
+          },
+          {
+            id: 25,
+            title: 'General Appliance Repair 25',
+            description:
+              'Professional repair service with detailed diagnostics and transparent solutions.',
+          },
+          {
+            id: 26,
+            title: 'General Appliance Repair 26',
+            description:
+              'Comprehensive repair for appliances experiencing reduced performance or complete failure.',
+          },
+          {
+            id: 27,
+            title: 'General Appliance Repair 27',
+            description:
+              'Expert troubleshooting and repair using advanced diagnostic tools and techniques.',
+          },
+          {
+            id: 28,
+            title: 'General Appliance Repair 28',
+            description:
+              'Complete appliance repair service with focus on efficiency and lasting results.',
+          },
+          {
+            id: 29,
+            title: 'General Appliance Repair 29',
+            description:
+              'Professional service addressing electrical faults, mechanical breakdowns, and control system issues.',
+          },
+          {
+            id: 30,
+            title: 'General Appliance Repair 30',
+            description:
+              'Comprehensive diagnostic and repair for appliances of any age or condition.',
+          },
+          {
+            id: 31,
+            title: 'General Appliance Repair 31',
+            description:
+              'Expert repair service with commitment to quality workmanship and customer satisfaction.',
+          },
+          {
+            id: 32,
+            title: 'General Appliance Repair 32',
+            description:
+              'Complete repair solution for appliances experiencing overheating, noise, or performance degradation.',
+          },
+          {
+            id: 33,
+            title: 'General Appliance Repair 33',
+            description:
+              'Professional diagnostic and repair covering all major systems and components.',
+          },
+          {
+            id: 34,
+            title: 'General Appliance Repair 34',
+            description:
+              'Comprehensive appliance repair ensuring safe and reliable operation after service.',
+          },
+          {
+            id: 35,
+            title: 'General Appliance Repair 35',
+            description:
+              'Expert troubleshooting for appliances with complex or intermittent fault conditions.',
+          },
+          {
+            id: 36,
+            title: 'General Appliance Repair 36',
+            description:
+              'Complete repair service with detailed inspection and quality replacement parts.',
+          },
+          {
+            id: 37,
+            title: 'General Appliance Repair 37',
+            description:
+              'Professional service addressing all common appliance failures with precision.',
+          },
+          {
+            id: 38,
+            title: 'General Appliance Repair 38',
+            description:
+              'Comprehensive diagnostic and repair for appliances showing signs of wear or malfunction.',
+          },
+          {
+            id: 39,
+            title: 'General Appliance Repair 39',
+            description:
+              'Expert repair service with focus on restoring full functionality and efficiency.',
+          },
+          {
+            id: 40,
+            title: 'General Appliance Repair 40',
+            description:
+              'Complete repair solution for electrical, electronic, and mechanical appliance issues.',
+          },
+          {
+            id: 41,
+            title: 'General Appliance Repair 41',
+            description:
+              'Professional diagnostic and repair service with thorough testing after completion.',
+          },
+          {
+            id: 42,
+            title: 'General Appliance Repair 42',
+            description:
+              'Comprehensive repair addressing both obvious failures and hidden contributing issues.',
+          },
+          {
+            id: 43,
+            title: 'General Appliance Repair 43',
+            description: 'Expert service covering all major appliance brands and models.',
+          },
+          {
+            id: 44,
+            title: 'General Appliance Repair 44',
+            description:
+              'Complete repair service with emphasis on durability and long-term performance.',
+          },
+          {
+            id: 45,
+            title: 'General Appliance Repair 45',
+            description:
+              'Professional troubleshooting and repair for appliances with persistent operational problems.',
+          },
+          {
+            id: 46,
+            title: 'General Appliance Repair 46',
+            description: 'Comprehensive diagnostic service followed by precise, effective repairs.',
+          },
+          {
+            id: 47,
+            title: 'General Appliance Repair 47',
+            description:
+              'Expert repair for appliances experiencing electrical failures or control board issues.',
+          },
+          {
+            id: 48,
+            title: 'General Appliance Repair 48',
+            description: 'Complete repair solution with focus on safety and reliable operation.',
+          },
+          {
+            id: 49,
+            title: 'General Appliance Repair 49',
+            description:
+              'Professional service addressing mechanical breakdowns and component failures.',
+          },
+          {
+            id: 50,
+            title: 'General Appliance Repair 50',
+            description: 'Comprehensive repair ensuring all appliance functions operate correctly.',
+          },
+          {
+            id: 51,
+            title: 'General Appliance Repair 51',
+            description:
+              'Expert diagnostic and repair for appliances with complex electronic control systems.',
+          },
+          {
+            id: 52,
+            title: 'General Appliance Repair 52',
+            description:
+              'Complete repair service with detailed assessment and quality workmanship.',
+          },
+          {
+            id: 53,
+            title: 'General Appliance Repair 53',
+            description:
+              'Professional service for appliances requiring specialized repair techniques.',
+          },
+          {
+            id: 54,
+            title: 'General Appliance Repair 54',
+            description:
+              'Comprehensive repair covering all components from motors to control boards.',
+          },
+          {
+            id: 55,
+            title: 'General Appliance Repair 55',
+            description: 'Expert troubleshooting and repair with focus on accurate diagnosis.',
+          },
+          {
+            id: 56,
+            title: 'General Appliance Repair 56',
+            description:
+              'Complete repair solution for appliances with unusual or hard-to-diagnose issues.',
+          },
+          {
+            id: 57,
+            title: 'General Appliance Repair 57',
+            description:
+              'Professional diagnostic and repair service with commitment to excellence.',
+          },
+          {
+            id: 58,
+            title: 'General Appliance Repair 58',
+            description: 'Comprehensive repair ensuring optimal performance and energy efficiency.',
+          },
+          {
+            id: 59,
+            title: 'General Appliance Repair 59',
+            description:
+              'Expert service for appliances requiring precise calibration or adjustment.',
+          },
+          {
+            id: 60,
+            title: 'General Appliance Repair 60',
+            description: 'Complete repair service with thorough testing and quality assurance.',
+          },
+          {
+            id: 61,
+            title: 'General Appliance Repair 61',
+            description: 'Professional repair covering all aspects of appliance functionality.',
+          },
+          {
+            id: 62,
+            title: 'General Appliance Repair 62',
+            description:
+              'Comprehensive diagnostic and repair for appliances with multiple failure points.',
+          },
+          {
+            id: 63,
+            title: 'General Appliance Repair 63',
+            description:
+              'Expert troubleshooting and repair using industry-leading diagnostic methods.',
+          },
+          {
+            id: 64,
+            title: 'General Appliance Repair 64',
+            description:
+              'Complete repair solution with focus on restoring appliance to factory specifications.',
+          },
+          {
+            id: 65,
+            title: 'General Appliance Repair 65',
+            description:
+              'Professional service addressing both immediate issues and preventive maintenance.',
+          },
+          {
+            id: 66,
+            title: 'General Appliance Repair 66',
+            description:
+              'Comprehensive repair ensuring long-term reliability and customer satisfaction.',
+          },
+          {
+            id: 67,
+            title: 'General Appliance Repair 67',
+            description:
+              'Expert diagnostic and repair for appliances with intermittent or sporadic issues.',
+          },
+          {
+            id: 68,
+            title: 'General Appliance Repair 68',
+            description:
+              'Complete repair service with detailed documentation and follow-up support.',
+          },
+          {
+            id: 69,
+            title: 'General Appliance Repair 69',
+            description:
+              'Professional service for appliances requiring specialized knowledge and tools.',
+          },
+          {
+            id: 70,
+            title: 'General Appliance Repair 70',
+            description:
+              'Comprehensive repair covering electrical, mechanical, and electronic systems.',
+          },
+          {
+            id: 71,
+            title: 'General Appliance Repair 71',
+            description:
+              'Expert troubleshooting and repair with emphasis on accurate problem identification.',
+          },
+          {
+            id: 72,
+            title: 'General Appliance Repair 72',
+            description:
+              'Complete repair solution for appliances with performance or safety concerns.',
+          },
+          {
+            id: 73,
+            title: 'General Appliance Repair 73',
+            description:
+              'Professional diagnostic and repair service with transparent pricing and solutions.',
+          },
+          {
+            id: 74,
+            title: 'General Appliance Repair 74',
+            description:
+              'Comprehensive repair ensuring all safety features and systems function correctly.',
+          },
+          {
+            id: 75,
+            title: 'General Appliance Repair 75',
+            description:
+              'Expert service for appliances with complex failure patterns or unusual symptoms.',
+          },
+          {
+            id: 76,
+            title: 'General Appliance Repair 76',
+            description: 'Complete repair service with focus on efficiency and minimal disruption.',
+          },
+          {
+            id: 77,
+            title: 'General Appliance Repair 77',
+            description: 'Professional repair covering all major appliance categories and brands.',
+          },
+          {
+            id: 78,
+            title: 'General Appliance Repair 78',
+            description: 'Comprehensive diagnostic and repair with thorough post-service testing.',
+          },
+          {
+            id: 79,
+            title: 'General Appliance Repair 79',
+            description:
+              'Expert troubleshooting and repair for appliances with electronic control failures.',
+          },
+          {
+            id: 80,
+            title: 'General Appliance Repair 80',
+            description:
+              'Complete repair solution with commitment to quality parts and workmanship.',
+          },
+          {
+            id: 81,
+            title: 'General Appliance Repair 81',
+            description:
+              'Professional service addressing mechanical wear and component deterioration.',
+          },
+          {
+            id: 82,
+            title: 'General Appliance Repair 82',
+            description:
+              'Comprehensive repair ensuring full restoration of appliance functionality.',
+          },
+          {
+            id: 83,
+            title: 'General Appliance Repair 83',
+            description:
+              'Expert diagnostic and repair for appliances with uncommon or rare failure modes.',
+          },
+          {
+            id: 84,
+            title: 'General Appliance Repair 84',
+            description:
+              'Complete repair service with detailed inspection and preventive recommendations.',
+          },
+          {
+            id: 85,
+            title: 'General Appliance Repair 85',
+            description:
+              'Professional service for appliances requiring precise component matching and installation.',
+          },
+          {
+            id: 86,
+            title: 'General Appliance Repair 86',
+            description:
+              'Comprehensive repair covering all operational aspects from startup to shutdown.',
+          },
+          {
+            id: 87,
+            title: 'General Appliance Repair 87',
+            description:
+              'Expert troubleshooting and repair with focus on lasting results and reliability.',
+          },
+          {
+            id: 88,
+            title: 'General Appliance Repair 88',
+            description:
+              'Complete repair solution with thorough quality control and customer verification.',
+          },
+          {
+            id: 89,
+            title: 'General Appliance Repair 89',
+            description:
+              'Professional diagnostic and repair service ensuring complete satisfaction and appliance longevity.',
+          },
+        ],
+      },
     ],
   },
 ]
