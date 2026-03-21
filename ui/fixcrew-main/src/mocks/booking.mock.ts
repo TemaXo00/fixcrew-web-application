@@ -394,30 +394,89 @@ export const services: Types[] = [
           {
             id: 1,
             title: 'Hood Service',
-            description: ''
+            description:
+              'Comprehensive maintenance and repair service for range hoods, including cleaning, inspection, and component testing.',
           },
           {
             id: 2,
             title: 'Range Hood Diagnostic',
-            description: ''
+            description:
+              'Identify the cause of poor ventilation, excessive noise, non-functional lights, or unresponsive controls with a full system evaluation.',
           },
           {
             id: 3,
             title: 'Range Hood Fan Motor Replacement',
-            description: ''
+            description:
+              'Restore proper airflow and ventilation by replacing a worn, seized, or noisy fan motor that fails to operate.',
           },
           {
             id: 4,
             title: 'Range Hood Light Replacement',
-            description: ''
+            description:
+              'Fix non-functional or flickering hood lights by replacing burned-out bulbs or faulty light sockets.',
           },
           {
             id: 5,
             title: 'Range Hood Control Switch Replacement',
-            description: ''
-          }
-        ]
-      }
+            description:
+              'Eliminate unresponsive fan speed buttons or light switches by replacing worn or failed control switches.',
+          },
+        ],
+      },
+      {
+        id: 8,
+        title: 'General Services',
+        subCategories: [
+          {
+            id: 1,
+            title: 'Services - Labor 30 Minutes',
+            description:
+              'Labor charge for service calls requiring up to 30 minutes of work, including minor repairs, adjustments, or inspections.',
+          },
+          {
+            id: 2,
+            title: 'Services - Labor 1 Hour',
+            description:
+              'Labor charge for service calls requiring up to one hour of work, covering standard repairs and component replacements.',
+          },
+          {
+            id: 3,
+            title: 'Services - Labor 2 Hours',
+            description:
+              'Labor charge for service calls requiring up to two hours of work, including complex repairs or multiple component replacements.',
+          },
+          {
+            id: 4,
+            title: 'Services - Shipping',
+            description:
+              'Cost associated with shipping parts to the service location or customer address for repair completion.',
+          },
+          {
+            id: 5,
+            title: 'Parts Pickup',
+            description:
+              'Service charge for collecting required replacement parts from suppliers to complete a repair.',
+          },
+          {
+            id: 6,
+            title: 'Parts Installation',
+            description:
+              'Labor charge specifically for installing customer-provided or replacement parts during a service visit.',
+          },
+          {
+            id: 7,
+            title: 'Return Visit',
+            description:
+              'Charge for a follow-up service visit to complete a repair, reinstall appliances, or address unresolved issues from a previous call.',
+          },
+          {
+            id: 8,
+            title: 'Emergency Service Call',
+            description:
+              'Premium service charge for urgent after-hours or same-day repairs requiring immediate attention outside standard business hours.',
+          },
+        ],
+      },
     ],
   },
 ]
