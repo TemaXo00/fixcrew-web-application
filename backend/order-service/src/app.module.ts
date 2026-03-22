@@ -4,9 +4,8 @@ import { TerminusModule } from '@nestjs/terminus';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
 
-import { PrismaModule } from './prisma/prisma.module';
-import { RedisModule } from './redis/redis.module';
 import { MastersModule } from './masters/masters.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -34,7 +33,6 @@ import { MastersModule } from './masters/masters.module';
     }),
     TerminusModule,
     PrismaModule,
-    RedisModule,
     MastersModule,
   ],
   controllers: [],

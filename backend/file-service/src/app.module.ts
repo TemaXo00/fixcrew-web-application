@@ -4,7 +4,6 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
 
 import { PrismaModule } from './prisma/prisma.module';
-import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -31,7 +30,6 @@ import { RedisModule } from './redis/redis.module';
       },
     }),
     PrismaModule,
-    RedisModule,
   ],
   controllers: [],
   providers: [],

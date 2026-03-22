@@ -7,7 +7,6 @@ import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module';
 import { InvitesModule } from './invites/invites.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -36,7 +35,6 @@ import { RedisModule } from './redis/redis.module';
     }),
     PrismaModule,
     AuthModule,
-    RedisModule,
     InvitesModule,
   ],
   controllers: [],
