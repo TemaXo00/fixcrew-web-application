@@ -8,7 +8,6 @@ import { computed, reactive, ref } from 'vue'
 import ButtonComponent from '@/components/shared/ButtonComponent.vue'
 import { user_routes } from '@/axios/configs.axios.ts'
 import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
 import AvatarInput from '@/components/authorization/AvatarInput.vue'
 
 const route = useRoute()
@@ -43,9 +42,6 @@ async function submitForm(): Promise<void> {
   } catch (error) {
     isLoading.value = false
     console.log(error)
-    if (axios.isAxiosError(error)) {
-      console.log(error.response?.data?.message || 'Registration failed')
-    }
   }
 }
 </script>

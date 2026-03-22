@@ -7,7 +7,6 @@ import InputComponent from '@/components/shared/InputComponent.vue'
 import { reactive, ref } from 'vue'
 import ButtonComponent from '@/components/shared/ButtonComponent.vue'
 import { user_routes } from '@/axios/configs.axios.ts'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -28,9 +27,6 @@ async function submitForm(): Promise<void> {
   } catch (error) {
     isLoading.value = false
     console.log(error)
-    if (axios.isAxiosError(error)) {
-      console.log(error.response?.data?.message || 'Login failed')
-    }
   }
 }
 </script>

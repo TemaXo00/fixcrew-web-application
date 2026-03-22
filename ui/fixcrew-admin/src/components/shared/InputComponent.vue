@@ -33,7 +33,7 @@ function updateValue(event: Event) {
       :value="modelValue"
       :type="type"
       @input="updateValue"
-      class="small:w-50 medium:w-70 large:w-110 w-130 transition ease-in-out font-secondary duration-300 border-2 border-dimmed/80 rounded-lg text-dimmed/65 p-2 focus:text-dimmed focus:scale-102 focus:outline-none"
+      class="w-50 small:w-70 medium:w-110 large:w-130 transition ease-in-out font-secondary duration-300 border-2 border-dimmed/80 rounded-lg text-dimmed/65 p-2 focus:text-dimmed focus:scale-102 focus:outline-none"
     />
   </div>
 </template>
