@@ -20,10 +20,10 @@ function updateValue(event: Event) {
 <template>
   <div class="flex flex-col gap-2 mb-4">
     <div class="flex flex-row gap-2">
-      <p class="text-lg text-accent pointer-events-none select-none font-primary">{{ name }}</p>
+      <p class="text-lg text-dimmed pointer-events-none select-none font-primary">{{ name }}</p>
       <p
         v-if="isNecessary === true"
-        class="text-lg text-muted-accent pointer-events-none select-none font-primary"
+        class="text-lg text-dimmed pointer-events-none select-none font-primary"
       >
         *
       </p>
@@ -33,7 +33,7 @@ function updateValue(event: Event) {
       :value="modelValue"
       :type="type"
       @input="updateValue"
-      class="small:w-75 medium:w-115 large:w-165 transition ease-in-out font-secondary duration-300 border-2 border-muted-accent/90 rounded-lg text-dimmed/65 p-2 focus:text-dimmed focus:scale-102 focus:outline-none"
+      class="small:w-50 medium:w-70 large:w-110 w-130 transition ease-in-out font-secondary duration-300 border-2 border-dimmed/80 rounded-lg text-dimmed/65 p-2 focus:text-dimmed focus:scale-102 focus:outline-none"
     />
   </div>
 </template>

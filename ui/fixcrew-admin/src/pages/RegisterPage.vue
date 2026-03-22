@@ -2,7 +2,7 @@
 import FormWrapper from '@/components/authorization/FormWrapper.vue'
 import FormBackground from '@/components/authorization/FormBackground.vue'
 import FormHeader from '@/components/authorization/FormHeader.vue'
-import type { UserRegister } from '@/interfaces/user.interface.ts'
+import type { AuthRegister } from '@/interfaces/auth.interface.ts'
 import InputComponent from '@/components/shared/InputComponent.vue'
 import { computed, reactive, ref } from 'vue'
 import ButtonComponent from '@/components/shared/ButtonComponent.vue'
@@ -16,7 +16,7 @@ const router = useRouter()
 
 const token = computed(() => route.query.token || null)
 const isLoading = ref<boolean>(false)
-const user = reactive<UserRegister>({
+const user = reactive<AuthRegister>({
   name: '',
   surname: '',
   phone_number: '',

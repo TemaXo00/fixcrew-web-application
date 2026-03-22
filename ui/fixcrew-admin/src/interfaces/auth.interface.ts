@@ -1,4 +1,4 @@
-export interface UserRegister {
+export interface AuthRegister {
   name: string;
   surname: string;
   phone_number: string;
@@ -7,4 +7,4 @@ export interface UserRegister {
   avatar_url: File | null;
 }
 
-export type UserLogin = Pick<UserRegister, 'email' | 'password'>
+export type AuthLogin = Pick<AuthRegister, 'email' | 'password'>

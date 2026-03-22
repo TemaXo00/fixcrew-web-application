@@ -10,6 +10,10 @@ const router = createRouter({
       path: '/',
       name: 'Home',
       component: HomePage,
+      meta: {
+        title: 'Home',
+        requiresAuth: true
+      }
     },
     {
       path: '/register',
@@ -34,6 +38,12 @@ router.beforeEach((to) => {
   const baseTitle: string = 'Admin'
 
   document.title = to.meta.title ? `${baseTitle} - ${to.meta.title}` : baseTitle
+
+  const isLoggedIn = !!localStorage.getItem('accessToken')
+
+  if (to.meta.requiresAuth && !isLoggedIn) {
+    return { name: 'Login' }
+  }
 
   return true
 })
