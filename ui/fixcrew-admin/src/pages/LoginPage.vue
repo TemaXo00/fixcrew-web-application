@@ -2,7 +2,7 @@
 import FormWrapper from '@/components/authorization/FormWrapper.vue'
 import FormBackground from '@/components/authorization/FormBackground.vue'
 import FormHeader from '@/components/authorization/FormHeader.vue'
-import type { UserLogin } from '@/interfaces/user.interface.ts'
+import type { AuthLogin } from '@/interfaces/auth.interface.ts'
 import InputComponent from '@/components/shared/InputComponent.vue'
 import { reactive, ref } from 'vue'
 import ButtonComponent from '@/components/shared/ButtonComponent.vue'
@@ -12,7 +12,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const user = reactive<UserLogin>({
+const user = reactive<AuthLogin>({
   email: '',
   password: '',
 })

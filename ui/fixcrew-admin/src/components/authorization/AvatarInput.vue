@@ -49,12 +49,12 @@ function onFileChange(event: Event) {
 <template>
   <div class="flex flex-col gap-2 mb-4">
     <div class="flex flex-row gap-2">
-      <p class="text-lg text-accent pointer-events-none select-none font-primary">
-        {{ props.name }}
+      <p class="text-lg text-dimmed pointer-events-none select-none font-primary">
+        {{ name }}
       </p>
       <p
-        v-if="props.isNecessary"
-        class="text-lg text-muted-accent pointer-events-none select-none font-primary"
+        v-if="isNecessary"
+        class="text-lg text-dimmed pointer-events-none select-none font-primary"
       >
         *
       </p>
