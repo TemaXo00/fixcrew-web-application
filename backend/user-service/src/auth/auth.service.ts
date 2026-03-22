@@ -46,8 +46,6 @@ export class AuthService {
     token: string,
     res: Response,
   ): Promise<AuthorizationDto> {
-    await this.invite.useInvite(token);
-
     const [existingEmail, existingPhoneNumber] = await Promise.all([
       this.prisma.user.findUnique({ where: { email: dto.email } }),
       this.prisma.user.findUnique({
@@ -62,6 +60,8 @@ export class AuthService {
     if (existingPhoneNumber) {
       throw new ConflictException('User already exists');
     }
+
+    await this.invite.useInvite(token);
 
     const hashedPassword = await argon2.hash(dto.password);
 
