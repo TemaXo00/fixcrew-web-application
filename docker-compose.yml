@@ -288,7 +288,6 @@ services:
     container_name: fixcrew-file-service
     environment:
       DATABASE_URL: ${FILE_DB_URL}
-      REDIS_URL: ${REDIS_URL}
       MINIO_API_PORT: ${MINIO_API_PORT}
       MINIO_UI_PORT: ${MINIO_UI_PORT}
     volumes:
@@ -299,8 +298,6 @@ services:
       - backend
       - storage
     depends_on:
-      redis:
-        condition: service_healthy
       minio:
         condition: service_healthy
       rabbitmq:
@@ -353,8 +350,6 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-      redis:
-        condition: service_healthy
 
   order-service:
     build:
@@ -396,7 +391,6 @@ services:
       JWT_REFRESH_TTL: ${JWT_REFRESH_TTL}
       COOKIE_DOMAIN: ${COOKIE_DOMAIN}
       DATABASE_URL: ${USER_DB_URL}
-      REDIS_URL: ${REDIS_URL}
       RABBIT_MQ_USER: ${RABBIT_MQ_USER}
       RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
       MAIL_QUEUE: ${MAIL_QUEUE}
@@ -408,8 +402,6 @@ services:
     networks:
       - backend
     depends_on:
-      redis:
-        condition: service_healthy
       rabbitmq:
         condition: service_healthy
       user-db:
