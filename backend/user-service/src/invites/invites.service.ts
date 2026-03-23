@@ -87,7 +87,7 @@ export class InvitesService {
     return invite;
   }
 
-  async createInvite(dto: InviteCreateDto): Promise<Token> {
+  async createInvite(dto: InviteCreateDto): Promise<void> {
     const rawToken = this.generateToken();
     const hashedToken = this.hashToken(rawToken);
 
@@ -105,7 +105,7 @@ export class InvitesService {
       throw new ConflictException('Invite for this email already exists');
     }
 
-    const invite = await this.prisma.token.create({
+    await this.prisma.token.create({
       data: {
         hash: hashedToken,
         email: dto.email,
@@ -117,27 +117,25 @@ export class InvitesService {
       email: dto.email,
       token: rawToken,
     });
-
-    return invite;
   }
 
-  async useInvite(rawToken: string): Promise<Token> {
+  async useInvite(rawToken: string): Promise<void> {
     const hashedToken = this.hashToken(rawToken);
 
     const invite = await this.getInviteByToken(hashedToken);
 
-    return this.prisma.token.update({
+    this.prisma.token.update({
       where: { id: invite.id },
       data: { status: 'USED' },
     });
   }
 
-  async revokeInvite(rawToken: string): Promise<Token> {
+  async revokeInvite(rawToken: string): Promise<void> {
     const hashedToken = this.hashToken(rawToken);
 
     const invite = await this.getInviteByToken(hashedToken);
 
-    return this.prisma.token.update({
+    this.prisma.token.update({
       where: { id: invite.id },
       data: { status: 'REVOKED' },
     });

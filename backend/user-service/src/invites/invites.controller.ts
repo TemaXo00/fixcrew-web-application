@@ -47,12 +47,12 @@ export class InvitesController {
   @Authorization()
   @Roles(UserRoles.ADMIN)
   @Post()
-  async createInvite(@Body() dto: InviteCreateDto): Promise<Token> {
+  async createInvite(@Body() dto: InviteCreateDto): Promise<void> {
     return this.invitesService.createInvite(dto);
   }
 
   @Patch('use/:token')
-  useToken(@Param('token') token: string): Promise<Token> {
+  useToken(@Param('token') token: string): Promise<void> {
     return this.invitesService.useInvite(token);
   }
 
@@ -60,7 +60,7 @@ export class InvitesController {
   @Authorization()
   @Roles(UserRoles.ADMIN)
   @Patch('revoke/:token')
-  async revokeInvite(@Param('token') token: string): Promise<Token> {
+  async revokeInvite(@Param('token') token: string): Promise<void> {
     return this.invitesService.revokeInvite(token);
   }
 

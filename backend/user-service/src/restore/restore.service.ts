@@ -7,7 +7,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { Token } from '@prisma-gen/client';
 import * as argon2 from 'argon2';
 
 import { PrismaService } from '../prisma/prisma.service';
@@ -29,7 +28,7 @@ export class RestoreService {
     return createHash('sha256').update(token).digest('hex');
   }
 
-  async setRestore(dto: CreateRestoreDto): Promise<Token> {
+  async setRestore(dto: CreateRestoreDto): Promise<void> {
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
@@ -73,7 +72,7 @@ export class RestoreService {
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + 24);
 
-    const token = await this.prisma.token.create({
+    await this.prisma.token.create({
       data: {
         hash: hashedToken,
         email: dto.email,
@@ -86,8 +85,6 @@ export class RestoreService {
       token: rawToken,
       expiresAt,
     });
-
-    return token;
   }
 
   async useRestore(rawToken: string, dto: UseRestoreDto): Promise<void> {
