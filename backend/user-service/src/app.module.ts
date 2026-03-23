@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { InvitesModule } from './invites/invites.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProfileModule } from './profile/profile.module';
+import { RestoreModule } from './restore/restore.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { ProfileModule } from './profile/profile.module';
     AuthModule,
     InvitesModule,
     ProfileModule,
+    RestoreModule,
   ],
   controllers: [],
   providers: [],

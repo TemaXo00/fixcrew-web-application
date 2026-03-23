@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { Invite } from '@prisma-gen/client';
+import { Token } from '@prisma-gen/client';
 
 import { InviteCreateDto } from './dto/invite-create.dto';
 import {
@@ -34,14 +34,14 @@ export class InvitesService {
 
   async getInvites(
     pagination: PaginationDto,
-  ): Promise<PaginatedResponseDto<Invite>> {
+  ): Promise<PaginatedResponseDto<Token>> {
     const [invites, total] = await Promise.all([
-      this.prisma.invite.findMany({
+      this.prisma.token.findMany({
         skip: pagination.skip,
         take: pagination.take,
         orderBy: { created_at: 'desc' },
       }),
-      this.prisma.invite.count({}),
+      this.prisma.token.count({}),
     ]);
 
     return new PaginatedResponseDto(invites, total, pagination);
@@ -49,10 +49,10 @@ export class InvitesService {
 
   async getInvitesStats(): Promise<object> {
     const [created, used, revoked, expired] = await Promise.all([
-      this.prisma.invite.count({ where: { status: 'CREATED' } }),
-      this.prisma.invite.count({ where: { status: 'USED' } }),
-      this.prisma.invite.count({ where: { status: 'REVOKED' } }),
-      this.prisma.invite.count({ where: { status: 'EXPIRED' } }),
+      this.prisma.token.count({ where: { status: 'CREATED' } }),
+      this.prisma.token.count({ where: { status: 'USED' } }),
+      this.prisma.token.count({ where: { status: 'REVOKED' } }),
+      this.prisma.token.count({ where: { status: 'EXPIRED' } }),
     ]);
 
     return {
@@ -63,10 +63,10 @@ export class InvitesService {
     };
   }
 
-  private async getInviteByToken(token: string): Promise<Invite> {
-    const invite = await this.prisma.invite.findFirst({
+  private async getInviteByToken(token: string): Promise<Token> {
+    const invite = await this.prisma.token.findFirst({
       where: {
-        token: token,
+        hash: token,
         status: 'CREATED',
       },
     });
@@ -76,7 +76,7 @@ export class InvitesService {
     }
 
     if (invite.expires_at < new Date()) {
-      await this.prisma.invite.update({
+      await this.prisma.token.update({
         where: { id: invite.id },
         data: { status: 'EXPIRED' },
       });
@@ -87,14 +87,14 @@ export class InvitesService {
     return invite;
   }
 
-  async createInvite(dto: InviteCreateDto): Promise<Invite> {
+  async createInvite(dto: InviteCreateDto): Promise<Token> {
     const rawToken = this.generateToken();
     const hashedToken = this.hashToken(rawToken);
 
     const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 1);
+    expiresAt.setHours(expiresAt.getHours() + 24);
 
-    const existing = await this.prisma.invite.findFirst({
+    const existing = await this.prisma.token.findFirst({
       where: {
         email: dto.email,
         status: 'CREATED',
@@ -105,9 +105,9 @@ export class InvitesService {
       throw new ConflictException('Invite for this email already exists');
     }
 
-    const invite = await this.prisma.invite.create({
+    const invite = await this.prisma.token.create({
       data: {
-        token: hashedToken,
+        hash: hashedToken,
         email: dto.email,
         expires_at: expiresAt,
       },
@@ -116,36 +116,35 @@ export class InvitesService {
     this.mail.emit('invite.created', {
       email: dto.email,
       token: rawToken,
-      expiresAt,
     });
 
     return invite;
   }
 
-  async useInvite(rawToken: string): Promise<Invite> {
+  async useInvite(rawToken: string): Promise<Token> {
     const hashedToken = this.hashToken(rawToken);
 
     const invite = await this.getInviteByToken(hashedToken);
 
-    return this.prisma.invite.update({
+    return this.prisma.token.update({
       where: { id: invite.id },
       data: { status: 'USED' },
     });
   }
 
-  async revokeInvite(rawToken: string): Promise<Invite> {
+  async revokeInvite(rawToken: string): Promise<Token> {
     const hashedToken = this.hashToken(rawToken);
 
     const invite = await this.getInviteByToken(hashedToken);
 
-    return this.prisma.invite.update({
+    return this.prisma.token.update({
       where: { id: invite.id },
       data: { status: 'REVOKED' },
     });
   }
 
   async manuallyDeleteExpiredInvites(): Promise<void> {
-    await this.prisma.invite.deleteMany({
+    await this.prisma.token.deleteMany({
       where: {
         OR: [
           { status: 'EXPIRED' },
@@ -163,7 +162,7 @@ export class InvitesService {
 
   @Cron(CronExpression.EVERY_WEEK)
   async automatedDeleteExpiredInvites(): Promise<void> {
-    await this.prisma.invite.deleteMany({
+    await this.prisma.token.deleteMany({
       where: {
         OR: [
           { status: 'EXPIRED' },

@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { Invite, Roles as UserRoles } from '@prisma-gen/client';
+import { Token, Roles as UserRoles } from '@prisma-gen/client';
 
 import { InviteCreateDto } from './dto/invite-create.dto';
 import { InvitesService } from './invites.service';
@@ -31,7 +31,7 @@ export class InvitesController {
   @Get()
   async getInvites(
     @Query() pagination: PaginationDto,
-  ): Promise<PaginatedResponseDto<Invite>> {
+  ): Promise<PaginatedResponseDto<Token>> {
     return this.invitesService.getInvites(pagination);
   }
 
@@ -47,12 +47,12 @@ export class InvitesController {
   @Authorization()
   @Roles(UserRoles.ADMIN)
   @Post()
-  async createInvite(@Body() dto: InviteCreateDto): Promise<Invite> {
+  async createInvite(@Body() dto: InviteCreateDto): Promise<Token> {
     return this.invitesService.createInvite(dto);
   }
 
   @Patch('use/:token')
-  useToken(@Param('token') token: string): Promise<Invite> {
+  useToken(@Param('token') token: string): Promise<Token> {
     return this.invitesService.useInvite(token);
   }
 
@@ -60,7 +60,7 @@ export class InvitesController {
   @Authorization()
   @Roles(UserRoles.ADMIN)
   @Patch('revoke/:token')
-  async revokeInvite(@Param('token') token: string): Promise<Invite> {
+  async revokeInvite(@Param('token') token: string): Promise<Token> {
     return this.invitesService.revokeInvite(token);
   }
 
