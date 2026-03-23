@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientProviderOptions, ClientsModule, Transport } from '@nestjs/microservices';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { InvitesController } from './invites.controller';
 import { InvitesService } from './invites.service';
-import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -38,5 +38,6 @@ import { ScheduleModule } from '@nestjs/schedule';
   ],
   controllers: [InvitesController],
   providers: [InvitesService],
+  exports: [InvitesService],
 })
 export class InvitesModule {}

@@ -124,7 +124,7 @@ services:
         UI_MAIN_PATH: ${UI_MAIN_PATH}
     container_name: fixcrew-ui-main
     environment:
-      GATEWAY_PORT: ${GATEWAY_PORT}
+      VITE_GATEWAY_URL: ${GATEWAY_URL}
     ports:
       - "${UI_MAIN_PORT}:5173"
     volumes:
@@ -142,7 +142,7 @@ services:
         UI_ADMIN_PATH: ${UI_ADMIN_PATH}
     container_name: fixcrew-ui-admin
     environment:
-      GATEWAY_PORT: ${GATEWAY_PORT}
+      VITE_GATEWAY_URL: ${GATEWAY_URL}
     ports:
       - "${UI_ADMIN_PORT}:5173"
     volumes:
@@ -265,12 +265,7 @@ services:
     container_name: fixcrew-blog-service
     environment:
       DATABASE_URL: ${BLOG_DB_URL}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
-      REDIS_TTL: ${REDIS_TTL}
-      RABBIT_MQ_USER: ${RABBIT_MQ_USER}
-      RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
-      BLOG_QUEUE: ${BLOG_QUEUE}
+      REDIS_URL: ${REDIS_URL}
     volumes:
       - ./backend/blog-service:/app
       - /app/node_modules
@@ -279,9 +274,10 @@ services:
       - backend
       - storage
     depends_on:
-      - redis
-      - rabbitmq
-      - blog-db
+      redis:
+        condition: service_healthy
+      blog-db:
+        condition: service_healthy
 
   file-service:
     build:
@@ -292,12 +288,6 @@ services:
     container_name: fixcrew-file-service
     environment:
       DATABASE_URL: ${FILE_DB_URL}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
-      REDIS_TTL: ${REDIS_TTL}
-      RABBIT_MQ_USER: ${RABBIT_MQ_USER}
-      RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
-      FILE_QUEUE: ${FILE_QUEUE}
       MINIO_API_PORT: ${MINIO_API_PORT}
       MINIO_UI_PORT: ${MINIO_UI_PORT}
     volumes:
@@ -308,10 +298,12 @@ services:
       - backend
       - storage
     depends_on:
-      - redis
-      - minio
-      - rabbitmq
-      - file-db
+      minio:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      file-db:
+        condition: service_healthy
 
   info-service:
     build:
@@ -322,12 +314,7 @@ services:
     container_name: fixcrew-info-service
     environment:
       DATABASE_URL: ${INFO_DB_URL}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
-      REDIS_TTL: ${REDIS_TTL}
-      RABBIT_MQ_USER: ${RABBIT_MQ_USER}
-      RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
-      INFO_QUEUE: ${INFO_QUEUE}
+      REDIS_URL: ${REDIS_URL}
     volumes:
       - ./backend/info-service:/app
       - /app/node_modules
@@ -335,9 +322,10 @@ services:
     networks:
       - backend
     depends_on:
-      - redis
-      - rabbitmq
-      - info-db
+      redis:
+        condition: service_healthy
+      info-db:
+        condition: service_healthy
 
   mail-service:
     build:
@@ -360,8 +348,8 @@ services:
     networks:
       - backend
     depends_on:
-      - redis
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
 
   order-service:
     build:
@@ -372,9 +360,7 @@ services:
     container_name: fixcrew-order-service
     environment:
       DATABASE_URL: ${ORDER_DB_URL}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
-      REDIS_TTL: ${REDIS_TTL}
+      REDIS_URL: ${REDIS_URL}
       RABBIT_MQ_USER: ${RABBIT_MQ_USER}
       RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
       ORDER_QUEUE: ${ORDER_QUEUE}
@@ -385,9 +371,12 @@ services:
     networks:
       - backend
     depends_on:
-      - redis
-      - rabbitmq
-      - order-db
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      order-db:
+        condition: service_healthy
 
   user-service:
     build:
@@ -397,15 +386,14 @@ services:
         USER_SERVICE_PATH: ${USER_SERVICE_PATH}
     container_name: fixcrew-user-service
     environment:
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_TTL: ${JWT_ACCESS_TTL}
+      JWT_REFRESH_TTL: ${JWT_REFRESH_TTL}
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN}
       DATABASE_URL: ${USER_DB_URL}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
-      REDIS_TTL: ${REDIS_TTL}
       RABBIT_MQ_USER: ${RABBIT_MQ_USER}
       RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
       MAIL_QUEUE: ${MAIL_QUEUE}
-      BLOG_QUEUE: ${BLOG_QUEUE}
-      INFO_QUEUE: ${INFO_QUEUE}
       ORDER_QUEUE: ${ORDER_QUEUE}
     volumes:
       - ./backend/user-service:/app
@@ -414,9 +402,10 @@ services:
     networks:
       - backend
     depends_on:
-      - redis
-      - rabbitmq
-      - user-db
+      rabbitmq:
+        condition: service_healthy
+      user-db:
+        condition: service_healthy
 
 networks:
   frontend:

@@ -12,15 +12,15 @@ model User {
   id String @id @default(uuid(4))
 
   name    String
-  surname String?
+  surname String
 
-  phone_number  String? @unique
-  email         String  @unique
+  phone_number  String @unique
+  email         String @unique
   password_hash String
 
   avatar_url String?
-  role       Roles
-  status     UserStatus
+  role       Roles      @default(MASTER)
+  status     UserStatus @default(ACTIVE)
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -28,10 +28,10 @@ model User {
   @@map("users")
 }
 
-model Invite {
+model Token {
   id String @id @default(uuid(4))
 
-  token      String       @unique
+  hash       String       @unique
   email      String
   status     InviteStatus @default(CREATED)
   expires_at DateTime
@@ -39,7 +39,7 @@ model Invite {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@map("invites")
+  @@map("token")
 }
 
 enum Roles {
@@ -50,7 +50,6 @@ enum Roles {
 enum UserStatus {
   ACTIVE
   BANNED
-  DELETED
 }
 
 enum InviteStatus {

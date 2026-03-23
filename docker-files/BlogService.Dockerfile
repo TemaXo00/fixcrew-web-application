@@ -10,4 +10,4 @@ RUN npm ci
 COPY ${BLOG_SERVICE_PATH}/ .
 
 EXPOSE 3000
-CMD sh -c "npm run start:dev"
+CMD sh -c "npx prisma migrate deploy && npm run start:dev"
