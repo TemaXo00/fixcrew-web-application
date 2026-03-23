@@ -32,20 +32,31 @@ const toggleMenu = () => {
             <div class="border-b border-white/20 pb-3 flex flex-col gap-1">
               <span
                 class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
-                >Air conditioning</span
+                >Refridgerators</span
               >
               <span
                 class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
-                >Heating</span
+                >Washers</span
               >
               <span
                 class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
-                >Electrical</span
+                >Dryers</span
               >
-              <span
+              <select
                 class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
-                >Plumbing</span
               >
+                <option value="">more...</option>
+                <option disabled>Dishwasher</option>
+                <option disabled>Oven/Range</option>
+                <option disabled>Microwave</option>
+                <option disabled>Hood</option>
+                <option disabled>General Services</option>
+                <option disabled>General Appliance</option>
+              </select>
+              <!--              <span-->
+              <!--                class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"-->
+              <!--                >more...</span-->
+              <!--              >-->
               <span
                 class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
                 >Prices</span
@@ -71,20 +82,28 @@ const toggleMenu = () => {
       <img src="../assets/images/logo.svg" alt="logo" class="h-8 sm:h-10 md:h-12" />
 
       <ul class="hidden lg:flex flex-row gap-3 xl:gap-5 text-white font-sans cursor-pointer">
-        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap">
-          Air conditioning
+        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
+          Refrigerators
         </li>
         <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
-          Heating
+          Washer
         </li>
         <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
-          Electrical
-        </li>
-        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
-          Plumbing
+          Dryers
         </li>
         <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
           Prices
+        </li>
+        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
+          <select>
+            <option value="">more...</option>
+            <option disabled>Dishwasher</option>
+            <option disabled>Oven/Range</option>
+            <option disabled>Microwave</option>
+            <option disabled>Hood</option>
+            <option disabled>General Services</option>
+            <option disabled>General Appliance</option>
+          </select>
         </li>
       </ul>
 
