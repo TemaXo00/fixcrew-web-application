@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./fonts/Roboto.ttf");
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/Inter.ttf");
+}
+
+@theme {
+  --color-accent: #00B4D8;
+  --color-muted-accent: #0077B6;
+  --color-container: #F3FCFF;
+  --color-container-muted: #D9D9D9;
+  --color-dimmed: #626262;
+
+  --font-primary: Inter, sans-serif;
+  --font-secondary: Roboto, sans-serif;
+
+  --breakpoint-smaller: 320px;
+  --breakpoint-small: 480px;
+  --breakpoint-medium: 768px;
+  --breakpoint-large: 1200px;
+}

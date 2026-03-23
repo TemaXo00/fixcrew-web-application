@@ -124,7 +124,7 @@ services:
         UI_MAIN_PATH: ${UI_MAIN_PATH}
     container_name: fixcrew-ui-main
     environment:
-      GATEWAY_PORT: ${GATEWAY_PORT}
+      VITE_GATEWAY_URL: ${GATEWAY_URL}
     ports:
       - "${UI_MAIN_PORT}:5173"
     volumes:
@@ -142,7 +142,7 @@ services:
         UI_ADMIN_PATH: ${UI_ADMIN_PATH}
     container_name: fixcrew-ui-admin
     environment:
-      GATEWAY_PORT: ${GATEWAY_PORT}
+      VITE_GATEWAY_URL: ${GATEWAY_URL}
     ports:
       - "${UI_ADMIN_PORT}:5173"
     volumes:
