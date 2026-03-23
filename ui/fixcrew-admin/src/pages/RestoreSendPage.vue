@@ -8,6 +8,7 @@ import { reactive, ref } from 'vue'
 import ButtonComponent from '@/components/shared/ButtonComponent.vue'
 import { user_routes } from '@/axios/configs.axios.ts'
 import { useRouter } from 'vue-router'
+import FormFooter from '@/components/authorization/FormFooter.vue'
 
 const router = useRouter()
 
@@ -44,6 +45,7 @@ async function submitForm(): Promise<void> {
         />
         <ButtonComponent name="Send email" :isLoading="isLoading" />
       </form>
+      <FormFooter name="" linkName="Back" link="/login" />
     </FormBackground>
   </FormWrapper>
 </template>

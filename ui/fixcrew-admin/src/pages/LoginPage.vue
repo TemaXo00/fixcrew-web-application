@@ -8,7 +8,7 @@ import { reactive, ref } from 'vue'
 import ButtonComponent from '@/components/shared/ButtonComponent.vue'
 import { user_routes } from '@/axios/configs.axios.ts'
 import { useRouter } from 'vue-router'
-import FormRestore from '@/components/authorization/FormRestore.vue'
+import FormFooter from '@/components/authorization/FormFooter.vue'
 
 const router = useRouter()
 
@@ -56,7 +56,7 @@ async function submitForm(): Promise<void> {
           :isLoading="isLoading"
         />
       </form>
-      <FormRestore />
+      <FormFooter name="Forgot Password?" linkName="Restore" link="/restore" />
     </FormBackground>
   </FormWrapper>
 </template>
