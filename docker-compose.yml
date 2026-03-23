@@ -178,6 +178,8 @@ services:
       POSTGRES_USER: ${USER_DB_USER}
       POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
       POSTGRES_DB: ${USER_DB_NAME}
+    ports:
+      - "5433:5432"
     volumes:
       - user_data:/var/lib/postgresql
     networks:
@@ -195,6 +197,8 @@ services:
       POSTGRES_USER: ${BLOG_DB_USER}
       POSTGRES_PASSWORD: ${BLOG_DB_PASSWORD}
       POSTGRES_DB: ${BLOG_DB_NAME}
+    ports:
+      - "5434:5432"
     volumes:
       - blog_data:/var/lib/postgresql
     networks:
@@ -212,6 +216,8 @@ services:
       POSTGRES_USER: ${INFO_DB_USER}
       POSTGRES_PASSWORD: ${INFO_DB_PASSWORD}
       POSTGRES_DB: ${INFO_DB_NAME}
+    ports:
+      - "5435:5432"
     volumes:
       - info_data:/var/lib/postgresql
     networks:
@@ -229,6 +235,8 @@ services:
       POSTGRES_USER: ${ORDER_DB_USER}
       POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD}
       POSTGRES_DB: ${ORDER_DB_NAME}
+    ports:
+      - "5436:5432"
     volumes:
       - order_data:/var/lib/postgresql
     networks:
@@ -246,6 +254,8 @@ services:
       POSTGRES_USER: ${FILE_DB_USER}
       POSTGRES_PASSWORD: ${FILE_DB_PASSWORD}
       POSTGRES_DB: ${FILE_DB_NAME}
+    ports:
+      - "5437:5432"
     volumes:
       - file_data:/var/lib/postgresql
     networks:
