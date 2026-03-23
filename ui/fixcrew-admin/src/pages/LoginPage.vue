@@ -8,6 +8,7 @@ import { reactive, ref } from 'vue'
 import ButtonComponent from '@/components/shared/ButtonComponent.vue'
 import { user_routes } from '@/axios/configs.axios.ts'
 import { useRouter } from 'vue-router'
+import FormRestore from '@/components/authorization/FormRestore.vue'
 
 const router = useRouter()
 
@@ -35,21 +36,27 @@ async function submitForm(): Promise<void> {
   <FormWrapper>
     <FormBackground>
       <FormHeader name="Welcome Back" />
-      <InputComponent
-        name="Email"
-        type="email"
-        place-text="example@example.com"
-        :isNecessary="true"
-        v-model="user.email"
-      />
-      <InputComponent
-        name="Password"
-        type="password"
-        place-text="Pass@wd123"
-        :isNecessary="true"
-        v-model="user.password"
-      />
-      <ButtonComponent name="Log in" :isLoading="isLoading" @click="submitForm" />
+      <form class="flex flex-col gap-3" @submit.prevent="submitForm">
+        <InputComponent
+          name="Email"
+          type="email"
+          place-text="example@example.com"
+          :isNecessary="true"
+          v-model="user.email"
+        />
+        <InputComponent
+          name="Password"
+          type="password"
+          place-text="Pass@wd123"
+          :isNecessary="true"
+          v-model="user.password"
+        />
+        <ButtonComponent
+          name="Log in"
+          :isLoading="isLoading"
+        />
+      </form>
+      <FormRestore />
     </FormBackground>
   </FormWrapper>
 </template>

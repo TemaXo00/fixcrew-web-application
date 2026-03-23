@@ -50,7 +50,7 @@ async function submitForm(): Promise<void> {
   <FormWrapper>
     <FormBackground>
       <FormHeader name="Create an account" />
-      <div class="flex flex-col gap-3">
+      <form class="flex flex-col gap-3" @submit.prevent="submitForm">
         <InputComponent
           name="Name"
           type="text"
@@ -87,8 +87,8 @@ async function submitForm(): Promise<void> {
           v-model="user.password"
         />
         <AvatarInput name="Avatar" v-model="user.avatar_url" />
-      </div>
-      <ButtonComponent name="Sign up" :isLoading="isLoading" @click="submitForm" />
+        <ButtonComponent name="Sign up" :isLoading="isLoading" />
+      </form>
     </FormBackground>
   </FormWrapper>
 </template>

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import RegisterPage from '@/pages/RegisterPage.vue'
 import HomePage from '@/pages/HomePage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
+import RestoreSendPage from '@/pages/RestoreSendPage.vue'
 import RestorePage from '@/pages/RestorePage.vue'
 
 const router = createRouter({
@@ -34,12 +35,20 @@ const router = createRouter({
     },
     {
       path: '/restore',
+      name: 'Restore send',
+      component: RestoreSendPage,
+      meta: {
+        title: 'Restore send',
+      }
+    },
+    {
+      path: '/restore/use',
       name: 'Restore',
       component: RestorePage,
       meta: {
         title: 'Restore'
       }
-    }
+    },
   ],
 })
 

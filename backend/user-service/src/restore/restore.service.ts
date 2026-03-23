@@ -44,28 +44,13 @@ export class RestoreService {
       where: {
         email: dto.email,
         status: 'CREATED',
-        expires_at: {
-          gt: new Date(),
-        },
+        type: 'PASSWORD'
       },
     });
 
     if (activeToken) {
-      throw new ConflictException(
-        'Active token already exists. Please wait until it expires.',
-      );
+      return
     }
-
-    await this.prisma.token.updateMany({
-      where: {
-        email: dto.email,
-        status: 'CREATED',
-        expires_at: {
-          lte: new Date(),
-        },
-      },
-      data: { status: 'EXPIRED' },
-    });
 
     const rawToken = this.generateToken();
     const hashedToken = this.hashToken(rawToken);
@@ -78,12 +63,13 @@ export class RestoreService {
         email: dto.email,
         expires_at: expiresAt,
         status: 'CREATED',
+        type: 'PASSWORD',
       },
     });
-    this.mail.emit('user.restore', {
+
+    this.mail.send('user.restore', {
       email: dto.email,
       token: rawToken,
-      expiresAt,
     });
   }
 
@@ -94,6 +80,7 @@ export class RestoreService {
       where: {
         hash: hashedToken,
         status: 'CREATED',
+        type: 'PASSWORD',
       },
     });
 

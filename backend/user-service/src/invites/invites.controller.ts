@@ -51,11 +51,6 @@ export class InvitesController {
     return this.invitesService.createInvite(dto);
   }
 
-  @Patch('use/:token')
-  useToken(@Param('token') token: string): Promise<void> {
-    return this.invitesService.useInvite(token);
-  }
-
   @UseGuards(RolesGuard)
   @Authorization()
   @Roles(UserRoles.ADMIN)

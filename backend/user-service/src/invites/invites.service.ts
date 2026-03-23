@@ -68,6 +68,7 @@ export class InvitesService {
       where: {
         hash: token,
         status: 'CREATED',
+        type: 'INVITE'
       },
     });
 
@@ -98,6 +99,7 @@ export class InvitesService {
       where: {
         email: dto.email,
         status: 'CREATED',
+        type: 'INVITE'
       },
     });
 
@@ -110,6 +112,7 @@ export class InvitesService {
         hash: hashedToken,
         email: dto.email,
         expires_at: expiresAt,
+        type: "INVITE"
       },
     });
 
