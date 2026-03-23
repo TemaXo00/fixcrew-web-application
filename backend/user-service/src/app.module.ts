@@ -5,10 +5,9 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
 
 import { AuthModule } from './auth/auth.module';
-import { InvitesModule } from './invites/invites.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProfileModule } from './profile/profile.module';
-import { RestoreModule } from './restore/restore.module';
+import { TokensModule } from './tokens/tokens.module';
 
 @Module({
   imports: [
@@ -37,9 +36,8 @@ import { RestoreModule } from './restore/restore.module';
     }),
     PrismaModule,
     AuthModule,
-    InvitesModule,
     ProfileModule,
-    RestoreModule,
+    TokensModule,
   ],
   controllers: [],
   providers: [],

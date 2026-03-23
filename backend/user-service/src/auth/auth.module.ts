@@ -7,11 +7,11 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { DateUtil } from '../common/utils/parse-data.util';
-import { InvitesModule } from '../invites/invites.module';
+import { TokensModule } from '../tokens/tokens.module';
 
 @Module({
   imports: [
-    InvitesModule,
+    TokensModule,
     ClientsModule.registerAsync([
       {
         name: 'ORDER_SERVICE',

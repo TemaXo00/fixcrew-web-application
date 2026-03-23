@@ -27,7 +27,7 @@ async function submitForm(): Promise<void> {
   }
 
   try {
-    await user_routes.patch(`/restore/${token.value}`, password)
+    await user_routes.patch(`/auth/restore/${token.value}`, password)
     await router.push('/login')
   } catch (error) {
     isLoading.value = false

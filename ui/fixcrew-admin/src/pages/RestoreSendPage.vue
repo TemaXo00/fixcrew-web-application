@@ -22,7 +22,7 @@ async function submitForm(): Promise<void> {
   isLoading.value = true
 
   try {
-    await user_routes.post('/restore', email, {})
+    await user_routes.post('/tokens/password', email, {})
     await router.push('/login')
   } catch (error) {
     console.log(error)

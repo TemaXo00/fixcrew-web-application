@@ -13,10 +13,11 @@ import * as argon2 from 'argon2';
 
 import { AuthorizationDto } from './dto/authorization.dto';
 import { DateUtil } from '../common/utils/parse-data.util';
-import { InvitesService } from '../invites/invites.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { TokensService } from '../tokens/tokens.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { RestorePasswordDto } from './dto/restore-password.dto';
 
 import type { JwtPayload } from './interfaces/jwt.interface';
 import type { CookieOptions, Response, Request } from 'express';
@@ -32,7 +33,7 @@ export class AuthService {
     @Inject('ORDER_SERVICE') private readonly order: ClientProxy,
     private readonly prisma: PrismaService,
     protected readonly config: ConfigService,
-    private readonly invite: InvitesService,
+    private readonly tokens: TokensService,
     private readonly jwt: JwtService,
     private readonly date: DateUtil,
   ) {
@@ -61,7 +62,7 @@ export class AuthService {
       throw new ConflictException('User already exists');
     }
 
-    await this.invite.useInvite(token);
+    await this.tokens.useToken(token, 'INVITE');
 
     const hashedPassword = await argon2.hash(dto.password);
 
@@ -146,6 +147,29 @@ export class AuthService {
 
   async logout(res: Response): Promise<void> {
     this.setCookies(res, '', new Date(0));
+  }
+
+  async restorePassword(token: string, dto: RestorePasswordDto): Promise<void> {
+    const userToken = await this.tokens.getWorkingTokenByRaw(token, 'PASSWORD')
+
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: userToken.email
+      }
+    })
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const hashedPassword = await argon2.hash(dto.password);
+
+    await this.prisma.user.update({
+      where: {id: user.id},
+      data: {password_hash: hashedPassword},
+    })
+
+    await this.tokens.useToken(token, 'PASSWORD')
   }
 
   async validate(id: string): Promise<User> {
