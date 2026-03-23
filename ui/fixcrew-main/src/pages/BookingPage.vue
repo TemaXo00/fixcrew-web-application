@@ -57,9 +57,32 @@ const validateStep6 = () => {
     newErrors.email = 'Invalid email'
   }
 
-  const phoneRegex = /^[0-9+\-() ]{7,}$/
+  const phoneRegex =
+    /^[\+]?1?[\s\-]?\(?([2-9][0-8][0-9])\)?[\s\-]?([2-9][0-9]{2})[\s\-]?([0-9]{4})$/
+
   if (phoneNumber.value && !phoneRegex.test(phoneNumber.value)) {
-    newErrors.phone = 'Invalid phone'
+    newErrors.phone = 'Invalid phone number. Example: +1 123-456-7890'
+  }
+
+  const streetRegex =
+    /^\d+\s+(?:[A-Za-z]+\.?\s+)?[A-Za-z\s]+(?:Street|St|Avenue|Ave|Boulevard|Blvd|Drive|Dr|Lane|Ln|Road|Rd|Court|Ct|Circle|Cir|Way|Place|Pl|Terrace|Ter|Parkway|Pkwy|Highway|Hwy)(?:\s+(?:[NSEW]|North|South|East|West))?(?:,\s*|$|[\s#]+(?:Apt|Suite|Ste|Unit|#)\s*\w+)?$/i
+  if (street.value && !streetRegex.test(street.value)) {
+    newErrors.street = 'Invalid street address. Example: 123 Sunset Boulevard'
+  }
+
+  const houseRegex = /^(Apt|Unit|Suite|#)?\s*[a-zA-Z0-9][a-zA-Z0-9\s\-]*[a-zA-Z0-9]$/i
+  if (house.value) {
+    const trimmed = house.value.trim()
+    if (!houseRegex.test(trimmed)) {
+      newErrors.house = 'Invalid house address. Example: Apt 123, Unit 4B, or Suite 200'
+    } else if (trimmed.length > 100) {
+      newErrors.house = 'House address is too long (maximum 100 characters)'
+    }
+  }
+
+  const zipRegex = /^\d{5}(?:-\d{4})?$/
+  if (zip.value && !zipRegex.test(zip.value)) {
+    newErrors.zip = 'Invalid ZIP code. Example: 12345 or 12345-6789'
   }
 
   errors.value = newErrors
