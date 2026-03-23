@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import type { Types, TypesCategories, TypesSubCategories } from '@/interfaces/booking.interface.ts'
 import { services } from '@/mocks/booking.mock.ts'
+import InputContent from '@/components/universalComp/InputContent.vue'
 
 const step = ref(1)
 const selectedService = ref<Types | null>(null)
@@ -11,6 +12,18 @@ const selectedSubCategory = ref<TypesSubCategories | null>(null)
 const previewUrls = ref<string[]>([])
 const selectedFiles = ref<File[]>([])
 const fileInput = ref<HTMLInputElement | null>(null)
+
+const firstName = ref<string>('')
+const lastName = ref<string>('')
+const phoneNumber = ref<string>('')
+const email = ref<string>('')
+const street = ref<string>('')
+const house = ref<string>('')
+const city = ref<string>('')
+const zip = ref<string>('')
+const country = ref<string>('United States')
+const state = ref<string>('')
+const checkBox = ref<boolean>(false)
 
 const selectService = (service: Types) => {
   selectedService.value = service
@@ -177,6 +190,70 @@ const details = ref<string>('')
                 ×
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+      <button
+        @click="proceed"
+        class="mb-4 mt-10 px-4 py-2 bg-[#00B4D8] rounded-lg hover:bg-gray-300 transition text-white"
+      >
+        Next
+      </button>
+    </div>
+
+    <div v-if="step === 6">
+      <div class="flex flex-col gap-10">
+        <div class="text-3xl font-sans font-bold">Add your contact details</div>
+        <input
+          type="text"
+          v-model="firstName"
+          placeholder="First Name*"
+          class="w-[100%] border-2 border-[#EAEAEA] pt-[20px] p-[20px] resize-none hover:border-gray-500 rounded-2xl"
+        />
+        <InputContent placeholder="Second name" type="text" v-model="lastName" />
+        <InputContent placeholder="Phone number*" type="phone" v-model="phoneNumber" />
+        <InputContent placeholder="E-mail address*" type="email" v-model="email" />
+        <div class="text-2xl font-sans font-bold">
+          Please add the address where you want the service to take place.
+        </div>
+        <InputContent placeholder="Street address*" type="text" v-model="street" />
+        <InputContent placeholder="Unit/apartment/suite*" type="text" v-model="house" />
+        <InputContent placeholder="City*" type="text" v-model="city" />
+        <InputContent placeholder="Zip code*" type="text" v-model="zip" />
+        <InputContent
+          placeholder="country*"
+          name="country"
+          v-model="country"
+          type="disabled"
+          readonly
+          class="text-gray-500"
+        />
+
+        <select
+          v-model="state"
+          class="w-full border-2 border-[#EAEAEA] pt-5 p-5 resize-none hover:border-gray-500 rounded-2xl"
+        >
+          <option disabled value="" class="text-gray-500">State*</option>
+          <option value="Los Gatos" class="text-gray-500">Los Gatos</option>
+          <option value="San Jose" class="text-gray-500">San Jose</option>
+          <option value="Cupertino" class="text-gray-500">Cupertino</option>
+          <option value="Mountain View" class="text-gray-500">Mountain View</option>
+          <option value="Campbell" class="text-gray-500">Campbell</option>
+          <option value="Los Altos" class="text-gray-500">Los Altos</option>
+          <option value="Palo Alto" class="text-gray-500">Palo Alto</option>
+        </select>
+
+        <div class="flex gap-3">
+          <input
+            type="checkbox"
+            v-model="checkBox"
+            class="border-[#EAEAEA] w-[24px] h-[24px] flex-shrink-0 mt-0.5"
+          />
+          <div class="text-gray-500 font-sans text-left">
+            By checking this box, I consent to receive marketing and promotional text messages from
+            FixCrew LLC at the phone number I have provided above. Message and data rates may apply.
+            Message frequency varies. Reply HELP for help and STOP to stop. I consent to the Terms
+            of Service and Privacy Policy.
           </div>
         </div>
       </div>
