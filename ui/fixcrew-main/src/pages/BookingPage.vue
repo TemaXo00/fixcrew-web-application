@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import type { Types, TypesCategories, TypesSubCategories } from '@/interfaces/booking.interface.ts'
 import { services } from '@/mocks/booking.mock.ts'
 import InputContent from '@/components/universalComp/InputContent.vue'
@@ -25,6 +25,56 @@ const country = ref<string>('United States')
 const state = ref<string>('')
 const checkBox = ref<boolean>(false)
 
+const details = ref<string>('')
+
+const errors = ref<Record<string, string>>({})
+
+onMounted(() => {
+  const saved = localStorage.getItem('marketingConsent')
+  if (saved === 'true') checkBox.value = true
+})
+
+watch(checkBox, (val) => {
+  localStorage.setItem('marketingConsent', String(val))
+})
+
+const validateStep6 = () => {
+  const newErrors: Record<string, string> = {}
+
+  if (!firstName.value.trim()) newErrors.firstName = 'Required'
+  if (!lastName.value.trim()) newErrors.lastName = 'Required'
+  if (!phoneNumber.value.trim()) newErrors.phone = 'Required'
+  if (!email.value.trim()) newErrors.email = 'Required'
+  if (!street.value.trim()) newErrors.street = 'Required'
+  if (!house.value.trim()) newErrors.house = 'Required'
+  if (!city.value.trim()) newErrors.city = 'Required'
+  if (!zip.value.trim()) newErrors.zip = 'Required'
+  if (!state.value.trim()) newErrors.state = 'Required'
+  if (!checkBox.value) newErrors.checkBox = 'Required'
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (email.value && !emailRegex.test(email.value)) {
+    newErrors.email = 'Invalid email'
+  }
+
+  const phoneRegex = /^[0-9+\-() ]{7,}$/
+  if (phoneNumber.value && !phoneRegex.test(phoneNumber.value)) {
+    newErrors.phone = 'Invalid phone'
+  }
+
+  errors.value = newErrors
+  return Object.keys(newErrors).length === 0
+}
+
+const proceed = () => {
+  if (step.value === 6 && !validateStep6()) return
+  step.value++
+}
+
+const goBack = () => {
+  if (step.value >= 0) step.value--
+}
+
 const selectService = (service: Types) => {
   selectedService.value = service
   proceed()
@@ -38,14 +88,6 @@ const selectCategory = (category: TypesCategories) => {
 const selectSubCategory = (sub: TypesSubCategories) => {
   selectedSubCategory.value = sub
   proceed()
-}
-
-const goBack = () => {
-  if (step.value >= 0) step.value--
-}
-
-const proceed = () => {
-  step.value++
 }
 
 const handleFileUpload = (event: Event) => {
@@ -78,8 +120,6 @@ const removeImage = (index: number) => {
   previewUrls.value.splice(index, 1)
   selectedFiles.value.splice(index, 1)
 }
-
-const details = ref<string>('')
 </script>
 
 <template>
@@ -150,10 +190,7 @@ const details = ref<string>('')
         <div class="text-3xl font-sans font-bold">Additional details (optional)</div>
         <textarea
           class="w-[100%] h-[300px] border-2 border-[#EAEAEA] pt-[20px] p-[20px] resize-none hover:border-gray-500 rounded-2xl"
-          type="text"
           v-model="details"
-          placeholder="Write a short description and include specific details needed for the appointment..."
-          style="display: flex; align-items: flex-start; padding-top: 8px"
         />
 
         <div class="flex flex-col gap-4">
@@ -169,20 +206,12 @@ const details = ref<string>('')
             @click="fileInput?.click()"
             class="px-6 py-3 bg-white border-2 border-[#00B4D8] text-[#00B4D8] rounded-xl hover:bg-[#00B4D8] hover:text-white transition flex items-center justify-center gap-2"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-              ></path>
-            </svg>
             Upload Images
           </button>
 
           <div class="flex flex-wrap gap-4">
             <div v-for="(url, index) in previewUrls" :key="index" class="relative w-32 h-32">
-              <img :src="url" class="w-full h-full object-cover rounded-lg" alt="Preview" />
+              <img :src="url" class="w-full h-full object-cover rounded-lg" />
               <button
                 @click="removeImage(index)"
                 class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
@@ -193,6 +222,7 @@ const details = ref<string>('')
           </div>
         </div>
       </div>
+
       <button
         @click="proceed"
         class="mb-4 mt-10 px-4 py-2 bg-[#00B4D8] rounded-lg hover:bg-gray-300 transition text-white"
@@ -202,24 +232,69 @@ const details = ref<string>('')
     </div>
 
     <div v-if="step === 6">
-      <div class="flex flex-col gap-10">
+      <div class="flex flex-col gap-10 relative">
         <div class="text-3xl font-sans font-bold">Add your contact details</div>
-        <input
-          type="text"
-          v-model="firstName"
-          placeholder="First Name*"
-          class="w-[100%] border-2 border-[#EAEAEA] pt-[20px] p-[20px] resize-none hover:border-gray-500 rounded-2xl"
-        />
-        <InputContent placeholder="Second name" type="text" v-model="lastName" />
-        <InputContent placeholder="Phone number*" type="phone" v-model="phoneNumber" />
-        <InputContent placeholder="E-mail address*" type="email" v-model="email" />
+
+        <div class="relative">
+          <input
+            v-model="firstName"
+            placeholder="First Name*"
+            class="w-full border-2 border-[#EAEAEA] p-[20px] rounded-2xl"
+          />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.firstName
+          }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="Second name*" type="text" v-model="lastName" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.lastName
+          }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="Phone number*" type="phone" v-model="phoneNumber" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.phone
+          }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="E-mail address*" type="email" v-model="email" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.email
+          }}</span>
+        </div>
+
         <div class="text-2xl font-sans font-bold">
           Please add the address where you want the service to take place.
         </div>
-        <InputContent placeholder="Street address*" type="text" v-model="street" />
-        <InputContent placeholder="Unit/apartment/suite*" type="text" v-model="house" />
-        <InputContent placeholder="City*" type="text" v-model="city" />
-        <InputContent placeholder="Zip code*" type="text" v-model="zip" />
+
+        <div class="relative">
+          <InputContent placeholder="Street address*" type="text" v-model="street" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.street
+          }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="Unit/apartment/suite*" type="text" v-model="house" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.house
+          }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="City*" type="text" v-model="city" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{ errors.city }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="Zip code*" type="text" v-model="zip" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{ errors.zip }}</span>
+        </div>
+
         <InputContent
           placeholder="country*"
           name="country"
@@ -229,21 +304,23 @@ const details = ref<string>('')
           class="text-gray-500"
         />
 
-        <select
-          v-model="state"
-          class="w-full border-2 border-[#EAEAEA] pt-5 p-5 resize-none hover:border-gray-500 rounded-2xl"
-        >
-          <option disabled value="" class="text-gray-500">State*</option>
-          <option value="Los Gatos" class="text-gray-500">Los Gatos</option>
-          <option value="San Jose" class="text-gray-500">San Jose</option>
-          <option value="Cupertino" class="text-gray-500">Cupertino</option>
-          <option value="Mountain View" class="text-gray-500">Mountain View</option>
-          <option value="Campbell" class="text-gray-500">Campbell</option>
-          <option value="Los Altos" class="text-gray-500">Los Altos</option>
-          <option value="Palo Alto" class="text-gray-500">Palo Alto</option>
-        </select>
+        <div class="relative">
+          <select v-model="state" class="w-full border-2 border-[#EAEAEA] pt-5 p-5 rounded-2xl">
+            <option disabled value="">State*</option>
+            <option value="Los Gatos">Los Gatos</option>
+            <option value="San Jose">San Jose</option>
+            <option value="Cupertino">Cupertino</option>
+            <option value="Mountain View">Mountain View</option>
+            <option value="Campbell">Campbell</option>
+            <option value="Los Altos">Los Altos</option>
+            <option value="Palo Alto">Palo Alto</option>
+          </select>
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.state
+          }}</span>
+        </div>
 
-        <div class="flex gap-3 items-center">
+        <div class="flex gap-3 items-center relative">
           <input
             type="checkbox"
             v-model="checkBox"
@@ -265,13 +342,17 @@ const details = ref<string>('')
               >Privacy Policy</a
             >.
           </div>
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-8">{{
+            errors.checkBox
+          }}</span>
         </div>
       </div>
+
       <button
         @click="proceed"
         class="mb-4 mt-10 px-4 py-2 bg-[#00B4D8] rounded-lg hover:bg-gray-300 transition text-white"
       >
-        Next
+        Submit
       </button>
     </div>
   </div>
