@@ -243,7 +243,7 @@ const details = ref<string>('')
           <option value="Palo Alto" class="text-gray-500">Palo Alto</option>
         </select>
 
-        <div class="flex gap-3">
+        <div class="flex gap-3 items-center">
           <input
             type="checkbox"
             v-model="checkBox"
@@ -252,8 +252,18 @@ const details = ref<string>('')
           <div class="text-gray-500 font-sans text-left">
             By checking this box, I consent to receive marketing and promotional text messages from
             FixCrew LLC at the phone number I have provided above. Message and data rates may apply.
-            Message frequency varies. Reply HELP for help and STOP to stop. I consent to the Terms
-            of Service and Privacy Policy.
+            Message frequency varies. Reply HELP for help and STOP to stop. I consent to the
+            <a
+              href="https://client.housecallpro.com/marketing/terms"
+              class="text-blue-600 underline"
+              >Terms of Service</a
+            >
+            and
+            <a
+              href="https://client.housecallpro.com/marketing/privacy"
+              class="text-blue-600 underline"
+              >Privacy Policy</a
+            >.
           </div>
         </div>
       </div>
