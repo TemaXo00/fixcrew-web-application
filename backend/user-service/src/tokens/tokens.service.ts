@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 
 import {
+  ConflictException,
   Inject,
   Injectable,
   NotFoundException,
@@ -114,10 +115,14 @@ export class TokensService {
   }
 
   async createToken(dto: TokenCreateDto, type: TokenTypes): Promise<Token> {
-    await this.getWorkingTokenByEmail(dto.email, type);
+    const existingToken = await this.getWorkingTokenByEmail(dto.email, type);
+
+    if (existingToken !== null) {
+      throw new ConflictException('Token already exists');
+    }
 
     const user = await this.prisma.user.findUnique({
-      where: { email: dto.email, status: 'ACTIVE' },
+      where: { email: dto.email },
     });
 
     if (user && type === 'INVITE') {

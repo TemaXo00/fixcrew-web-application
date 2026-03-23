@@ -21,7 +21,6 @@ async function submitForm(): Promise<void> {
   isLoading.value = true
 
   if (!token.value) {
-    console.error('❌ Token отсутствует в query')
     isLoading.value = false
     return
   }
