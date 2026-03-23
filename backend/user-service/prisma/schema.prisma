@@ -28,10 +28,10 @@ model User {
   @@map("users")
 }
 
-model Invite {
+model Token {
   id String @id @default(uuid(4))
 
-  token      String       @unique
+  hash       String       @unique
   email      String
   status     InviteStatus @default(CREATED)
   expires_at DateTime
@@ -39,7 +39,7 @@ model Invite {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@map("invites")
+  @@map("token")
 }
 
 enum Roles {
