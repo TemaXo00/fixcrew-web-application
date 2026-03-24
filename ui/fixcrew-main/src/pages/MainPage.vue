@@ -4,6 +4,7 @@ import BottomHeader from '@/components/BottomHeader.vue'
 import EmergencyPhone from '@/components/mainPage/EmergencyPhone.vue'
 import Slider from '@/components/universalComp/Slider.vue'
 import ServiceBlock from '@/components/mainPage/ServiceBlock.vue'
+import ServiceArea from '@/components/mainPage/ServiceArea.vue'
 </script>
 
 <template>
@@ -16,6 +17,7 @@ import ServiceBlock from '@/components/mainPage/ServiceBlock.vue'
     </div>
 
     <EmergencyPhone />
+    <ServiceArea />
   </main>
 </template>
 
