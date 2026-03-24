@@ -31,6 +31,7 @@ export class AuthService {
 
   constructor(
     @Inject('ORDER_SERVICE') private readonly order: ClientProxy,
+    @Inject('MAIL_SERVICE') private readonly mail: ClientProxy,
     private readonly prisma: PrismaService,
     protected readonly config: ConfigService,
     private readonly tokens: TokensService,
@@ -46,6 +47,7 @@ export class AuthService {
     dto: RegisterDto,
     token: string,
     res: Response,
+    ua: string
   ): Promise<AuthorizationDto> {
     const [existingEmail, existingPhoneNumber] = await Promise.all([
       this.prisma.user.findUnique({ where: { email: dto.email } }),
@@ -83,10 +85,15 @@ export class AuthService {
       phone_number: user.phone_number,
     });
 
+    this.mail.emit('user.register', {
+      email: user.email,
+      agent: ua
+    })
+
     return this.auth(res, user.id, user.role);
   }
 
-  async login(dto: LoginDto, res: Response): Promise<AuthorizationDto> {
+  async login(dto: LoginDto, res: Response, ua: string): Promise<AuthorizationDto> {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -103,6 +110,11 @@ export class AuthService {
     if (!verifiedPassword || user.status === 'BANNED') {
       throw new NotFoundException('User not found');
     }
+
+    this.mail.emit('user.login', {
+      email: dto.email,
+      agent: ua
+    })
 
     return this.auth(res, user.id, user.role);
   }
@@ -149,7 +161,7 @@ export class AuthService {
     this.setCookies(res, '', new Date(0));
   }
 
-  async restorePassword(token: string, dto: RestorePasswordDto): Promise<void> {
+  async restorePassword(token: string, dto: RestorePasswordDto, ua: string): Promise<void> {
     const userToken = await this.tokens.getWorkingTokenByRaw(token, 'PASSWORD')
 
     const user = await this.prisma.user.findUnique({
@@ -167,6 +179,11 @@ export class AuthService {
     await this.prisma.user.update({
       where: {id: user.id},
       data: {password_hash: hashedPassword},
+    })
+
+    this.mail.emit('user.password', {
+      email: user.email,
+      agent: ua
     })
 
     await this.tokens.useToken(token, 'PASSWORD')

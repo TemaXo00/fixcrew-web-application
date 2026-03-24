@@ -154,7 +154,7 @@ export class TokensService {
         token: rawToken,
       });
     } else {
-      this.mail.emit('user.restore', {
+      this.mail.emit('restore.created', {
         email: dto.email,
         token: rawToken,
       });

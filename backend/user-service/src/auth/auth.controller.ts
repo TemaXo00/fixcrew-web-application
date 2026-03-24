@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Headers,
   Param,
   Patch,
   Post,
@@ -26,16 +27,18 @@ export class AuthController {
     @Body() dto: RegisterDto,
     @Query('token') token: string,
     @Res({ passthrough: true }) res: Response,
+    @Headers('user-agent') ua: string,
   ): Promise<AuthorizationDto> {
-    return this.authService.register(dto, token, res);
+    return this.authService.register(dto, token, res, ua);
   }
 
   @Post('login')
   async login(
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
+    @Headers('user-agent') ua: string,
   ): Promise<AuthorizationDto> {
-    return this.authService.login(dto, res);
+    return this.authService.login(dto, res, ua);
   }
 
   @Post('refresh')
@@ -52,7 +55,11 @@ export class AuthController {
   }
 
   @Patch('restore/:token')
-  async restorePassword(@Param('token') token: string, @Body() dto: RestorePasswordDto): Promise<void> {
-    await this.authService.restorePassword(token, dto);
+  async restorePassword(
+    @Param('token') token: string,
+    @Body() dto: RestorePasswordDto,
+    @Headers('user-agent') ua: string,
+  ): Promise<void> {
+    await this.authService.restorePassword(token, dto, ua);
   }
 }
