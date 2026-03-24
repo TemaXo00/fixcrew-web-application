@@ -57,8 +57,7 @@ const validateStep6 = () => {
     newErrors.email = 'Invalid email'
   }
 
-  const phoneRegex =
-    /^[\+]?1?[\s\-]?\(?([2-9][0-8][0-9])\)?[\s\-]?([2-9][0-9]{2})[\s\-]?([0-9]{4})$/
+  const phoneRegex = /^(?:\+1[\s\-]?)?\(?[2-9][0-9]{2}\)?[\s\-]?[2-9][0-9]{2}[\s\-]?[0-9]{4}$/
 
   if (phoneNumber.value && !phoneRegex.test(phoneNumber.value)) {
     newErrors.phone = 'Invalid phone number. Example: +1 123-456-7890'
