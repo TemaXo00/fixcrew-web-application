@@ -1,31 +1,32 @@
 <script setup lang="ts">
-import FormWrapper from '@/components/authorization/FormWrapper.vue'
-import FormBackground from '@/components/authorization/FormBackground.vue'
-import FormHeader from '@/components/authorization/FormHeader.vue'
-import type { AuthLogin } from '@/interfaces/auth.interface.ts'
-import InputComponent from '@/components/shared/InputComponent.vue'
+import type { AuthLoginType } from '@/interfaces/auth.interface.ts'
 import { reactive, ref } from 'vue'
-import ButtonComponent from '@/components/shared/ButtonComponent.vue'
-import { user_routes } from '@/axios/configs.axios.ts'
 import { useRouter } from 'vue-router'
+import { userRoutes } from '@/axios/configs.axios.ts'
+import FormBackground from '@/components/authorization/FormBackground.vue'
 import FormFooter from '@/components/authorization/FormFooter.vue'
+import FormHeader from '@/components/authorization/FormHeader.vue'
+import FormWrapper from '@/components/authorization/FormWrapper.vue'
+import ButtonComponent from '@/components/shared/ButtonComponent.vue'
+import InputComponent from '@/components/shared/InputComponent.vue'
 
 const router = useRouter()
 
-const user = reactive<AuthLogin>({
+const user = reactive<AuthLoginType>({
   email: '',
   password: '',
 })
 
 const isLoading = ref<boolean>(false)
 
-async function submitForm(): Promise<void> {
+const submitForm = async (): Promise<void> => {
   isLoading.value = true
 
   try {
-    await user_routes.post('/auth/login', user, {})
+    await userRoutes.post('/auth/login', user, {})
     await router.push('/')
-  } catch (error) {
+  }
+  catch (error) {
     isLoading.value = false
     console.log(error)
   }
@@ -33,32 +34,39 @@ async function submitForm(): Promise<void> {
 </script>
 
 <template>
-  <FormWrapper>
-    <FormBackground>
-      <FormHeader name="Welcome Back" />
-      <form class="flex flex-col gap-3" @submit.prevent="submitForm">
-        <InputComponent
-          name="Email"
-          type="email"
-          place-text="example@example.com"
-          :isNecessary="true"
-          v-model="user.email"
-        />
-        <InputComponent
-          name="Password"
-          type="password"
-          place-text="Pass@wd123"
-          :isNecessary="true"
-          v-model="user.password"
-        />
-        <ButtonComponent
-          name="Log in"
-          :isLoading="isLoading"
-        />
-      </form>
-      <FormFooter name="Forgot Password?" linkName="Restore" link="/restore" />
-    </FormBackground>
-  </FormWrapper>
+    <FormWrapper>
+        <FormBackground>
+            <FormHeader name="Welcome Back" />
+            <form
+                class="flex flex-col gap-3"
+                @submit.prevent="submitForm"
+            >
+                <InputComponent
+                    v-model="user.email"
+                    name="Email"
+                    type="email"
+                    place-text="example@example.com"
+                    :is-necessary="true"
+                />
+                <InputComponent
+                    v-model="user.password"
+                    name="Password"
+                    type="password"
+                    place-text="Pass@wd123"
+                    :is-necessary="true"
+                />
+                <ButtonComponent
+                    name="Log in"
+                    :is-loading="isLoading"
+                />
+            </form>
+            <FormFooter
+                name="Forgot Password?"
+                link-name="Restore"
+                link="/restore"
+            />
+        </FormBackground>
+    </FormWrapper>
 </template>
 
 <style scoped></style>
