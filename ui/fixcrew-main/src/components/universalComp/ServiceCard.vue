@@ -13,7 +13,7 @@ const isExpanded = ref(false)
 </script>
 
 <template>
-  <div class="bg-[#E7E7E7] rounded-2xl flex flex-col h-full">
+  <div class="bg-[#E7E7E7] rounded-2xl flex flex-col h-full ">
     <div class="p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col flex-1 text-center">
       <h3 class="text-xl sm:text-2xl font-bold text-gray-600">{{ title }}</h3>
       <p class="text-sm sm:text-base text-gray-400 mb-2 sm:mb-4 font-semibold">{{ subtitle }}</p>
