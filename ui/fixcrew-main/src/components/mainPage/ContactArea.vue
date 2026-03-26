@@ -14,11 +14,14 @@ const termsOfService = ref(false)
 const errors = reactive<Record<string, string>>({})
 
 const validateForm = () => {
+  Object.keys(errors).forEach((key) => delete errors[key])
+
   const newErrors: Record<string, string> = {}
 
   if (!formData.name.trim()) newErrors.name = 'Name is required'
   if (!formData.phoneNumber.trim()) newErrors.phoneNumber = 'Phone number is required'
   if (!formData.email.trim()) newErrors.email = 'Email is required'
+  if (!formData.address.trim()) newErrors.address = 'Address is required'
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (formData.email && !emailRegex.test(formData.email)) {
@@ -28,6 +31,12 @@ const validateForm = () => {
   const phoneRegex = /^(?:\+1[\s\-]?)?\(?[2-9][0-9]{2}\)?[\s\-]?[2-9][0-9]{2}[\s\-]?[0-9]{4}$/
   if (formData.phoneNumber && !phoneRegex.test(formData.phoneNumber)) {
     newErrors.phoneNumber = 'Invalid phone number. Example: +1 123-456-7890'
+  }
+
+  const streetRegex =
+    /^\d+\s+(?:[A-Za-z]+\.?\s+)?[A-Za-z\s]+(?:Street|St|Avenue|Ave|Boulevard|Blvd|Drive|Dr|Lane|Ln|Road|Rd|Court|Ct|Circle|Cir|Way|Place|Pl|Terrace|Ter|Parkway|Pkwy|Highway|Hwy)(?:\s+(?:[NSEW]|North|South|East|West))?(?:,\s*|$|[\s#]+(?:Apt|Suite|Ste|Unit|#)\s*\w+)?$/i
+  if (formData.address && !streetRegex.test(formData.address)) {
+    newErrors.address = 'Invalid address format. Example: 123 Sunset Boulevard'
   }
 
   if (!termsOfService.value) newErrors.termsOfService = 'You must accept the terms'
@@ -50,7 +59,7 @@ const submitForm = () => {
     <div class="relative z-10 flex justify-center w-full mt-4 sm:mt-6 md:mt-8 px-4">
       <div class="flex flex-col items-center gap-5 w-full max-w-4xl">
         <form
-          @keydown.enter="submitForm"
+          @submit.prevent="submitForm"
           class="flex flex-col items-center gap-5 p-10 shadow-lg bg-[#E7E7E7] rounded-2xl w-full"
         >
           <div class="text-center max-w-2xl">
@@ -102,6 +111,11 @@ const submitForm = () => {
               v-model="formData.address"
               class="w-full border-2 bg-white border-[#EAEAEA] pt-5 p-5 resize-none hover:border-gray-500 rounded-2xl"
             />
+            <span
+              v-if="errors.address"
+              class="absolute text-red-500 text-xs bottom-[-18px] left-2"
+              >{{ errors.address }}</span
+            >
           </div>
           <div class="relative w-full max-w-2xl">
             <textarea
@@ -142,7 +156,7 @@ const submitForm = () => {
             }}</span>
           </div>
           <button
-            @click="submitForm"
+            type="submit"
             class="mb-4 mt-10 px-4 py-2 bg-[#00B4D8] rounded-lg hover:bg-gray-300 transition text-white"
           >
             Book now
