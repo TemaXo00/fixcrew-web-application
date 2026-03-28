@@ -39,6 +39,23 @@ CREATE TABLE "token" (
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "token_pkey" PRIMARY KEY ("id")
+<<<<<<<< HEAD:backend/user-service/prisma/migrations/20260323100953_001_base/migration.sql
+========
+);
+
+-- CreateTable
+CREATE TABLE "Session" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "refreshTokenHash" TEXT NOT NULL,
+    "device" TEXT,
+    "browser" TEXT,
+    "os" TEXT,
+    "lastActiveAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
+>>>>>>>> backend:backend/user-service/prisma/migrations/20260328151508_001_base/migration.sql
 );
 
 -- CreateIndex
@@ -49,3 +66,9 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "token_hash_key" ON "token"("hash");
+<<<<<<<< HEAD:backend/user-service/prisma/migrations/20260323100953_001_base/migration.sql
+========
+
+-- AddForeignKey
+ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+>>>>>>>> backend:backend/user-service/prisma/migrations/20260328151508_001_base/migration.sql
