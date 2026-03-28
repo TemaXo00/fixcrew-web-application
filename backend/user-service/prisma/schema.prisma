@@ -33,10 +33,10 @@ model User {
 model Token {
   id String @id @default(uuid(4))
 
-  hash       String       @unique
+  hash       String      @unique
   email      String
   status     TokenStatus @default(CREATED)
-  type TokenTypes
+  type       TokenTypes
   expires_at DateTime
 
   created_at DateTime @default(now())
@@ -59,6 +59,8 @@ model Session {
 
   lastActiveAt DateTime @default(now())
   created_at   DateTime @default(now())
+
+  @@map("sessions")
 }
 
 enum Roles {
