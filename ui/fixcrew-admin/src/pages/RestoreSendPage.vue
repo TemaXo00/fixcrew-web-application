@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { AuthRestoreSendType } from '@/interfaces/auth.interface.ts'
+import type { AuthRestoreSendType } from '@/types/auth.types.ts'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { userRoutes } from '@/axios/configs.axios.ts'
+import { userRoutes } from '@/api/configs.api.ts'
 import FormBackground from '@/components/authorization/FormBackground.vue'
 import FormFooter from '@/components/authorization/FormFooter.vue'
 import FormHeader from '@/components/authorization/FormHeader.vue'
@@ -26,8 +26,8 @@ const submitForm = async (): Promise<void> => {
     await router.push('/login')
   }
   catch (error) {
-    console.log(error)
     isLoading.value = false
+    throw error
   }
 }
 </script>
