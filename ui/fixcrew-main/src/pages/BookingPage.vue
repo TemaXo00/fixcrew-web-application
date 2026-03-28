@@ -1,38 +1,106 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useBookingStore } from '@/stores/booking.store'
 import type { Types, TypesCategories, TypesSubCategories } from '@/interfaces/booking.interface.ts'
 import { services } from '@/mocks/booking.mock.ts'
+import InputContent from '@/components/universalComp/InputContent.vue'
+const bookingStore = useBookingStore()
+const {
+  step,
+  type: selectedService,
+  category: selectedCategory,
+  subCategory: selectedSubCategory,
+  details,
+  previewUrls,
+  selectedFiles,
+  firstName,
+  lastName,
+  phoneNumber,
+  email,
+  street,
+  house,
+  city,
+  zip,
+  country,
+  state,
+  checkBox,
+} = storeToRefs(bookingStore)
 
-const step = ref(1)
-const selectedService = ref<Types | null>(null)
-const selectedCategory = ref<TypesCategories | null>(null)
-const selectedSubCategory = ref<TypesSubCategories | null>(null)
-
-const previewUrls = ref<string[]>([])
-const selectedFiles = ref<File[]>([])
 const fileInput = ref<HTMLInputElement | null>(null)
+const errors = ref<Record<string, string>>({})
+
+const validateStep6 = () => {
+  const newErrors: Record<string, string> = {}
+
+  if (!firstName.value?.trim()) newErrors.firstName = 'Required'
+  if (!lastName.value?.trim()) newErrors.lastName = 'Required'
+  if (!phoneNumber.value?.trim()) newErrors.phone = 'Required'
+  if (!email.value?.trim()) newErrors.email = 'Required'
+  if (!street.value?.trim()) newErrors.street = 'Required'
+  if (!house.value?.trim()) newErrors.house = 'Required'
+  if (!city.value?.trim()) newErrors.city = 'Required'
+  if (!zip.value?.trim()) newErrors.zip = 'Required'
+  if (!state.value?.trim()) newErrors.state = 'Required'
+  if (!checkBox.value) newErrors.checkBox = 'Required'
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (email.value && !emailRegex.test(email.value)) {
+    newErrors.email = 'Invalid email'
+  }
+
+  const phoneRegex = /^(?:\+1[\s\-]?)?\(?[2-9][0-9]{2}\)?[\s\-]?[2-9][0-9]{2}[\s\-]?[0-9]{4}$/
+  if (phoneNumber.value && !phoneRegex.test(phoneNumber.value)) {
+    newErrors.phone = 'Invalid phone number. Example: +1 123-456-7890'
+  }
+
+  const streetRegex =
+    /^\d+\s+(?:[A-Za-z]+\.?\s+)?[A-Za-z\s]+(?:Street|St|Avenue|Ave|Boulevard|Blvd|Drive|Dr|Lane|Ln|Road|Rd|Court|Ct|Circle|Cir|Way|Place|Pl|Terrace|Ter|Parkway|Pkwy|Highway|Hwy)(?:\s+(?:[NSEW]|North|South|East|West))?(?:,\s*|$|[\s#]+(?:Apt|Suite|Ste|Unit|#)\s*\w+)?$/i
+  if (street.value && !streetRegex.test(street.value)) {
+    newErrors.street = 'Invalid street address. Example: 123 Sunset Boulevard'
+  }
+
+  const houseRegex = /^(Apt|Unit|Suite|#)?\s*[a-zA-Z0-9][a-zA-Z0-9\s\-]*[a-zA-Z0-9]$/i
+  if (house.value) {
+    const trimmed = house.value.trim()
+    if (!houseRegex.test(trimmed)) {
+      newErrors.house = 'Invalid house address. Example: Apt 123, Unit 4B, or Suite 200'
+    } else if (trimmed.length > 100) {
+      newErrors.house = 'House address is too long (maximum 100 characters)'
+    }
+  }
+
+  const zipRegex = /^\d{5}(?:-\d{4})?$/
+  if (zip.value && !zipRegex.test(zip.value)) {
+    newErrors.zip = 'Invalid ZIP code. Example: 12345 or 12345-6789'
+  }
+
+  errors.value = newErrors
+  return Object.keys(newErrors).length === 0
+}
+
+const proceed = () => {
+  if (step.value === 6 && !validateStep6()) return
+  bookingStore.setStep(step.value + 1)
+}
+
+const goBack = () => {
+  if (step.value > 1) bookingStore.setStep(step.value - 1)
+}
 
 const selectService = (service: Types) => {
-  selectedService.value = service
+  bookingStore.setType(service)
   proceed()
 }
 
 const selectCategory = (category: TypesCategories) => {
-  selectedCategory.value = category
+  bookingStore.setCategory(category)
   proceed()
 }
 
 const selectSubCategory = (sub: TypesSubCategories) => {
-  selectedSubCategory.value = sub
+  bookingStore.setSubCategory(sub)
   proceed()
-}
-
-const goBack = () => {
-  if (step.value >= 0) step.value--
-}
-
-const proceed = () => {
-  step.value++
 }
 
 const handleFileUpload = (event: Event) => {
@@ -47,10 +115,10 @@ const handleFileUpload = (event: Event) => {
     }
 
     newFiles.forEach((file) => {
-      selectedFiles.value.push(file)
+      bookingStore.addSelectedFile(file)
       const reader = new FileReader()
       reader.onload = (e) => {
-        previewUrls.value.push(e.target?.result as string)
+        bookingStore.addPreviewUrl(e.target?.result as string)
       }
       reader.readAsDataURL(file)
     })
@@ -62,18 +130,41 @@ const handleFileUpload = (event: Event) => {
 }
 
 const removeImage = (index: number) => {
-  previewUrls.value.splice(index, 1)
-  selectedFiles.value.splice(index, 1)
+  bookingStore.removePreviewUrl(index)
+  bookingStore.removeSelectedFile(index)
 }
-
-const details = ref<string>('')
+const submitForm = () => {
+  if (validateStep6()) {
+    console.log('Form submitted', {
+      service: selectedService.value,
+      category: selectedCategory.value,
+      subCategory: selectedSubCategory.value,
+      details: details.value,
+      images: selectedFiles.value,
+      contact: {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        phone: phoneNumber.value,
+        email: email.value,
+        address: {
+          street: street.value,
+          house: house.value,
+          city: city.value,
+          zip: zip.value,
+          country: country.value,
+          state: state.value,
+        },
+      },
+    })
+  }
+}
 </script>
 
 <template>
   <div class="max-w-2xl mx-auto p-5">
     <button
       @click="goBack"
-      class="mb-4 px-4 py-2 bg-[#00B4D8] rounded-lg hover:bg-gray-300 transition text-white"
+      class="mb-4 px-4 py-2 bg-main rounded-lg hover:bg-gray-300 transition text-white"
       v-if="step > 1"
     >
       Back
@@ -137,10 +228,7 @@ const details = ref<string>('')
         <div class="text-3xl font-sans font-bold">Additional details (optional)</div>
         <textarea
           class="w-[100%] h-[300px] border-2 border-[#EAEAEA] pt-[20px] p-[20px] resize-none hover:border-gray-500 rounded-2xl"
-          type="text"
           v-model="details"
-          placeholder="Write a short description and include specific details needed for the appointment..."
-          style="display: flex; align-items: flex-start; padding-top: 8px"
         />
 
         <div class="flex flex-col gap-4">
@@ -156,20 +244,11 @@ const details = ref<string>('')
             @click="fileInput?.click()"
             class="px-6 py-3 bg-white border-2 border-[#00B4D8] text-[#00B4D8] rounded-xl hover:bg-[#00B4D8] hover:text-white transition flex items-center justify-center gap-2"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-              ></path>
-            </svg>
             Upload Images
           </button>
-
           <div class="flex flex-wrap gap-4">
             <div v-for="(url, index) in previewUrls" :key="index" class="relative w-32 h-32">
-              <img :src="url" class="w-full h-full object-cover rounded-lg" alt="Preview" />
+              <img :src="url" class="w-full h-full object-cover rounded-lg" />
               <button
                 @click="removeImage(index)"
                 class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
@@ -180,11 +259,136 @@ const details = ref<string>('')
           </div>
         </div>
       </div>
+
       <button
         @click="proceed"
         class="mb-4 mt-10 px-4 py-2 bg-[#00B4D8] rounded-lg hover:bg-gray-300 transition text-white"
       >
         Next
+      </button>
+    </div>
+
+    <div v-if="step === 6">
+      <div class="flex flex-col gap-10 relative">
+        <div class="text-3xl font-sans font-bold">Add your contact details</div>
+
+        <div class="relative">
+          <input
+            v-model="firstName"
+            placeholder="First Name*"
+            class="w-full border-2 border-[#EAEAEA] p-[20px] rounded-2xl"
+          />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.firstName
+          }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="Second name*" type="text" v-model="lastName" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.lastName
+          }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="Phone number*" type="tel" v-model="phoneNumber" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.phone
+          }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="E-mail address*" type="email" v-model="email" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.email
+          }}</span>
+        </div>
+
+        <div class="text-2xl font-sans font-bold">
+          Please add the address where you want the service to take place.
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="Street address*" type="text" v-model="street" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.street
+          }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="Unit/apartment/suite*" type="text" v-model="house" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.house
+          }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="City*" type="text" v-model="city" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{ errors.city }}</span>
+        </div>
+
+        <div class="relative">
+          <InputContent placeholder="Zip code*" type="text" v-model="zip" />
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{ errors.zip }}</span>
+        </div>
+
+        <InputContent
+          placeholder="country*"
+          name="country"
+          v-model="country"
+          type="disabled"
+          readonly
+          class="text-gray-500"
+        />
+
+        <div class="relative">
+          <select v-model="state" class="w-full border-2 border-[#EAEAEA] pt-5 p-5 rounded-2xl">
+            <option disabled value="">State*</option>
+            <option value="Los Gatos">Los Gatos</option>
+            <option value="San Jose">San Jose</option>
+            <option value="Cupertino">Cupertino</option>
+            <option value="Mountain View">Mountain View</option>
+            <option value="Campbell">Campbell</option>
+            <option value="Los Altos">Los Altos</option>
+            <option value="Palo Alto">Palo Alto</option>
+          </select>
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.state
+          }}</span>
+        </div>
+        <div class="flex gap-3 items-center relative">
+          <input
+            type="checkbox"
+            v-model="checkBox"
+            class="border-[#EAEAEA] w-[24px] h-[24px] flex-shrink-0 mt-0.5"
+          />
+          <div class="text-gray-500 font-sans text-left">
+            By checking this box, I consent to receive marketing and promotional text messages from
+            FixCrew LLC at the phone number I have provided above. Message and data rates may apply.
+            Message frequency varies. Reply HELP for help and STOP to stop. I consent to the
+            <a
+              href="https://client.housecallpro.com/marketing/terms"
+              class="text-blue-600 underline"
+              >Terms of Service</a
+            >
+            and
+            <a
+              href="https://client.housecallpro.com/marketing/privacy"
+              class="text-blue-600 underline"
+              >Privacy Policy</a
+            >.
+          </div>
+          <span class="absolute text-red-500 text-xs bottom-[-18px] left-8">{{
+            errors.checkBox
+          }}</span>
+        </div>
+      </div>
+
+      <button
+        @click="submitForm"
+        class="mb-4 mt-10 px-4 py-2 bg-[#00B4D8] rounded-lg hover:bg-gray-300 transition text-white"
+      >
+        Submit
       </button>
     </div>
   </div>

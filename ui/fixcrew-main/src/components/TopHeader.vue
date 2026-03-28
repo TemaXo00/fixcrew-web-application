@@ -6,9 +6,9 @@
     <ul
       class="flex flex-row gap-3 sm:gap-4 md:gap-5 text-[#0077B6] font-sans text-xs sm:text-sm md:text-base"
     >
-      <li class="hover:text-gray-200 cursor-pointer transition-colors">blog</li>
-      <li class="hover:text-gray-200 cursor-pointer transition-colors">about</li>
-      <li class="hover:text-gray-200 cursor-pointer transition-colors">contacts</li>
+      <li class="hover:text-blue-300 cursor-pointer transition-colors">blog</li>
+      <li class="hover:text-blue-300 cursor-pointer transition-colors">about</li>
+      <li class="hover:text-blue-300 cursor-pointer transition-colors">contacts</li>
     </ul>
     <div class="font-sans text-[#0077B6] font-bold underline text-xs sm:text-sm md:text-base">
       <a href="tel:6507197300" class="hover:text-red-700 transition-colors">(650)719-7300</a>
