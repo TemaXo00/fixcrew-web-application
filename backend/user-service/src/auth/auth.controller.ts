@@ -15,17 +15,19 @@ export class AuthController {
   async register(
     @Body() dto: RegisterDto,
     @Query('token') token: string,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Promise<AuthorizationDto> {
-    return this.authService.register(dto, token, res);
+    return this.authService.register(dto, token, res, req);
   }
 
   @Post('login')
   async login(
     @Body() dto: LoginDto,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Promise<AuthorizationDto> {
-    return this.authService.login(dto, res);
+    return this.authService.login(dto, res, req);
   }
 
   @Post('refresh')
@@ -37,7 +39,10 @@ export class AuthController {
   }
 
   @Post('logout')
-  async logout(@Res({ passthrough: true }) res: Response): Promise<void> {
-    return this.authService.logout(res);
+  async logout(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<void> {
+    return this.authService.logout(req, res);
   }
 }

@@ -22,6 +22,8 @@ model User {
   role       Roles      @default(MASTER)
   status     UserStatus @default(ACTIVE)
 
+  sessions Session[]
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -40,6 +42,22 @@ model Token {
   updated_at DateTime @updatedAt
 
   @@map("token")
+}
+
+model Session {
+  id String @id @default(uuid(4))
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  refreshTokenHash String
+
+  device  String?
+  browser String?
+  os      String?
+
+  lastActiveAt DateTime @default(now())
+  created_at   DateTime @default(now())
 }
 
 enum Roles {

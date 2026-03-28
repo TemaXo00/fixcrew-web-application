@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 import {
   ConflictException,
   Inject,
@@ -10,6 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices';
 import { User } from '@prisma-gen/client';
 import * as argon2 from 'argon2';
+import { UAParser } from 'ua-parser-js';
 
 import { AuthorizationDto } from './dto/authorization.dto';
 import { DateUtil } from '../common/utils/parse-data.util';
@@ -45,6 +48,7 @@ export class AuthService {
     dto: RegisterDto,
     token: string,
     res: Response,
+    req: Request,
   ): Promise<AuthorizationDto> {
     const [existingEmail, existingPhoneNumber] = await Promise.all([
       this.prisma.user.findUnique({ where: { email: dto.email } }),
@@ -53,11 +57,7 @@ export class AuthService {
       }),
     ]);
 
-    if (existingEmail) {
-      throw new ConflictException('User already exists');
-    }
-
-    if (existingPhoneNumber) {
+    if (existingEmail || existingPhoneNumber) {
       throw new ConflictException('User already exists');
     }
 
@@ -82,10 +82,14 @@ export class AuthService {
       phone_number: user.phone_number,
     });
 
-    return this.auth(res, user.id, user.role);
+    return this.auth(res, req, user.id, user.role);
   }
 
-  async login(dto: LoginDto, res: Response): Promise<AuthorizationDto> {
+  async login(
+    dto: LoginDto,
+    res: Response,
+    req: Request,
+  ): Promise<AuthorizationDto> {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -103,7 +107,7 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    return this.auth(res, user.id, user.role);
+    return this.auth(res, req, user.id, user.role);
   }
 
   async refresh(req: Request, res: Response): Promise<AuthorizationDto> {
@@ -116,35 +120,62 @@ export class AuthService {
     try {
       const payload: JwtPayload = await this.jwt.verifyAsync(refreshToken);
 
+      const session = await this.prisma.session.findUnique({
+        where: { id: payload.sessionId },
+      });
+
+      if (!session) {
+        this.setCookies(res, '', new Date(0));
+        throw new UnauthorizedException('Session not found');
+      }
+
+      const isValid = await argon2.verify(
+        session.refreshTokenHash,
+        refreshToken,
+      );
+
+      if (!isValid) {
+        this.setCookies(res, '', new Date(0));
+        throw new UnauthorizedException('Invalid session');
+      }
+
       const user = await this.prisma.user.findUnique({
         where: { id: payload.id },
         select: { id: true, role: true, status: true },
       });
 
-      if (!user) {
+      if (!user || user.status === 'BANNED') {
         this.setCookies(res, '', new Date(0));
-        throw new NotFoundException('User not found');
+        throw new UnauthorizedException('User invalid');
       }
 
-      if (user.status === 'BANNED') {
-        this.setCookies(res, '', new Date(0));
-        throw new UnauthorizedException(`User ${user.status.toLowerCase()}`);
-      }
+      await this.prisma.session.update({
+        where: { id: session.id },
+        data: { lastActiveAt: new Date() },
+      });
 
-      return this.auth(res, user.id, user.role);
-    } catch (error) {
-      if (
-        error?.name === 'JsonWebTokenError' ||
-        error?.name === 'TokenExpiredError'
-      ) {
-        this.setCookies(res, '', new Date(0));
-        throw new UnauthorizedException('Invalid or expired refresh token');
-      }
-      throw error;
+      return this.auth(res, req, user.id, user.role, session.id);
+    } catch {
+      this.setCookies(res, '', new Date(0));
+      throw new UnauthorizedException('Invalid or expired refresh token');
     }
   }
 
-  async logout(res: Response): Promise<void> {
+  async logout(req: Request, res: Response): Promise<void> {
+    const refreshToken = req.cookies?.['refreshToken'];
+
+    if (refreshToken) {
+      try {
+        const payload: JwtPayload = await this.jwt.verifyAsync(refreshToken);
+
+        await this.prisma.session.delete({
+          where: { id: payload.sessionId },
+        });
+      } catch {
+        return;
+      }
+    }
+
     this.setCookies(res, '', new Date(0));
   }
 
@@ -167,8 +198,9 @@ export class AuthService {
   private genTokens(
     id: string,
     role: string,
+    sessionId: string,
   ): { access_token: string; refresh_token: string } {
-    const payload: JwtPayload = { id, role };
+    const payload: JwtPayload = { id, role, sessionId };
 
     const access_token = this.jwt.sign(payload, {
       expiresIn: this.ACCESS_TTL,
@@ -178,21 +210,62 @@ export class AuthService {
       expiresIn: this.REFRESH_TTL,
     });
 
+    return { access_token, refresh_token };
+  }
+
+  private parseUA(ua: string): {
+    device: string;
+    browser: string;
+    os: string;
+  } {
+    const result = new UAParser(ua).getResult();
+
     return {
-      access_token,
-      refresh_token,
+      device: result.device.model || 'Desktop',
+      browser: result.browser.name || 'Unknown',
+      os: result.os.name || 'Unknown',
     };
   }
 
   private async auth(
     res: Response,
+    req: Request,
     id: string,
     role: string,
+    existingSessionId?: string,
   ): Promise<AuthorizationDto> {
-    const { access_token, refresh_token } = this.genTokens(id, role);
+    const ua = req.headers['user-agent'] || '';
+    const { device, browser, os } = this.parseUA(ua);
+
+    let sessionId = existingSessionId;
+
+    if (!sessionId) {
+      sessionId = randomUUID();
+
+      const { refresh_token } = this.genTokens(id, role, sessionId);
+      const hash = await argon2.hash(refresh_token);
+
+      await this.prisma.session.create({
+        data: {
+          id: sessionId,
+          userId: id,
+          refreshTokenHash: hash,
+          device,
+          browser,
+          os,
+        },
+      });
+
+      const expiresIn: Date = this.date.parseTTL(this.REFRESH_TTL);
+      this.setCookies(res, refresh_token, expiresIn);
+
+      const { access_token } = this.genTokens(id, role, sessionId);
+      return { access_token };
+    }
+
+    const { access_token, refresh_token } = this.genTokens(id, role, sessionId);
 
     const expiresIn: Date = this.date.parseTTL(this.REFRESH_TTL);
-
     this.setCookies(res, refresh_token, expiresIn);
 
     return { access_token };
@@ -206,6 +279,7 @@ export class AuthService {
       secure: false,
       sameSite: 'lax',
     };
+
     res.cookie(`refreshToken`, value, options);
   }
 }
