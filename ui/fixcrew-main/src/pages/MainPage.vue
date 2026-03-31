@@ -7,6 +7,7 @@ import ServiceBlock from '@/components/mainPage/ServiceBlock.vue'
 import ServiceArea from '@/components/mainPage/ServiceArea.vue'
 import ContactArea from '@/components/mainPage/ContactArea.vue'
 import MapArea from '@/components/mainPage/MapArea.vue'
+import FooterComponent from '@/components/FooterComponent.vue'
 </script>
 
 <template>
@@ -25,6 +26,7 @@ import MapArea from '@/components/mainPage/MapArea.vue'
       <MapArea/>
     </div>
   </main>
+  <FooterComponent />
 </template>
 
 <style scoped></style>
