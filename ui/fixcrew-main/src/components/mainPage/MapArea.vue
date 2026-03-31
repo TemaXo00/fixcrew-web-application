@@ -7,7 +7,7 @@
       <div
         v-if="tooltip.visible"
         :style="{ top: tooltip.y + 'px', left: tooltip.x + 'px' }"
-        class="absolute bg-white shadow-lg rounded-xl p-3 text-sm pointer-events-none"
+        class="absolute bg-white shadow-lg rounded-xl p-3 text-sm pointer-events-none z-10"
       >
         <div class="font-semibold">{{ tooltip.title }}</div>
         <div>Avg. Response: {{ tooltip.response }}</div>
@@ -48,35 +48,108 @@ const locations: Location[] = [
   { name: 'Palo Alto', coords: [37.4419, -122.143], response: '35 min' },
 ]
 
-onMounted(() => {
+async function fetchRegionBoundary(city: string): Promise<L.GeoJSON | null> {
+  const query = `${city}, California, USA`
+  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=geojson&polygon_geojson=1&limit=1`
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'LeafletMapApp/1.0',
+      },
+    })
+    const data = await response.json()
+    if (!data.features || data.features.length === 0) return null
+
+    const feature = data.features[0]
+    if (!feature.geometry) return null
+
+    const geoJsonLayer = L.geoJSON(feature, {
+      style: {
+        color: '#3b82f6',
+        weight: 2,
+        fillColor: '#3b82f6',
+        fillOpacity: 0.4,
+      },
+    })
+
+    return geoJsonLayer
+  } catch (error) {
+    console.error(`Failed to fetch boundary for ${city}:`, error)
+    return null
+  }
+}
+
+onMounted(async () => {
   if (!mapContainer.value) return
 
   const map = L.map(mapContainer.value).setView([37.3, -121.9], 10)
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Boundaries &copy; OpenStreetMap contributors',
   }).addTo(map)
 
-  locations.forEach((loc) => {
-    const marker = L.circleMarker(loc.coords, {
-      radius: 6,
-      color: '#3b82f6',
-      fillColor: '#3b82f6',
-      fillOpacity: 1,
-    }).addTo(map)
+  const bounds = L.latLngBounds()
+  const locationMap = new Map(locations.map((loc) => [loc.name, loc]))
 
-    marker.on('mouseover', (e: any) => {
-      tooltip.value.visible = true
-      tooltip.value.x = e.originalEvent.clientX
-      tooltip.value.y = e.originalEvent.clientY
-      tooltip.value.title = loc.name
-      tooltip.value.response = loc.response
-    })
+  for (const loc of locations) {
+    const boundary = await fetchRegionBoundary(loc.name)
+    if (boundary) {
+      boundary.addTo(map)
+      boundary.eachLayer((layer) => {
+        if (layer instanceof L.Path) {
+          layer.on('mouseover', (e: L.LeafletMouseEvent) => {
+            tooltip.value.visible = true
+            tooltip.value.x = e.originalEvent.clientX
+            tooltip.value.y = e.originalEvent.clientY
+            tooltip.value.title = loc.name
+            tooltip.value.response = loc.response
+          })
+          layer.on('mousemove', (e: L.LeafletMouseEvent) => {
+            tooltip.value.x = e.originalEvent.clientX
+            tooltip.value.y = e.originalEvent.clientY
+          })
+          layer.on('mouseout', () => {
+            tooltip.value.visible = false
+          })
+          if (layer.getBounds) {
+            bounds.extend(layer.getBounds())
+          }
+        }
+      })
+    } else {
+      const circle = L.circle(loc.coords, {
+        radius: 2000,
+        color: '#3b82f6',
+        fillColor: '#3b82f6',
+        fillOpacity: 0.4,
+        weight: 2,
+      }).addTo(map)
 
-    marker.on('mouseout', () => {
-      tooltip.value.visible = false
-    })
-  })
+      circle.on('mouseover', (e: L.LeafletMouseEvent) => {
+        tooltip.value.visible = true
+        tooltip.value.x = e.originalEvent.clientX
+        tooltip.value.y = e.originalEvent.clientY
+        tooltip.value.title = loc.name
+        tooltip.value.response = loc.response
+      })
+      circle.on('mousemove', (e: L.LeafletMouseEvent) => {
+        tooltip.value.x = e.originalEvent.clientX
+        tooltip.value.y = e.originalEvent.clientY
+      })
+      circle.on('mouseout', () => {
+        tooltip.value.visible = false
+      })
+
+      bounds.extend(circle.getBounds())
+    }
+  }
+
+  if (!bounds.isValid()) {
+    bounds.extend([37.3, -121.9])
+  }
+  map.fitBounds(bounds, { padding: [30, 30] })
 })
 </script>
 
