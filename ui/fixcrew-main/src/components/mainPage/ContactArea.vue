@@ -53,7 +53,7 @@ const submitForm = () => {
 </script>
 
 <template>
-  <div class="bg-[url(@/assets/images/form-bg.jpg)] bg-cover bg-center relative p-2">
+  <div class="bg-[url(@/assets/images/form-bg.jpg)] bg-cover bg-center relative p-2z">
     <div class="absolute inset-0 bg-black/50"></div>
 
     <div class="relative z-10 flex justify-center w-full mt-4 sm:mt-6 md:mt-8 px-4">
