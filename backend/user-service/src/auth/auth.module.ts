@@ -7,11 +7,11 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { DateUtil } from '../common/utils/parse-data.util';
-import { InvitesModule } from '../invites/invites.module';
+import { TokensModule } from '../tokens/tokens.module';
 
 @Module({
   imports: [
-    InvitesModule,
+    TokensModule,
     ClientsModule.registerAsync([
       {
         name: 'ORDER_SERVICE',
@@ -29,6 +29,31 @@ import { InvitesModule } from '../invites/invites.module';
             options: {
               urls: [`amqp://${rabbitUser}:${rabbitPass}@${rabbitHost}:5672`],
               queue: orderQueue,
+              queueOptions: {
+                durable: true,
+              },
+            },
+          };
+        },
+      },
+    ]),
+    ClientsModule.registerAsync([
+      {
+        name: 'MAIL_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (configService: ConfigService): ClientProviderOptions => {
+          const rabbitUser = configService.get<string>('RABBIT_MQ_USER');
+          const rabbitPass = configService.get<string>('RABBIT_MQ_PASSWORD');
+          const rabbitHost = 'rabbitmq';
+          const mailQueue = configService.get<string>('MAIL_QUEUE');
+
+          return {
+            name: 'MAIL_SERVICE',
+            transport: Transport.RMQ,
+            options: {
+              urls: [`amqp://${rabbitUser}:${rabbitPass}@${rabbitHost}:5672`],
+              queue: mailQueue,
               queueOptions: {
                 durable: true,
               },

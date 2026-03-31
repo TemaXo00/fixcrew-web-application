@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import RegisterPage from '@/pages/RegisterPage.vue'
 import HomePage from '@/pages/HomePage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
+import RegisterPage from '@/pages/RegisterPage.vue'
 import RestorePage from '@/pages/RestorePage.vue'
+import RestoreSendPage from '@/pages/RestoreSendPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,8 +14,8 @@ const router = createRouter({
       component: HomePage,
       meta: {
         title: 'Home',
-        requiresAuth: true
-      }
+        requiresAuth: true,
+      },
     },
     {
       path: '/register',
@@ -29,17 +30,25 @@ const router = createRouter({
       name: 'Login',
       component: LoginPage,
       meta: {
-        title: 'Login'
-      }
+        title: 'Login',
+      },
     },
     {
       path: '/restore',
+      name: 'Restore send',
+      component: RestoreSendPage,
+      meta: {
+        title: 'Restore send',
+      },
+    },
+    {
+      path: '/restore/use',
       name: 'Restore',
       component: RestorePage,
       meta: {
-        title: 'Restore'
-      }
-    }
+        title: 'Restore',
+      },
+    },
   ],
 })
 

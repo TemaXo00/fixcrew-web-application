@@ -22,6 +22,8 @@ model User {
   role       Roles      @default(MASTER)
   status     UserStatus @default(ACTIVE)
 
+  sessions Session[]
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -31,15 +33,34 @@ model User {
 model Token {
   id String @id @default(uuid(4))
 
-  hash       String       @unique
+  hash       String      @unique
   email      String
-  status     InviteStatus @default(CREATED)
+  status     TokenStatus @default(CREATED)
+  type       TokenTypes
   expires_at DateTime
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
   @@map("token")
+}
+
+model Session {
+  id String @id @default(uuid(4))
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  refreshTokenHash String
+
+  device  String?
+  browser String?
+  os      String?
+
+  lastActiveAt DateTime @default(now())
+  created_at   DateTime @default(now())
+
+  @@map("sessions")
 }
 
 enum Roles {
@@ -52,9 +73,14 @@ enum UserStatus {
   BANNED
 }
 
-enum InviteStatus {
+enum TokenStatus {
   CREATED
   USED
   EXPIRED
   REVOKED
+}
+
+enum TokenTypes {
+  PASSWORD
+  INVITE
 }

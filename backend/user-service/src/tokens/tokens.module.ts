@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientProviderOptions, ClientsModule, Transport } from '@nestjs/microservices';
+import {
+  ClientProviderOptions,
+  ClientsModule,
+  Transport,
+} from '@nestjs/microservices';
+import { ScheduleModule } from '@nestjs/schedule';
 
-import { RestoreController } from './restore.controller';
-import { RestoreService } from './restore.service';
+import { TokensController } from './tokens.controller';
+import { TokensService } from './tokens.service';
 
 @Module({
   imports: [
@@ -30,11 +35,13 @@ import { RestoreService } from './restore.service';
               },
             },
           };
-        }
+        },
       },
     ]),
+    ScheduleModule.forRoot(),
   ],
-  controllers: [RestoreController],
-  providers: [RestoreService],
+  controllers: [TokensController],
+  providers: [TokensService],
+  exports: [TokensService],
 })
-export class RestoreModule {}
+export class TokensModule {}

@@ -1,8 +1,6 @@
-import { IsNotEmpty, IsString, IsStrongPassword } from 'class-validator';
+import { IsStrongPassword } from 'class-validator';
 
-export class UseRestoreDto {
-  @IsNotEmpty()
-  @IsString()
+export class RestorePasswordDto {
   @IsStrongPassword({
     minLength: 8,
     minNumbers: 1,
