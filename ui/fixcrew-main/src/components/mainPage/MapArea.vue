@@ -1,19 +1,18 @@
 <template>
-  <div class="text-center max-w-1xl">
+  <div class="flex flex-col items-center bg-[#e7e7e7] p-10 rounded-2xl gap-3">
     <h2 class="text-5xl font-sans mb-14 text-[#626262]">Feel free to contact us 24/7</h2>
-  </div>
+    <div class="w-full h-[600px] relative">
+      <div ref="mapContainer" class="w-full h-full"></div>
 
-  <div class="w-full h-[600px] relative">
-    <div ref="mapContainer" class="w-full h-full"></div>
-
-    <div
-      v-if="tooltip.visible"
-      :style="{ top: tooltip.y + 'px', left: tooltip.x + 'px' }"
-      class="absolute bg-white shadow-lg rounded-xl p-3 text-sm pointer-events-none"
-    >
-      <div class="font-semibold">{{ tooltip.title }}</div>
-      <div>Avg. Response: {{ tooltip.response }}</div>
-      <div>Same-day service available</div>
+      <div
+        v-if="tooltip.visible"
+        :style="{ top: tooltip.y + 'px', left: tooltip.x + 'px' }"
+        class="absolute bg-white shadow-lg rounded-xl p-3 text-sm pointer-events-none"
+      >
+        <div class="font-semibold">{{ tooltip.title }}</div>
+        <div>Avg. Response: {{ tooltip.response }}</div>
+        <div>Same-day service available</div>
+      </div>
     </div>
   </div>
 </template>
