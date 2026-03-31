@@ -8,6 +8,9 @@ import ServiceArea from '@/components/mainPage/ServiceArea.vue'
 import ContactArea from '@/components/mainPage/ContactArea.vue'
 import MapArea from '@/components/mainPage/MapArea.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
+import WhyChoose from '@/components/mainPage/WhyChoose.vue'
+import GetinTouch from '@/components/mainPage/GetinTouch.vue'
+import InfoUnion from '@/components/mainPage/InfoUnion.vue'
 </script>
 
 <template>
@@ -23,8 +26,10 @@ import FooterComponent from '@/components/FooterComponent.vue'
     <div class="px-[3%] flex flex-col gap-30">
       <ServiceArea />
       <ContactArea />
-      <MapArea/>
+      <MapArea />
+      <InfoUnion/>
     </div>
+
   </main>
   <FooterComponent />
 </template>
