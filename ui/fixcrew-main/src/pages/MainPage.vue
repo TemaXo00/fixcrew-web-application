@@ -8,8 +8,6 @@ import ServiceArea from '@/components/mainPage/ServiceArea.vue'
 import ContactArea from '@/components/mainPage/ContactArea.vue'
 import MapArea from '@/components/mainPage/MapArea.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
-import WhyChoose from '@/components/mainPage/WhyChoose.vue'
-import GetinTouch from '@/components/mainPage/GetinTouch.vue'
 import InfoUnion from '@/components/mainPage/InfoUnion.vue'
 </script>
 

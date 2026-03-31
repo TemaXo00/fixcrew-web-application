@@ -4,9 +4,7 @@ import WhyChoose from '@/components/mainPage/WhyChoose.vue'
 </script>
 
 <template>
-  <div
-    class="px-[20%] flex flex-col gap-30 bg-[url(@/assets/images/info-bg.jpg)] bg-cover bg-center min-h-screen rounded-2xl"
-  >
+  <div class="px-[20%] py-10 flex flex-col gap-30 bg-[url(@/assets/images/info-bg.jpg)] bg-cover bg-center rounded-2xl">
     <WhyChoose />
     <GetinTouch />
   </div>
