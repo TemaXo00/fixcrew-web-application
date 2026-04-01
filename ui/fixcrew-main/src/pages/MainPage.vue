@@ -9,6 +9,7 @@ import ContactArea from '@/components/mainPage/ContactArea.vue'
 import MapArea from '@/components/mainPage/MapArea.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import InfoUnion from '@/components/mainPage/InfoUnion.vue'
+import ScrollToTop from '@/components/universalComp/ScrollToTop.vue'
 </script>
 
 <template>
@@ -26,6 +27,7 @@ import InfoUnion from '@/components/mainPage/InfoUnion.vue'
       <ContactArea />
       <MapArea />
       <InfoUnion/>
+      <ScrollToTop/>
     </div>
 
   </main>
