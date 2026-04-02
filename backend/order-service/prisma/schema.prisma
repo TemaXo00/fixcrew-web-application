@@ -7,3 +7,57 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Order {
+  id String @id @default(uuid(4))
+
+  name String
+
+  phone String
+  email String
+
+  address String
+
+  message   String
+  photo_ids String[]
+
+  master_id String?
+  master    knownMasters? @relation(fields: [master_id], references: [id])
+
+  status Statuses @default(CREATED)
+  price  Int      @default(0)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+
+  @@map("orders")
+  @@index([master_id, phone, email])
+}
+
+model knownMasters {
+  id String @id @default(uuid(4))
+
+  master_id    String @unique
+  email        String @unique
+  phone_number String @unique
+
+  scheduleFrom DateTime?
+  sheduleTo    DateTime?
+
+  orders Order[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("known_masters")
+  @@index([master_id, email, phone_number])
+}
+
+enum Statuses {
+  CREATED
+  PENDING
+  COMPLETED
+  CANCELED
+  UNDONE
+  WARRANTY_CASE
+}

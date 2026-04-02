@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import compression from 'compression';
+import { Request, Response, NextFunction } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { createProxyMiddleware } from 'http-proxy-middleware';
@@ -50,9 +51,14 @@ async function bootstrap(): Promise<void> {
     maxAge: 86400,
   });
 
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    next();
+  });
+
   const serviceProxies: Record<string, string> = {
     blog: 'http://blog-service:3000',
-    file: 'http://file-service:3000/',
+    file: 'http://file-service:3000',
     info: 'http://info-service:3000',
     order: 'http://order-service:3000',
     user: 'http://user-service:3000',

@@ -7,3 +7,27 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model File {
+  id String @id @default(uuid(4))
+
+  filename  String
+  extension String
+  mimeType  String
+  size      Int
+
+  bucket String
+  key    String @unique
+
+  visibility Visibility
+
+  createdAt DateTime @default(now())
+
+  @@map("files")
+  @@index([filename, key, visibility])
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+}
