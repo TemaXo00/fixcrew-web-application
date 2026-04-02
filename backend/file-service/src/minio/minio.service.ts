@@ -12,7 +12,7 @@ export class MinioService implements OnModuleInit {
 
   onModuleInit(): void {
     this.client = new Minio.Client({
-      endPoint: this.configService.getOrThrow<string>('MINIO_ENDPOINT'),
+      endPoint: "minio",
       port: 9000,
       useSSL: false,
       accessKey: this.configService.getOrThrow<string>('MINIO_USER'),
@@ -21,7 +21,9 @@ export class MinioService implements OnModuleInit {
   }
 
   async upload(bucket: string, key: string, buffer: Buffer, mimeType: string): Promise<void> {
-    await this.client.putObject(bucket, key, buffer, buffer.length, { 'Content-Type': mimeType });
+    await this.client.putObject(bucket, key, buffer, buffer.length, {
+      'Content-Type': mimeType,
+    });
   }
 
   async getObject(bucket: string, key: string): Promise<Readable> {
@@ -29,17 +31,35 @@ export class MinioService implements OnModuleInit {
   }
 
   async getPresignedUrl(bucket: string, key: string, expires = 300): Promise<string> {
-    return this.client.presignedUrl('GET', bucket, key, expires);
+    return await this.client.presignedUrl('GET', bucket, key, expires);
   }
 
   async deleteObject(bucket: string, key: string): Promise<void> {
     await this.client.removeObject(bucket, key);
   }
 
-  async ensureBucket(bucket: string): Promise<void> {
+  async ensureBucket(bucket: string, isPublic: boolean): Promise<void> {
     const exists = await this.client.bucketExists(bucket);
+
     if (!exists) {
       await this.client.makeBucket(bucket);
+
+      if (isPublic) {
+        await this.client.setBucketPolicy(
+          bucket,
+          JSON.stringify({
+            Version: '2012-10-17',
+            Statement: [
+              {
+                Effect: 'Allow',
+                Principal: '*',
+                Action: ['s3:GetObject'],
+                Resource: [`arn:aws:s3:::${bucket}/*`],
+              },
+            ],
+          }),
+        );
+      }
     }
   }
 }

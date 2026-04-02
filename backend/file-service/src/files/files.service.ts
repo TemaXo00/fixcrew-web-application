@@ -27,16 +27,21 @@ export class FilesService {
     return `${randomUUID()}${ext}`;
   }
 
+  private isPublicBucket(bucket: string): boolean {
+    return bucket !== 'order';
+  }
+
   async uploadFile(dto: UploadFileDto): Promise<File> {
     if (!dto.buffer || !Buffer.isBuffer(dto.buffer)) {
       throw new Error('Invalid buffer');
     }
 
-    const bucket = dto.visibility === Visibility.PUBLIC ? 'public' : 'private';
+    const bucket = dto.bucket;
+    const isPublic = this.isPublicBucket(bucket);
     const extension = path.extname(dto.filename).replace('.', '');
     const key = this.generateKey(dto.filename);
 
-    await this.minioService.ensureBucket(bucket);
+    await this.minioService.ensureBucket(bucket, isPublic);
     await this.minioService.upload(bucket, key, dto.buffer, dto.mimeType);
 
     return this.prisma.file.create({
@@ -47,7 +52,7 @@ export class FilesService {
         size: dto.size,
         bucket,
         key,
-        visibility: dto.visibility,
+        visibility: isPublic ? Visibility.PUBLIC : Visibility.PRIVATE,
       },
     });
   }
@@ -63,10 +68,10 @@ export class FilesService {
     }
 
     if (file.visibility === Visibility.PUBLIC) {
-      return `${this.GATEWAY_URL}/file/files/public/${file.id}`;
+      return `${this.GATEWAY_URL}/file/public/${file.id}`;
     }
 
-    return this.minioService.getPresignedUrl(file.bucket, file.key);
+    return `${this.GATEWAY_URL}/file/private/${file.id}`;
   }
 
   async deleteFile(fileId: string): Promise<{ success: boolean } | void> {
@@ -77,21 +82,26 @@ export class FilesService {
 
     await this.minioService.deleteObject(file.bucket, file.key);
     await this.prisma.file.delete({ where: { id: fileId } });
-
     return { success: true };
   }
 
   async getPublicFileStream(id: string): Promise<{ stream: Readable; mimeType: string } | null> {
     const file = await this.prisma.file.findUnique({ where: { id } });
-    if (!file) {
+    if (!file || file.visibility !== Visibility.PUBLIC) {
       return null;
     }
 
     const stream = await this.minioService.getObject(file.bucket, file.key);
+    return { stream, mimeType: file.mimeType };
+  }
 
-    return {
-      stream,
-      mimeType: file.mimeType,
-    };
+  async getPrivateFileStream(id: string): Promise<{ stream: Readable; mimeType: string } | null> {
+    const file = await this.prisma.file.findUnique({ where: { id } });
+    if (!file || file.visibility !== Visibility.PRIVATE) {
+      return null;
+    }
+
+    const stream = await this.minioService.getObject(file.bucket, file.key);
+    return { stream, mimeType: file.mimeType };
   }
 }

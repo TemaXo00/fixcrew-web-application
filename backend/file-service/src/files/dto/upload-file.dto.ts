@@ -18,4 +18,8 @@ export class UploadFileDto {
 
   @IsEnum(Visibility)
   visibility: Visibility;
+
+  @IsString()
+  @IsNotEmpty()
+  bucket: string;
 }
