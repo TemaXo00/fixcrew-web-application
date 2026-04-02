@@ -45,7 +45,7 @@ export class AuthService {
     await this.mailSender.sendMail({
       to: dto.email,
       subject: 'Register to FixCrew',
-      template: 'register',
+      template: 'register-notification',
       context: {
         ui_link: this.UI_LINK,
         agent: dto.agent,
@@ -57,7 +57,7 @@ export class AuthService {
     await this.mailSender.sendMail({
       to: dto.email,
       subject: 'Login',
-      template: 'login',
+      template: 'login-notification',
       context: {
         ui_link: this.UI_LINK,
         agent: dto.agent,

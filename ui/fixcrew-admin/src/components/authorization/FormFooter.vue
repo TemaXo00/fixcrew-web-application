@@ -9,7 +9,7 @@ defineProps<Props>()
 </script>
 
 <template>
-    <div class="flex flex-col items-center gap-3 small:flex-row">
+    <div class="flex flex-row items-center gap-3">
         <p class="text-dimmed text-lg font-primary">
             {{ name }}
         </p>
