@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
 
+import { FilesModule } from './files/files.module';
+import { MinioModule } from './minio/minio.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
@@ -30,6 +32,8 @@ import { PrismaModule } from './prisma/prisma.module';
       },
     }),
     PrismaModule,
+    MinioModule,
+    FilesModule,
   ],
   controllers: [],
   providers: [],
