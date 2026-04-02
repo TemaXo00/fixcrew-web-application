@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import LoginPage from '@/pages/authorization/LoginPage.vue'
+import RegisterPage from '@/pages/authorization/RegisterPage.vue'
+import RestorePage from '@/pages/authorization/RestorePage.vue'
+import RestoreSendPage from '@/pages/authorization/RestoreSendPage.vue'
 import HomePage from '@/pages/HomePage.vue'
-import LoginPage from '@/pages/LoginPage.vue'
-import RegisterPage from '@/pages/RegisterPage.vue'
-import RestorePage from '@/pages/RestorePage.vue'
-import RestoreSendPage from '@/pages/RestoreSendPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
