@@ -24,6 +24,7 @@ model File {
   createdAt DateTime @default(now())
 
   @@map("files")
+  @@index([filename, key, visibility])
 }
 
 enum Visibility {
