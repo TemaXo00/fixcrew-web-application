@@ -25,7 +25,7 @@ const router = createRouter({
     },
     {
       name: 'Info',
-      path: '/:slug',
+      path: '/info/:slug',
       component: InfoPage,
     },
     {
