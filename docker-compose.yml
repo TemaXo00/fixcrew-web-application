@@ -328,7 +328,10 @@ services:
     environment:
       DATABASE_URL: ${INFO_DB_URL}
       REDIS_URL: ${REDIS_URL}
+      RABBIT_MQ_USER: ${RABBIT_MQ_USER}
+      RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
       FILE_QUEUE: ${FILE_QUEUE}
+      ORDER_QUEUE: ${ORDER_QUEUE}
     volumes:
       - ./backend/info-service:/app
       - /app/node_modules
@@ -379,6 +382,7 @@ services:
       RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
       ORDER_QUEUE: ${ORDER_QUEUE}
       FILE_QUEUE: ${FILE_QUEUE}
+      INFO_QUEUE: ${INFO_QUEUE}
     volumes:
       - ./backend/order-service:/app
       - /app/node_modules
