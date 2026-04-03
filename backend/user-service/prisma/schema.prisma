@@ -28,6 +28,7 @@ model User {
   updated_at DateTime @updatedAt
 
   @@map("users")
+  @@index([email, phone_number])
 }
 
 model Token {
@@ -43,6 +44,7 @@ model Token {
   updated_at DateTime @updatedAt
 
   @@map("token")
+  @@index([type, email, status])
 }
 
 model Session {
@@ -61,6 +63,7 @@ model Session {
   created_at   DateTime @default(now())
 
   @@map("sessions")
+  @@index([userId, lastActiveAt])
 }
 
 enum Roles {

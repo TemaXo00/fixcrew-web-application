@@ -276,6 +276,7 @@ services:
     environment:
       DATABASE_URL: ${BLOG_DB_URL}
       REDIS_URL: ${REDIS_URL}
+      FILE_QUEUE: ${FILE_QUEUE}
     volumes:
       - ./backend/blog-service:/app
       - /app/node_modules
@@ -298,8 +299,10 @@ services:
     container_name: fixcrew-file-service
     environment:
       DATABASE_URL: ${FILE_DB_URL}
-      MINIO_API_PORT: ${MINIO_API_PORT}
-      MINIO_UI_PORT: ${MINIO_UI_PORT}
+      GATEWAY_URL: ${GATEWAY_URL}
+      MINIO_USER: ${MINIO_USER}
+      MINIO_PASSWORD: ${MINIO_PASSWORD}
+      FILE_QUEUE: ${FILE_QUEUE}
     volumes:
       - ./backend/file-service:/app
       - /app/node_modules
@@ -325,6 +328,7 @@ services:
     environment:
       DATABASE_URL: ${INFO_DB_URL}
       REDIS_URL: ${REDIS_URL}
+      FILE_QUEUE: ${FILE_QUEUE}
     volumes:
       - ./backend/info-service:/app
       - /app/node_modules
@@ -374,6 +378,7 @@ services:
       RABBIT_MQ_USER: ${RABBIT_MQ_USER}
       RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
       ORDER_QUEUE: ${ORDER_QUEUE}
+      FILE_QUEUE: ${FILE_QUEUE}
     volumes:
       - ./backend/order-service:/app
       - /app/node_modules
@@ -405,6 +410,7 @@ services:
       RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
       MAIL_QUEUE: ${MAIL_QUEUE}
       ORDER_QUEUE: ${ORDER_QUEUE}
+      FILE_QUEUE: ${FILE_QUEUE}
     volumes:
       - ./backend/user-service:/app
       - /app/node_modules
