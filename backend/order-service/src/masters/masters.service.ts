@@ -7,6 +7,7 @@ import {
 } from '../common/dto/pagination.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateMasterDto } from './dto/create-master,dto';
+import { UpdateScheduleDto } from './dto/update-schedule.dto';
 
 @Injectable()
 export class MastersService {
@@ -60,6 +61,33 @@ export class MastersService {
         master_id: dto.master_id,
         email: dto.email,
         phone_number: dto.phone_number
+      }
+    })
+  }
+
+  async changeSchedule(master_id: string, dto: UpdateScheduleDto): Promise<knownMasters> {
+    await this.getMasterById(master_id)
+
+    if (dto.from > dto.to) {
+      throw new ConflictException('Value from cannot be greater than to')
+    }
+    return this.prisma.knownMasters.update({
+      where: {
+        master_id: master_id
+      },
+      data: {
+        scheduleFrom: dto.from,
+        scheduleTo: dto.to,
+      }
+    })
+  }
+
+  async deleteMaster(master_id:string): Promise<void> {
+    await this.getMasterById(master_id)
+
+    await this.prisma.knownMasters.delete({
+      where: {
+        master_id: master_id
       }
     })
   }

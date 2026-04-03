@@ -14,7 +14,7 @@ model Order {
   name String
 
   phone String
-  email String
+  email String?
 
   address String
 
@@ -30,8 +30,8 @@ model Order {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt()
 
-  @@map("orders")
   @@index([master_id, phone, email])
+  @@map("orders")
 }
 
 model knownMasters {
@@ -41,16 +41,16 @@ model knownMasters {
   email        String @unique
   phone_number String @unique
 
-  scheduleFrom DateTime?
-  sheduleTo    DateTime?
+  scheduleFrom Int?
+  scheduleTo   Int?
 
   orders Order[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@map("known_masters")
   @@index([master_id, email, phone_number])
+  @@map("known_masters")
 }
 
 enum Statuses {

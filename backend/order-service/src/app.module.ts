@@ -5,6 +5,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
 
 import { MastersModule } from './masters/masters.module';
+import { OrdersModule } from './orders/orders.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
@@ -34,6 +35,7 @@ import { PrismaModule } from './prisma/prisma.module';
     TerminusModule,
     PrismaModule,
     MastersModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],
