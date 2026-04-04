@@ -9,7 +9,7 @@ defineProps<Props>()
 </script>
 
 <template>
-    <div class="flex flex-col items-center gap-10 mb-10">
+    <div class="flex flex-col items-start gap-10 mb-10">
         <img
             :src="logo"
             alt="Logo"

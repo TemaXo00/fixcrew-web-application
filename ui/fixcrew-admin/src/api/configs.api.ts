@@ -1,10 +1,81 @@
-import type { AxiosInstance } from 'axios'
+import type { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
+import { useAuthStore } from '@/stores/auth.store'
 
 export const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL
 
-export const userRoutes: AxiosInstance = axios.create({
-  baseURL: `${GATEWAY_URL}/user`,
-  timeout: 5000,
+const api: AxiosInstance = axios.create({
+  baseURL: GATEWAY_URL,
+  timeout: 10000,
   withCredentials: true,
 })
+
+let isRefreshing = false
+let failedQueue: Array<{
+  resolve: (value: unknown) => void
+  reject: (reason?: unknown) => void
+}> = []
+
+const processQueue = (error: Error | null, token: string | null = null) => {
+  failedQueue.forEach((promise) => {
+    if (error) {
+      promise.reject(error)
+    }
+    else {
+      promise.resolve(token)
+    }
+  })
+  failedQueue = []
+}
+
+api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const authStore = useAuthStore()
+  if (authStore.accessToken) {
+    config.headers.Authorization = `Bearer ${authStore.accessToken}`
+  }
+  return config
+})
+
+api.interceptors.response.use(
+  response => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
+    const authStore = useAuthStore()
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject })
+        })
+          .then(() => api(originalRequest))
+          .catch(err => Promise.reject(err))
+      }
+
+      originalRequest._retry = true
+      isRefreshing = true
+
+      try {
+        const { data } = await axios.post<{ access_token: string }>(
+          `${GATEWAY_URL}/auth/refresh`,
+          {},
+          { withCredentials: true },
+        )
+        authStore.setAccessToken(data.access_token)
+        processQueue(null, data.access_token)
+        return api(originalRequest)
+      }
+      catch (refreshError) {
+        processQueue(refreshError as Error, null)
+        authStore.logout()
+        return Promise.reject(refreshError)
+      }
+      finally {
+        isRefreshing = false
+      }
+    }
+
+    return Promise.reject(error)
+  },
+)
+
+export default api
