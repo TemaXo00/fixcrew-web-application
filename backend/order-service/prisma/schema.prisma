@@ -21,6 +21,7 @@ model Order {
 
   date     String
   startMin Int
+  endMin   Int
   duration Int
 
   region_id String
@@ -46,7 +47,9 @@ model Order {
 model KnownMasters {
   id String @id @default(uuid(4))
 
-  master_id    String @unique
+  master_id String @unique
+
+  name         String
   email        String @unique
   phone_number String @unique
 

@@ -70,6 +70,7 @@ export class MastersService {
 
     await this.prisma.knownMasters.create({
       data: {
+        name: dto.name,
         master_id: dto.master_id,
         email: dto.email,
         phone_number: dto.phone_number,

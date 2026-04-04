@@ -383,6 +383,7 @@ services:
       ORDER_QUEUE: ${ORDER_QUEUE}
       FILE_QUEUE: ${FILE_QUEUE}
       INFO_QUEUE: ${INFO_QUEUE}
+      MAIL_QUEUE: ${MAIL_QUEUE}
     volumes:
       - ./backend/order-service:/app
       - /app/node_modules
