@@ -5,7 +5,10 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
 
 import { MastersModule } from './masters/masters.module';
+import { OrdersModule } from './orders/orders.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { RegionsModule } from './regions/regions.module';
+import { SchedulesModule } from './schedules/schedules.module';
 
 @Module({
   imports: [
@@ -34,6 +37,9 @@ import { PrismaModule } from './prisma/prisma.module';
     TerminusModule,
     PrismaModule,
     MastersModule,
+    OrdersModule,
+    SchedulesModule,
+    RegionsModule,
   ],
   controllers: [],
   providers: [],

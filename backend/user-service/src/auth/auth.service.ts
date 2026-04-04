@@ -79,6 +79,7 @@ export class AuthService {
     });
 
     this.order.emit('user.created', {
+      name: `${user.name} ${user.surname}`,
       master_id: user.id,
       email: user.email,
       phone_number: user.phone_number,
