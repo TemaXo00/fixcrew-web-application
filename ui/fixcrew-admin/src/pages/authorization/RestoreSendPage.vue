@@ -3,10 +3,8 @@ import type { AuthRestoreSendType } from '@/types/auth.types'
 import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
-import FormBackground from '@/components/authorization/FormBackground.vue'
 import FormFooter from '@/components/authorization/FormFooter.vue'
 import FormHeader from '@/components/authorization/FormHeader.vue'
-import FormWrapper from '@/components/authorization/FormWrapper.vue'
 import ButtonComponent from '@/components/shared/ButtonComponent.vue'
 import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
 import InputComponent from '@/components/shared/InputComponent.vue'
@@ -32,36 +30,32 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-    <FormWrapper>
-        <FormBackground>
-            <FormHeader name="Restore account" />
-            <form
-                class="flex flex-col gap-3"
-                @submit.prevent="onSubmit"
-            >
-                <InputComponent
-                    v-model="email"
-                    v-bind="emailAttrs"
-                    name="Email"
-                    type="email"
-                    place-text="example@example.com"
-                    :is-necessary="true"
-                />
-                <span
-                    v-if="errors.email"
-                    class="text-red-500 text-sm -mt-2 mb-2"
-                >{{ errors.email }}</span>
-                <ButtonComponent
-                    name="Send email"
-                    :is-loading="authStore.isLoading"
-                />
-                <ErrorDisplay :error="authStore.error" />
-            </form>
-            <FormFooter
-                name=""
-                link-name="Back"
-                link="/login"
-            />
-        </FormBackground>
-    </FormWrapper>
+    <FormHeader name="Restore account" />
+    <form
+        class="flex flex-col gap-3"
+        @submit.prevent="onSubmit"
+    >
+        <InputComponent
+            v-model="email"
+            v-bind="emailAttrs"
+            name="Email"
+            type="email"
+            place-text="example@example.com"
+            :is-necessary="true"
+        />
+        <span
+            v-if="errors.email"
+            class="text-red-500 text-sm -mt-2 mb-2"
+        >{{ errors.email }}</span>
+        <ButtonComponent
+            name="Send email"
+            :is-loading="authStore.isLoading"
+        />
+        <ErrorDisplay :error="authStore.error" />
+    </form>
+    <FormFooter
+        name=""
+        link-name="Back"
+        link="/login"
+    />
 </template>

@@ -1,9 +1,4 @@
-import type {
-  AuthLoginType,
-  AuthRegister,
-  AuthRestoreSendType,
-  AuthRestoreType,
-} from '@/types/auth.types'
+import type { AuthLoginType, AuthRegister, AuthRestoreSendType, AuthRestoreType } from '@/types/auth.types'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { authApi } from '@/api/auth.api'

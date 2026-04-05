@@ -4,9 +4,7 @@ import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import FormBackground from '@/components/authorization/FormBackground.vue'
 import FormHeader from '@/components/authorization/FormHeader.vue'
-import FormWrapper from '@/components/authorization/FormWrapper.vue'
 import ButtonComponent from '@/components/shared/ButtonComponent.vue'
 import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
 import PasswordInput from '@/components/shared/PasswordInput.vue'
@@ -39,32 +37,28 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-    <FormWrapper>
-        <FormBackground>
-            <FormHeader name="Restore password" />
-            <form
-                class="flex flex-col gap-3"
-                @submit.prevent="onSubmit"
-            >
-                <PasswordInput
-                    v-model="password"
-                    v-bind="passwordAttrs"
-                    name="Password"
-                    place-text="Pass@wd123"
-                    :is-necessary="true"
-                />
-                <span
-                    v-if="errors.password"
-                    class="text-red-500 text-sm -mt-2 mb-2"
-                >{{
-                    errors.password
-                }}</span>
-                <ButtonComponent
-                    name="Restore"
-                    :is-loading="authStore.isLoading"
-                />
-                <ErrorDisplay :error="authStore.error" />
-            </form>
-        </FormBackground>
-    </FormWrapper>
+    <FormHeader name="Restore password" />
+    <form
+        class="flex flex-col gap-3"
+        @submit.prevent="onSubmit"
+    >
+        <PasswordInput
+            v-model="password"
+            v-bind="passwordAttrs"
+            name="Password"
+            place-text="Pass@wd123"
+            :is-necessary="true"
+        />
+        <span
+            v-if="errors.password"
+            class="text-red-500 text-sm -mt-2 mb-2"
+        >{{
+            errors.password
+        }}</span>
+        <ButtonComponent
+            name="Restore"
+            :is-loading="authStore.isLoading"
+        />
+        <ErrorDisplay :error="authStore.error" />
+    </form>
 </template>
