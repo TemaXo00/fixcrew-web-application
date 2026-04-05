@@ -32,38 +32,38 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-    <FormHeader name="Welcome Back" />
-    <form
-        class="flex flex-col gap-3"
-        @submit.prevent="onSubmit"
-    >
-        <InputComponent
-            v-model="email"
-            v-bind="emailAttrs"
-            name="Email"
-            type="email"
-            place-text="example@example.com"
-            :is-necessary="true"
-        />
-        <span
-            v-if="errors.email"
-            class="text-red-500 text-sm -mt-2 mb-2"
-        >{{ errors.email }}</span>
-        <PasswordInput
-            v-model="password"
-            name="Password"
-            place-text="Pass@wd123"
-            :is-necessary="true"
-        />
-        <ButtonComponent
-            name="Log in"
-            :is-loading="authStore.isLoading"
-        />
-        <ErrorDisplay :error="authStore.error" />
-    </form>
-    <FormFooter
-        name="Forgot Password?"
-        link-name="Restore"
-        link="/restore"
+  <FormHeader name="Welcome Back" />
+  <form
+    class="flex flex-col gap-3"
+    @submit.prevent="onSubmit"
+  >
+    <InputComponent
+      v-model="email"
+      v-bind="emailAttrs"
+      name="Email"
+      type="email"
+      place-text="example@example.com"
+      :is-necessary="true"
     />
+    <span
+      v-if="errors.email"
+      class="text-red-500 text-sm -mt-2 mb-2"
+    >{{ errors.email }}</span>
+    <PasswordInput
+      v-model="password"
+      name="Password"
+      place-text="Pass@wd123"
+      :is-necessary="true"
+    />
+    <ButtonComponent
+      name="Log in"
+      :is-loading="authStore.isLoading"
+    />
+    <ErrorDisplay :error="authStore.error" />
+  </form>
+  <FormFooter
+    name="Forgot Password?"
+    link-name="Restore"
+    link="/restore"
+  />
 </template>

@@ -6,6 +6,7 @@ import RegisterPage from '@/pages/authorization/RegisterPage.vue'
 import RestorePage from '@/pages/authorization/RestorePage.vue'
 import RestoreSendPage from '@/pages/authorization/RestoreSendPage.vue'
 import DashboardPage from '@/pages/DashboardPage.vue'
+import TokensPage from '@/pages/TokensPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,6 +58,13 @@ const router = createRouter({
           component: DashboardPage,
           meta: {
             title: 'Dashboard',
+          },
+        },
+        {
+          path: 'tokens',
+          component: TokensPage,
+          meta: {
+            title: 'Tokens',
           },
         },
       ],

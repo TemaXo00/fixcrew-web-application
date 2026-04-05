@@ -42,80 +42,80 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-    <FormHeader name="Create an account" />
-    <form
-        class="flex flex-col gap-3"
-        @submit.prevent="onSubmit"
-    >
-        <InputComponent
-            v-model="name"
-            v-bind="nameAttrs"
-            name="Name"
-            type="text"
-            place-text="John"
-            :is-necessary="true"
-        />
-        <span
-            v-if="errors.name"
-            class="text-red-500 text-sm -mt-2 mb-2"
-        >{{ errors.name }}</span>
-        <InputComponent
-            v-model="surname"
-            v-bind="surnameAttrs"
-            name="Surname"
-            type="text"
-            place-text="Doe"
-            :is-necessary="true"
-        />
-        <span
-            v-if="errors.surname"
-            class="text-red-500 text-sm -mt-2 mb-2"
-        >{{
-            errors.surname
-        }}</span>
-        <InputComponent
-            v-model="phone_number"
-            v-bind="phoneAttrs"
-            name="Phone Number"
-            type="tel"
-            place-text="xxx-xxx-xxxx"
-            :is-necessary="true"
-        />
-        <span
-            v-if="errors.phone_number"
-            class="text-red-500 text-sm -mt-2 mb-2"
-        >{{
-            errors.phone_number
-        }}</span>
-        <InputComponent
-            v-model="email"
-            v-bind="emailAttrs"
-            name="Email"
-            type="email"
-            place-text="example@example.com"
-            :is-necessary="true"
-        />
-        <span
-            v-if="errors.email"
-            class="text-red-500 text-sm -mt-2 mb-2"
-        >{{ errors.email }}</span>
-        <PasswordInput
-            v-model="password"
-            v-bind="passwordAttrs"
-            name="Password"
-            place-text="Pass@wd123"
-            :is-necessary="true"
-        />
-        <span
-            v-if="errors.password"
-            class="text-red-500 text-sm -mt-2 mb-2"
-        >{{
-            errors.password
-        }}</span>
-        <ButtonComponent
-            name="Sign up"
-            :is-loading="authStore.isLoading"
-        />
-        <ErrorDisplay :error="authStore.error" />
-    </form>
+  <FormHeader name="Create an account" />
+  <form
+    class="flex flex-col gap-3"
+    @submit.prevent="onSubmit"
+  >
+    <InputComponent
+      v-model="name"
+      v-bind="nameAttrs"
+      name="Name"
+      type="text"
+      place-text="John"
+      :is-necessary="true"
+    />
+    <span
+      v-if="errors.name"
+      class="text-red-500 text-sm -mt-2 mb-2"
+    >{{ errors.name }}</span>
+    <InputComponent
+      v-model="surname"
+      v-bind="surnameAttrs"
+      name="Surname"
+      type="text"
+      place-text="Doe"
+      :is-necessary="true"
+    />
+    <span
+      v-if="errors.surname"
+      class="text-red-500 text-sm -mt-2 mb-2"
+    >{{
+      errors.surname
+    }}</span>
+    <InputComponent
+      v-model="phone_number"
+      v-bind="phoneAttrs"
+      name="Phone Number"
+      type="tel"
+      place-text="xxx-xxx-xxxx"
+      :is-necessary="true"
+    />
+    <span
+      v-if="errors.phone_number"
+      class="text-red-500 text-sm -mt-2 mb-2"
+    >{{
+      errors.phone_number
+    }}</span>
+    <InputComponent
+      v-model="email"
+      v-bind="emailAttrs"
+      name="Email"
+      type="email"
+      place-text="example@example.com"
+      :is-necessary="true"
+    />
+    <span
+      v-if="errors.email"
+      class="text-red-500 text-sm -mt-2 mb-2"
+    >{{ errors.email }}</span>
+    <PasswordInput
+      v-model="password"
+      v-bind="passwordAttrs"
+      name="Password"
+      place-text="Pass@wd123"
+      :is-necessary="true"
+    />
+    <span
+      v-if="errors.password"
+      class="text-red-500 text-sm -mt-2 mb-2"
+    >{{
+      errors.password
+    }}</span>
+    <ButtonComponent
+      name="Sign up"
+      :is-loading="authStore.isLoading"
+    />
+    <ErrorDisplay :error="authStore.error" />
+  </form>
 </template>

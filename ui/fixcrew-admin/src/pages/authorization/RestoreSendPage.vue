@@ -30,32 +30,32 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-    <FormHeader name="Restore account" />
-    <form
-        class="flex flex-col gap-3"
-        @submit.prevent="onSubmit"
-    >
-        <InputComponent
-            v-model="email"
-            v-bind="emailAttrs"
-            name="Email"
-            type="email"
-            place-text="example@example.com"
-            :is-necessary="true"
-        />
-        <span
-            v-if="errors.email"
-            class="text-red-500 text-sm -mt-2 mb-2"
-        >{{ errors.email }}</span>
-        <ButtonComponent
-            name="Send email"
-            :is-loading="authStore.isLoading"
-        />
-        <ErrorDisplay :error="authStore.error" />
-    </form>
-    <FormFooter
-        name=""
-        link-name="Back"
-        link="/login"
+  <FormHeader name="Restore account" />
+  <form
+    class="flex flex-col gap-3"
+    @submit.prevent="onSubmit"
+  >
+    <InputComponent
+      v-model="email"
+      v-bind="emailAttrs"
+      name="Email"
+      type="email"
+      place-text="example@example.com"
+      :is-necessary="true"
     />
+    <span
+      v-if="errors.email"
+      class="text-red-500 text-sm -mt-2 mb-2"
+    >{{ errors.email }}</span>
+    <ButtonComponent
+      name="Send email"
+      :is-loading="authStore.isLoading"
+    />
+    <ErrorDisplay :error="authStore.error" />
+  </form>
+  <FormFooter
+    name=""
+    link-name="Back"
+    link="/login"
+  />
 </template>

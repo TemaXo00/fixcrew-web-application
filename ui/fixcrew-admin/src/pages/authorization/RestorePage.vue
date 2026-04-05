@@ -37,28 +37,28 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-    <FormHeader name="Restore password" />
-    <form
-        class="flex flex-col gap-3"
-        @submit.prevent="onSubmit"
-    >
-        <PasswordInput
-            v-model="password"
-            v-bind="passwordAttrs"
-            name="Password"
-            place-text="Pass@wd123"
-            :is-necessary="true"
-        />
-        <span
-            v-if="errors.password"
-            class="text-red-500 text-sm -mt-2 mb-2"
-        >{{
-            errors.password
-        }}</span>
-        <ButtonComponent
-            name="Restore"
-            :is-loading="authStore.isLoading"
-        />
-        <ErrorDisplay :error="authStore.error" />
-    </form>
+  <FormHeader name="Restore password" />
+  <form
+    class="flex flex-col gap-3"
+    @submit.prevent="onSubmit"
+  >
+    <PasswordInput
+      v-model="password"
+      v-bind="passwordAttrs"
+      name="Password"
+      place-text="Pass@wd123"
+      :is-necessary="true"
+    />
+    <span
+      v-if="errors.password"
+      class="text-red-500 text-sm -mt-2 mb-2"
+    >{{
+      errors.password
+    }}</span>
+    <ButtonComponent
+      name="Restore"
+      :is-loading="authStore.isLoading"
+    />
+    <ErrorDisplay :error="authStore.error" />
+  </form>
 </template>

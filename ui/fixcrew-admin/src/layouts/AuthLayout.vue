@@ -4,11 +4,11 @@ import FormWrapper from '@/components/authorization/FormWrapper.vue'
 </script>
 
 <template>
-    <FormWrapper>
-        <FormBackground>
-            <router-view />
-        </FormBackground>
-    </FormWrapper>
+  <FormWrapper>
+    <FormBackground>
+      <router-view />
+    </FormBackground>
+  </FormWrapper>
 </template>
 
 <style scoped></style>

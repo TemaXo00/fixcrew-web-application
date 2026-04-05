@@ -1,7 +1,16 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import MainView from '@/components/main/MainView.vue'
+import MainWrapper from '@/components/main/MainWrapper.vue'
+import Sidebar from '@/components/sidebar/Sidebar.vue'
+</script>
 
 <template>
-    <router-view />
+  <MainWrapper>
+    <Sidebar />
+    <MainView>
+      <router-view />
+    </MainView>
+  </MainWrapper>
 </template>
 
 <style scoped></style>
