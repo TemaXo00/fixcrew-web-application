@@ -40,7 +40,9 @@ export class TokensService {
       this.prisma.token.findMany({
         skip: pagination.skip,
         take: pagination.take,
-        orderBy: { created_at: 'desc' },
+        orderBy: {
+          status: 'asc',
+        },
       }),
       this.prisma.token.count({}),
     ]);
@@ -49,7 +51,8 @@ export class TokensService {
   }
 
   async getTokensStats(): Promise<object> {
-    const [created, used, revoked, expired] = await Promise.all([
+    const [all, created, used, revoked, expired] = await Promise.all([
+      this.prisma.token.count(),
       this.prisma.token.count({ where: { status: 'CREATED' } }),
       this.prisma.token.count({ where: { status: 'USED' } }),
       this.prisma.token.count({ where: { status: 'REVOKED' } }),
@@ -57,10 +60,11 @@ export class TokensService {
     ]);
 
     return {
-      Created: created,
-      Used: used,
-      Revoked: revoked,
-      Expired: expired,
+      all: all,
+      created: created,
+      used: used,
+      revoked: revoked,
+      expired: expired,
     };
   }
 
@@ -176,10 +180,10 @@ export class TokensService {
     });
   }
 
-  async revokeUserToken(token: string): Promise<void> {
-    await this.prisma.token.update({
+  async revokeUserToken(id: string): Promise<Token> {
+    return this.prisma.token.update({
       where: {
-        hash: token,
+        id: id,
       },
       data: {
         status: 'REVOKED',

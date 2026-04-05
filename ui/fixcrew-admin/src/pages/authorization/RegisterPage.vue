@@ -5,7 +5,7 @@ import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import FormHeader from '@/components/authorization/FormHeader.vue'
-import ButtonComponent from '@/components/shared/ButtonComponent.vue'
+import AccentButton from '@/components/shared/AccentButton.vue'
 import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
 import InputComponent from '@/components/shared/InputComponent.vue'
 import PasswordInput from '@/components/shared/PasswordInput.vue'
@@ -112,7 +112,7 @@ const onSubmit = handleSubmit(async (values) => {
     >{{
       errors.password
     }}</span>
-    <ButtonComponent
+    <AccentButton
       name="Sign up"
       :is-loading="authStore.isLoading"
     />

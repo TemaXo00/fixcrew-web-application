@@ -5,7 +5,7 @@ import { useForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
 import FormFooter from '@/components/authorization/FormFooter.vue'
 import FormHeader from '@/components/authorization/FormHeader.vue'
-import ButtonComponent from '@/components/shared/ButtonComponent.vue'
+import AccentButton from '@/components/shared/AccentButton.vue'
 import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
 import InputComponent from '@/components/shared/InputComponent.vue'
 import { useAuthStore } from '@/stores/auth.store'
@@ -47,7 +47,7 @@ const onSubmit = handleSubmit(async (values) => {
       v-if="errors.email"
       class="text-red-500 text-sm -mt-2 mb-2"
     >{{ errors.email }}</span>
-    <ButtonComponent
+    <AccentButton
       name="Send email"
       :is-loading="authStore.isLoading"
     />
