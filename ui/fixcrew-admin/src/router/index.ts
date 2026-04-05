@@ -55,16 +55,20 @@ const router = createRouter({
       children: [
         {
           path: '',
+          name: 'Dashboard',
           component: DashboardPage,
           meta: {
             title: 'Dashboard',
+            showInSidebar: true,
           },
         },
         {
           path: 'tokens',
+          name: 'Tokens',
           component: TokensPage,
           meta: {
             title: 'Tokens',
+            showInSidebar: true,
           },
         },
       ],

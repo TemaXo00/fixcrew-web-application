@@ -1,7 +1,7 @@
 import type { AuthLoginType, AuthRegister, AuthRestoreSendType, AuthRestoreType } from '@/types/auth.types'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { authApi } from '@/api/auth.api'
+import { authApi } from '@/api/user/auth.api.ts'
 
 export const useAuthStore = defineStore('auth', () => {
   const accessToken = ref<string | null>(null)

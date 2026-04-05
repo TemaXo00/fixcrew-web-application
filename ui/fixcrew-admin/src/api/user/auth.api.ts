@@ -4,8 +4,8 @@ import type {
   AuthResponseType,
   AuthRestoreSendType,
   AuthRestoreType,
-} from '@/types/auth.types'
-import api from './configs.api'
+} from '@/types/auth.types.ts'
+import api from '../configs.api.ts'
 
 export const authApi = {
   async register(userData: AuthRegister, token: string): Promise<AuthResponseType> {

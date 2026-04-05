@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import type { Component } from 'vue'
-import type { RouteLocationRaw } from 'vue-router'
+import type { RouteLocationRaw, RouteRecordNameGeneric } from 'vue-router'
 
 interface Props {
   to: RouteLocationRaw
-  name: string
-  icon: Component
+  name: RouteRecordNameGeneric
 }
 
 defineProps<Props>()
@@ -17,18 +15,12 @@ defineProps<Props>()
     :to="to"
   >
     <div
-      class="flex items-center justify-between w-50 gap-3 py-1.5 px-2 text-xl font-light font-sans transition-all duration-300 text-container"
+      class="w-full px-4 py-3 text-xl font-sans font-normal transition-all duration-300 cursor-pointer"
       :class="[
-        isExactActive
-          ? 'bg-accent/60 rounded-lg hover:bg-accent/40 hover:rounded-xl'
-          : 'bg-dimmed/60 rounded-lg hover:bg-dimmed/40 hover:rounded-xl',
+        isExactActive ? 'bg-muted-accent text-container' : 'text-muted-accent hover:bg-dimmed/20',
       ]"
     >
       <p>{{ name }}</p>
-      <component
-        :is="icon"
-        class="w-5 h-5"
-      />
     </div>
   </RouterLink>
 </template>

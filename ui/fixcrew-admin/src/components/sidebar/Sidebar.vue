@@ -1,22 +1,28 @@
 <script setup lang="ts">
-import SidebarHeader from '@/components/sidebar/SidebarHeader.vue'
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import SidebarLink from '@/components/sidebar/SidebarLink.vue'
 import SidebarWrapper from '@/components/sidebar/SidebarWrapper.vue'
-import { menuItems } from '@/utils/menu.utils.ts'
+
+const router = useRouter()
+
+const menuItems = computed(() => router
+  .getRoutes()
+  .filter(route => route.meta?.showInSidebar === true)
+  .map(route => ({
+    name: route.name,
+    to: route.path,
+  })))
 </script>
 
 <template>
   <SidebarWrapper>
-    <SidebarHeader />
-    <div class="flex flex-col items-center gap-3">
-      <SidebarLink
-        v-for="item in menuItems"
-        :key="item.name"
-        :to="item.to"
-        :name="item.name"
-        :icon="item.icon"
-      />
-    </div>
+    <SidebarLink
+      v-for="item in menuItems"
+      :key="item.name"
+      :to="item.to"
+      :name="item.name"
+    />
   </SidebarWrapper>
 </template>
 
