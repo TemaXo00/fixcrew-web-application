@@ -5,7 +5,7 @@ import LoginPage from '@/pages/authorization/LoginPage.vue'
 import RegisterPage from '@/pages/authorization/RegisterPage.vue'
 import RestorePage from '@/pages/authorization/RestorePage.vue'
 import RestoreSendPage from '@/pages/authorization/RestoreSendPage.vue'
-import HomePage from '@/pages/HomePage.vue'
+import DashboardPage from '@/pages/DashboardPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,9 +54,9 @@ const router = createRouter({
       children: [
         {
           path: '',
-          component: HomePage,
+          component: DashboardPage,
           meta: {
-            title: 'Home',
+            title: 'Dashboard',
           },
         },
       ],
