@@ -46,7 +46,7 @@ onMounted(async () => {
   </div>
   <div
     v-else
-    class="flex flex-col medium::flex-row items-center justify-center gap-3"
+    class="flex flex-col xl:flex-row items-center justify-center gap-3"
   >
     <StatsCard
       :value="stats?.all"
