@@ -2,11 +2,11 @@ import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
-  IsPhoneNumber,
   IsString,
   IsStrongPassword,
   IsUrl,
   Length,
+  Matches,
 } from 'class-validator';
 
 export class RegisterDto {
@@ -20,7 +20,7 @@ export class RegisterDto {
   surname: string;
   @IsNotEmpty()
   @IsString()
-  @IsPhoneNumber()
+  @Matches(/^\d{3}-\d{3}-\d{4}$/, { message: 'Phone number must be in format: xxx-xxx-xxxx'})
   phone_number: string;
   @IsNotEmpty()
   @IsString()
@@ -33,7 +33,7 @@ export class RegisterDto {
     minNumbers: 1,
     minLowercase: 1,
     minUppercase: 1,
-    minSymbols: 0
+    minSymbols: 0,
   })
   password: string;
   @IsOptional()

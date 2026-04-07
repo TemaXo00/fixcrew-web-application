@@ -20,7 +20,9 @@ defineProps<Props>()
         isExactActive ? 'bg-muted-accent text-container' : 'text-muted-accent hover:bg-dimmed/20',
       ]"
     >
-      <p>{{ name }}</p>
+      <p class="font-sans">
+        {{ name }}
+      </p>
     </div>
   </RouterLink>
 </template>

@@ -1,8 +1,7 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div class="flex flex-row gap-3 w-screen min-h-screen bg-container">
+  <div class="flex flex-col min-h-screen medium:flex-row">
     <slot />
   </div>
 </template>

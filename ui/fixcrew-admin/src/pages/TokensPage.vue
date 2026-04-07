@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import CreateToken from '@/components/tokens/CreateToken.vue'
 import GetAllTokens from '@/components/tokens/GetAllTokens.vue'
+import TokenActions from '@/components/tokens/TokenActions.vue'
 import TokensStats from '@/components/tokens/TokensStats.vue'
 </script>
 
 <template>
   <TokensStats />
-  <CreateToken />
+  <TokenActions />
   <GetAllTokens />
 </template>
 

@@ -48,18 +48,18 @@ const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString()
 
 <template>
   <div
-    class="flex flex-col small:grid small:grid-cols-5 gap-2 items-start small:items-center bg-dimmed/30 min-h-20 p-3 small:p-2 rounded-lg text-sm small:text-lg"
+    class="flex flex-col large:flex-row justify-between gap-2 items-start small:items-center border border-accent min-h-20 p-3 small:p-2 rounded-lg text-sm small:text-lg"
   >
     <p class="font-black text-accent break-all w-full small:w-auto">
       {{ props.email }}
     </p>
-    <p class="font-medium text-container">
+    <p class="font-medium text-dimmed">
       {{ props.status.toLowerCase() }}
     </p>
-    <p class="font-medium text-container">
+    <p class="font-medium text-accent">
       {{ props.type.toLowerCase() }}
     </p>
-    <p class="font-medium text-container text-xs smaller:text-sm small:text-base">
+    <p class="font-medium text-muted-accent text-xs smaller:text-sm small:text-base">
       {{ formatDate(expiresAt) }}
     </p>
     <div class="w-full small:w-auto mt-2 small:mt-0">

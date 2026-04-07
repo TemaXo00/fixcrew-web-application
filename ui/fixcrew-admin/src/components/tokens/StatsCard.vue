@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import SpinnerLoader from '@/components/shared/SpinnerLoader.vue'
+
 interface Props {
   value: number | undefined
   name: string
+  isLoading: boolean
 }
 
 defineProps<Props>()
@@ -9,12 +12,16 @@ defineProps<Props>()
 
 <template>
   <div
-    class="flex flex-col gap-2 mobile:gap-3 items-center min-w-30 mobile:min-w-50 w-full mobile:w-auto px-4 py-3 mobile:py-4 bg-container-muted/60 border border-accent rounded-lg"
+    class="flex flex-col gap-2 medium:gap-3 items-center min-w-30 medium:min-w-50 w-full px-4 py-3 bg-accent rounded-lg"
   >
-    <p class="font-black text-accent text-lg mobile:text-xl">
+    <SpinnerLoader v-if="isLoading" />
+    <p
+      v-if="!isLoading"
+      class="font-black text-container text-lg mobile:text-xl"
+    >
       {{ value ?? 0 }}
     </p>
-    <p class="font-normal text-accent text-sm mobile:text-lg text-center">
+    <p class="font-normal text-container text-sm mobile:text-lg text-center">
       {{ name }}
     </p>
   </div>
