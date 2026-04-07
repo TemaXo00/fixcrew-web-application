@@ -8,7 +8,7 @@ const emit = defineEmits<{
 
 <template>
   <header
-    class="bg-container-muted border-b border-accent/30 medium:hidden"
+    class="bg-container-muted medium:hidden"
   >
     <div class="flex items-center justify-between px-4 py-3">
       <button

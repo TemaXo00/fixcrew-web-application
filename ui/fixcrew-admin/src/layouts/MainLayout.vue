@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 import MainView from '@/components/main/MainView.vue'
 import MainWrapper from '@/components/main/MainWrapper.vue'
-import Sidebar from '@/components/sidebar/Sidebar.vue'
-import SidebarHeader from '@/components/sidebar/SidebarHeader.vue'
+import Sidebar from '@/components/main/sidebar/Sidebar.vue'
+import Header from '@/components/main/Header.vue'
 
 const sidebarRef = ref<InstanceType<typeof Sidebar> | null>(null)
 
@@ -14,7 +14,7 @@ const handleToggle = () => {
 
 <template>
   <MainWrapper>
-    <SidebarHeader @toggle="handleToggle" />
+    <Header @toggle="handleToggle" />
     <Sidebar ref="sidebarRef" />
     <MainView>
       <router-view />
