@@ -30,6 +30,10 @@ const fetchTokens = async () => {
   }
 }
 
+const refreshTokens = () => {
+  fetchTokens()
+}
+
 const handlePageChange = (page: number) => {
   currentPage.value = page
   fetchTokens()
@@ -48,6 +52,19 @@ const handleNext = () => {
     fetchTokens()
   }
 }
+
+const handleTokenRevoked = (tokenId: string) => {
+  if (tokens.value?.items) {
+    const tokenIndex = tokens.value.items.findIndex(t => t.id === tokenId)
+    if (tokenIndex !== -1 && tokens.value.items[tokenIndex]) {
+      tokens.value.items[tokenIndex].status = 'REVOKED'
+    }
+  }
+}
+
+defineExpose({
+  refreshTokens,
+})
 
 onMounted(async () => {
   await fetchTokens()
@@ -81,6 +98,7 @@ onMounted(async () => {
       :status="token.status"
       :type="token.type"
       :expires-at="token.expires_at"
+      @revoked="handleTokenRevoked"
     />
 
     <div
@@ -106,5 +124,3 @@ onMounted(async () => {
     :error="error"
   />
 </template>
-
-<style scoped></style>

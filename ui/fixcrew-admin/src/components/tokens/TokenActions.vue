@@ -1,20 +1,45 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import AccentButton from '@/components/shared/AccentButton.vue'
-import DangerousButton from '@/components/shared/DangerousButton.vue'
+import AccentButton from '@/components/shared/buttons/AccentButton.vue'
+import DangerousButton from '@/components/shared/buttons/DangerousButton.vue'
 import Title from '@/components/shared/Title.vue'
 import CreateToken from '@/components/tokens/CreateToken.vue'
+import DeleteTokens from '@/components/tokens/DeleteTokens.vue'
 
 const createOpen = ref<boolean>(false)
 const deleteOpen = ref<boolean>(false)
 
+const tokensListRef = ref<{ refreshTokens: () => void } | null>(null)
+const statsRef = ref<{ refreshStats: () => void } | null>(null)
+
 const handleOpen = () => {
+  if (deleteOpen.value === true && createOpen.value === false) {
+    deleteOpen.value = false
+  }
   createOpen.value = !createOpen.value
 }
 
 const handleDelete = () => {
+  if (createOpen.value === true && deleteOpen.value === false) {
+    createOpen.value = false
+  }
   deleteOpen.value = !deleteOpen.value
 }
+
+const handleTokenCreated = () => {
+  tokensListRef.value?.refreshTokens()
+  statsRef.value?.refreshStats()
+}
+
+const handleTokensDeleted = () => {
+  tokensListRef.value?.refreshTokens()
+  statsRef.value?.refreshStats()
+}
+
+defineExpose({
+  tokensListRef,
+  statsRef,
+})
 </script>
 
 <template>
@@ -32,7 +57,16 @@ const handleDelete = () => {
         @click="handleDelete"
       />
     </div>
-    <CreateToken v-if="createOpen" />
+    <CreateToken
+      v-if="createOpen"
+      @close="handleOpen"
+      @token-created="handleTokenCreated"
+    />
+    <DeleteTokens
+      v-if="deleteOpen"
+      @close="handleDelete"
+      @tokens-deleted="handleTokensDeleted"
+    />
   </div>
 </template>
 

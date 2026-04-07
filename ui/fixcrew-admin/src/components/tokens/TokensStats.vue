@@ -10,7 +10,7 @@ const stats = ref<TokensStats>()
 const isLoading = ref<boolean>(false)
 const error = ref<string>('')
 
-onMounted(async () => {
+const fetchStats = async () => {
   try {
     isLoading.value = true
     stats.value = await tokenApi.getTokenStats()
@@ -22,6 +22,18 @@ onMounted(async () => {
   finally {
     isLoading.value = false
   }
+}
+
+const refreshStats = () => {
+  fetchStats()
+}
+
+defineExpose({
+  refreshStats,
+})
+
+onMounted(async () => {
+  await fetchStats()
 })
 </script>
 
@@ -34,7 +46,7 @@ onMounted(async () => {
   </div>
   <div
     v-else
-    class="flex flex-col large:flex-row items-center justify-center gap-3"
+    class="flex flex-col medium::flex-row items-center justify-center gap-3"
   >
     <StatsCard
       :value="stats?.all"
