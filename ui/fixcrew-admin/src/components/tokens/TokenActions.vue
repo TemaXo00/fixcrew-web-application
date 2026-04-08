@@ -47,7 +47,7 @@ defineExpose({
     <Title title="Token Actions" />
     <div class="flex flex-col medium:flex-row items-start medium:items-center gap-3">
       <AccentButton
-        name="Create token"
+        name="Create invite token"
         :is-loading="createOpen"
         @click="handleOpen"
       />

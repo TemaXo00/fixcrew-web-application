@@ -5,8 +5,9 @@ import LoginPage from '@/pages/authorization/LoginPage.vue'
 import RegisterPage from '@/pages/authorization/RegisterPage.vue'
 import RestorePage from '@/pages/authorization/RestorePage.vue'
 import RestoreSendPage from '@/pages/authorization/RestoreSendPage.vue'
-import DashboardPage from '@/pages/DashboardPage.vue'
-import TokensPage from '@/pages/TokensPage.vue'
+import DashboardPage from '@/pages/dashboard/DashboardPage.vue'
+import TokensPage from '@/pages/dashboard/TokensPage.vue'
+import NotFound from '@/pages/NotFound.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,14 @@ const router = createRouter({
       path: '/auth',
       component: AuthLayout,
       children: [
+        {
+          path: '/:pathMatch(.*)*',
+          name: 'NotFound',
+          component: NotFound,
+          meta: {
+            title: 'Not Found',
+          },
+        },
         {
           path: 'register',
           name: 'Register',
@@ -72,6 +81,14 @@ const router = createRouter({
           },
         },
       ],
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFound,
+      meta: {
+        title: 'Not Found',
+      },
     },
   ],
 })

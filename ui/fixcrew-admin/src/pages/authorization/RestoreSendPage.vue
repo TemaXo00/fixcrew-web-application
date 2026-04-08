@@ -23,7 +23,7 @@ const [email, emailAttrs] = defineField('email')
 const onSubmit = handleSubmit(async (values) => {
   try {
     await authStore.sendRestore(values)
-    await router.push('/login')
+    await router.push('/auth/login')
   }
   catch {}
 })
@@ -56,6 +56,6 @@ const onSubmit = handleSubmit(async (values) => {
   <FormFooter
     name=""
     link-name="Back"
-    link="/login"
+    link="/auth/login"
   />
 </template>

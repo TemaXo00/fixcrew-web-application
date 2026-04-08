@@ -4,6 +4,7 @@ import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import FormFooter from '@/components/authorization/FormFooter.vue'
 import FormHeader from '@/components/authorization/FormHeader.vue'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
 import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
@@ -115,6 +116,11 @@ const onSubmit = handleSubmit(async (values) => {
     <AccentButton
       name="Sign up"
       :is-loading="authStore.isLoading"
+    />
+    <FormFooter
+      name="Already have account?"
+      link="/auth/login"
+      link-name="Login"
     />
     <ErrorDisplay :error="authStore.error" />
   </form>
