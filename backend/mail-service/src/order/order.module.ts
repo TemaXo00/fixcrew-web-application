@@ -22,7 +22,7 @@ import { OrderService } from './order.service';
           },
         },
         template: {
-          dir: process.cwd() + '/src/auth/templates/',
+          dir: process.cwd() + '/src/templates/',
           adapter: new EjsAdapter(),
         },
       }),

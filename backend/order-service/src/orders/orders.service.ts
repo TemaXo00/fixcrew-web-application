@@ -170,7 +170,7 @@ export class OrdersService {
       include: { master: true, region: true },
     });
 
-    await this.sendPendingNotifications(updatedOrder as OrderWithMaster);
+    await this.sendOrderPendingNotification(updatedOrder as OrderWithMaster);
     await this.scheduleReminder(updatedOrder);
 
     return updatedOrder;
@@ -290,7 +290,7 @@ export class OrdersService {
         );
       }
     }
-    await this.sendMasterAssignedNotification(updated as OrderWithMaster);
+    await this.sendOrderPendingNotification(updated as OrderWithMaster);
 
     return updated;
   }
@@ -341,7 +341,7 @@ export class OrdersService {
     }
   }
 
-  private async sendPendingNotifications(
+  private async sendOrderPendingNotification(
     order: OrderWithMaster,
   ): Promise<void> {
     if (
@@ -355,21 +355,61 @@ export class OrdersService {
     const startTime = this.minutesToTime(order.startMin);
     const endTime = this.minutesToTime(order.endMin);
 
-    this.mailClient.emit('order.pending.master', {
-      masterEmail: order.master.email,
-      masterName: order.master.name,
-      customerName: order.name,
+    this.mailClient.emit('order.pending', {
+      id: order.id,
+      name: order.master.name,
+      email: order.email,
       date: order.date,
       time: `${startTime} - ${endTime}`,
-      orderId: order.id,
     });
 
     if (order.email) {
-      this.mailClient.emit('order.pending.client', {
-        name: order.name,
+      this.mailClient.emit('order.pending', {
+        id: order.id,
+        name: order.master.name,
         email: order.email,
         date: order.date,
         time: `${startTime} - ${endTime}`,
+      });
+    }
+  }
+
+  private async sendMasterReplacedNotification(
+    oldMaster: KnownMasters,
+    order: Order
+  ): Promise<void> {
+    this.mailClient.emit('order.master', {
+      id: order.id,
+      email: oldMaster.email,
+    });
+  }
+
+  private async sendDateChangeNotification(
+    order: OrderWithMaster,
+  ): Promise<void> {
+    if (
+      order.date === null ||
+      order.startMin === null ||
+      order.endMin === null
+    ) {
+      return;
+    }
+    const startTime = this.minutesToTime(order.startMin);
+    const endTime = this.minutesToTime(order.endMin);
+    const message = { date: order.date, time: `${startTime} - ${endTime}` };
+
+    if (order.master?.email) {
+      this.mailClient.emit('order.date', {
+        name: order.master.name,
+        email: order.master.email,
+        ...message,
+      });
+    }
+    if (order.email) {
+      this.mailClient.emit('order.date', {
+        name: order.name,
+        email: order.email,
+        ...message,
       });
     }
   }
@@ -390,6 +430,7 @@ export class OrdersService {
       'send-day-before-reminder',
       {
         orderId: order.id,
+        name: order.name,
         email: order.email,
         date: order.date,
         time: this.minutesToTime(order.startMin),
@@ -410,69 +451,10 @@ export class OrdersService {
     await this.scheduleReminder(order);
   }
 
-  private async sendDateChangeNotification(
-    order: OrderWithMaster,
-  ): Promise<void> {
-    if (
-      order.date === null ||
-      order.startMin === null ||
-      order.endMin === null
-    ) {
-      return;
-    }
-    const startTime = this.minutesToTime(order.startMin);
-    const endTime = this.minutesToTime(order.endMin);
-    const message = { date: order.date, time: `${startTime} - ${endTime}` };
-
-    if (order.master?.email) {
-      this.mailClient.emit('order.date', {
-        email: order.master.email,
-        ...message,
-      });
-    }
-    if (order.email) {
-      this.mailClient.emit('order.date', { email: order.email, ...message });
-    }
-  }
-
-  private async sendMasterReplacedNotification(
-    oldMaster: KnownMasters,
-    order: OrderWithMaster,
-  ): Promise<void> {
-    this.mailClient.emit('order.master', {
-      email: oldMaster.email,
-      orderId: order.id,
-    });
-  }
-
-  private async sendMasterAssignedNotification(
-    order: OrderWithMaster,
-  ): Promise<void> {
-    if (
-      !order.master ||
-      order.date === null ||
-      order.startMin === null ||
-      order.endMin === null
-    ) {
-      return;
-    }
-    const startTime = this.minutesToTime(order.startMin);
-    const endTime = this.minutesToTime(order.endMin);
-    this.mailClient.emit('order.pending.master', {
-      masterName: order.master.name,
-      masterEmail: order.master.email,
-      customerName: order.name,
-      date: order.date,
-      time: `${startTime} - ${endTime}`,
-      orderId: order.id,
-    });
-  }
-
   private async sendStatusNotification(order: Order): Promise<void> {
     if (order.email) {
       this.mailClient.emit('order.status', {
         email: order.email,
-        orderId: order.id,
         status: order.status,
       });
     }

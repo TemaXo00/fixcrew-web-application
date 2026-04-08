@@ -22,7 +22,7 @@ import { AuthService } from './auth.service';
           },
         },
         template: {
-          dir: process.cwd() + '/src/auth/templates/',
+          dir: process.cwd() + '/src/templates/',
           adapter: new EjsAdapter(),
         },
       }),

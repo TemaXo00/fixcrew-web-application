@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Login Notification</title>
+    <%- include ('components/style.ejs') %>
+</head>
+<body>
+<h1>Login Alert</h1>
+<p>Your account was just accessed.</p>
+<p>Agent: <%= agent %></p>
+<button>
+    <a href="<%= ui_link %>">Go to Dashboard</a>
+</button>
+</body>
+</html>

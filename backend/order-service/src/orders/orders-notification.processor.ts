@@ -12,13 +12,20 @@ export class OrderNotificationProcessor {
   @Process('send-day-before-reminder')
   async handleDayBeforeReminder(
     job: bull.Job<{
+      orderId: string;
+      name: string;
       email: string;
       date: string;
       time: string;
-      orderId: string;
     }>,
   ): Promise<void> {
-    const { email, date, time } = job.data;
-    this.mailClient.emit('order.pending.client', { email, date, time });
+    const { orderId, name, email, date, time } = job.data;
+    this.mailClient.emit('order.reminder', {
+      id: orderId,
+      name,
+      email,
+      date,
+      time,
+    });
   }
 }

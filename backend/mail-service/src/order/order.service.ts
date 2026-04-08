@@ -1,17 +1,79 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { MailerService } from '@nestjs-modules/mailer';
+
+import { ChangeMasterDto } from './dto/change-master.dto';
+import { ChangeStatusDto } from './dto/change-status.dto';
+import { SetOrderDto } from './dto/set-order.dto';
 
 @Injectable()
 export class OrderService {
-  private readonly UI_LINK: string;
 
   constructor(
     private readonly mailSender: MailerService,
-    protected config: ConfigService,
-  ) {
-    this.UI_LINK = config.getOrThrow<string>('MAIL_UI_LINK');
+  ) {}
+
+  async sendPendingNotification(dto: SetOrderDto): Promise<void> {
+    await this.mailSender.sendMail({
+      to: dto.email,
+      subject: "Order created",
+      template: 'pending',
+      context: {
+        id: dto.id,
+        name: dto.name,
+        date: dto.date,
+        time: dto.time,
+      }
+    })
   }
 
+  async sendDateNotification(dto: SetOrderDto): Promise<void> {
+    await this.mailSender.sendMail({
+      to: dto.email,
+      subject: "Date of order changed",
+      template: 'date',
+      context: {
+        id: dto.id,
+        name: dto.name,
+        date: dto.date,
+        time: dto.time,
+      }
+    })
+  }
 
+  async sendReminderNotification(dto: SetOrderDto): Promise<void> {
+    await this.mailSender.sendMail({
+      to: dto.email,
+      subject: "Remind for order",
+      template: 'reminder',
+      context: {
+        id: dto.id,
+        name: dto.name,
+        date: dto.date,
+        time: dto.time,
+      }
+    })
+  }
+
+  async sendMasterChangeNotification(dto: ChangeMasterDto): Promise<void> {
+    await this.mailSender.sendMail({
+      to: dto.email,
+      subject: "You reassigned from order",
+      template: 'master',
+      context: {
+        id: dto.id,
+      }
+    })
+  }
+
+  async sendStatusChangeNotification(dto: ChangeStatusDto): Promise<void> {
+    await this.mailSender.sendMail({
+      to: dto.email,
+      subject: "Status of order changed",
+      template: 'status',
+      context: {
+        orderId: dto.orderId,
+        status: dto.status,
+      }
+    })
+  }
 }
