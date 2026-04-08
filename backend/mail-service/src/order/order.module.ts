@@ -3,8 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 
-import { AuthService } from './auth.service';
-import { MailController } from './mail.controller';
+import { OrderController } from './order.controller';
+import { OrderService } from './order.service';
 
 @Module({
   imports: [
@@ -22,13 +22,13 @@ import { MailController } from './mail.controller';
           },
         },
         template: {
-          dir: process.cwd() + '/src/mail/templates/',
+          dir: process.cwd() + '/src/auth/templates/',
           adapter: new EjsAdapter(),
         },
       }),
     }),
   ],
-  controllers: [MailController],
-  providers: [AuthService],
+  controllers: [OrderController],
+  providers: [OrderService],
 })
-export class MailModule {}
+export class OrderModule {}
