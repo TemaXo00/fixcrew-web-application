@@ -12,8 +12,8 @@ export class MinioService implements OnModuleInit {
 
   onModuleInit(): void {
     this.client = new Minio.Client({
-      endPoint: this.configService.getOrThrow<string>('MINIO_ENDPOINT'),
-      port: this.configService.getOrThrow<number>('MINIO_PORT'),
+      endPoint: "minio",
+      port: 9000,
       useSSL: false,
       accessKey: this.configService.getOrThrow<string>('MINIO_USER'),
       secretKey: this.configService.getOrThrow<string>('MINIO_PASSWORD'),
