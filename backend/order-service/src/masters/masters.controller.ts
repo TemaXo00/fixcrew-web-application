@@ -12,15 +12,12 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { KnownMasters } from '@prisma-gen/client';
 
 import { CreateMasterDto } from './dto/create-master,dto';
+import { SetRegionsDto } from './dto/set-regions.dto';
 import { MastersService } from './masters.service';
 import {
   PaginatedResponseDto,
   PaginationDto,
 } from '../common/dto/pagination.dto';
-
-class SetRegionsDto {
-  region_ids: string[];
-}
 
 @Controller('masters')
 export class MastersController {

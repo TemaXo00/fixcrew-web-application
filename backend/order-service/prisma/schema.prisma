@@ -16,22 +16,24 @@ model Order {
   email String?
 
   address   String
-  message   String
+  message   String?
   photo_ids String[]
 
-  date     String
-  startMin Int
-  endMin   Int
-  duration Int
+  date     String?
+  startMin Int?
+  endMin   Int?
+  duration Int?
 
-  region_id String
-  region    Region @relation(fields: [region_id], references: [id], onDelete: Cascade)
+  region_id String?
+  region    Region? @relation(fields: [region_id], references: [id], onDelete: Cascade)
 
   master_id String?
   master    KnownMasters? @relation(fields: [master_id], references: [id], onDelete: Cascade)
 
   status Statuses @default(CREATED)
   price  Int      @default(0)
+
+  reminder_job_id String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -41,6 +43,7 @@ model Order {
   @@index([date])
   @@index([date, startMin])
   @@index([status])
+  @@index([name])
   @@map("orders")
 }
 

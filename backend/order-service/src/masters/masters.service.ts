@@ -44,9 +44,9 @@ export class MastersService {
         orders: {
           take: 10,
           orderBy: {
-            created_at: 'desc'
-          }
-        }
+            created_at: 'desc',
+          },
+        },
       },
     });
 
@@ -96,7 +96,7 @@ export class MastersService {
 
     const regions = await this.prisma.region.findMany({
       where: {
-        id: {
+        region_id: {
           in: region_ids,
         },
       },
@@ -107,10 +107,10 @@ export class MastersService {
     }
 
     return this.prisma.knownMasters.update({
-      where: { id: master_id },
+      where: { master_id: master_id },
       data: {
         regions: {
-          set: region_ids.map((id) => ({ id })),
+          set: regions.map((region) => ({ id: region.id })),
         },
       },
       include: {
@@ -127,7 +127,7 @@ export class MastersService {
 
     const regions = await this.prisma.region.findMany({
       where: {
-        id: {
+        region_id: {
           in: region_ids,
         },
       },
@@ -138,10 +138,10 @@ export class MastersService {
     }
 
     return this.prisma.knownMasters.update({
-      where: { id: master_id },
+      where: { master_id: master_id },
       data: {
         regions: {
-          connect: region_ids.map((id) => ({ id })),
+          connect: regions.map((region) => ({ id: region.id })),
         },
       },
       include: {
