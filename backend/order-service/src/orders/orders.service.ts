@@ -357,6 +357,7 @@ export class OrdersService {
 
     this.mailClient.emit('order.pending.master', {
       masterEmail: order.master.email,
+      masterName: order.master.name,
       customerName: order.name,
       date: order.date,
       time: `${startTime} - ${endTime}`,
@@ -365,6 +366,7 @@ export class OrdersService {
 
     if (order.email) {
       this.mailClient.emit('order.pending.client', {
+        name: order.name,
         email: order.email,
         date: order.date,
         time: `${startTime} - ${endTime}`,
@@ -457,6 +459,7 @@ export class OrdersService {
     const startTime = this.minutesToTime(order.startMin);
     const endTime = this.minutesToTime(order.endMin);
     this.mailClient.emit('order.pending.master', {
+      masterName: order.master.name,
       masterEmail: order.master.email,
       customerName: order.name,
       date: order.date,
