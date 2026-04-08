@@ -64,6 +64,6 @@ const onSubmit = handleSubmit(async (values) => {
   <FormFooter
     name="Forgot Password?"
     link-name="Restore"
-    link="/restore"
+    link="/auth/restore"
   />
 </template>

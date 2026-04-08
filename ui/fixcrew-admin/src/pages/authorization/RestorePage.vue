@@ -30,7 +30,7 @@ const onSubmit = handleSubmit(async (values) => {
   }
   try {
     await authStore.restore(token.value, values)
-    await router.push('/login')
+    await router.push('/auth/login')
   }
   catch {}
 })

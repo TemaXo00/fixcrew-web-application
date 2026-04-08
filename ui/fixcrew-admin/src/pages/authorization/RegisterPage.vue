@@ -11,6 +11,7 @@ import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import PasswordInput from '@/components/shared/inputs/PasswordInput.vue'
 import { useAuthStore } from '@/stores/auth.store'
 import { registerSchema } from '@/utils/validation/auth.validation'
+import FormFooter from '@/components/authorization/FormFooter.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -115,6 +116,11 @@ const onSubmit = handleSubmit(async (values) => {
     <AccentButton
       name="Sign up"
       :is-loading="authStore.isLoading"
+    />
+    <FormFooter
+      name="Already have account?"
+      link="/auth/login"
+      link-name="Login"
     />
     <ErrorDisplay :error="authStore.error" />
   </form>
