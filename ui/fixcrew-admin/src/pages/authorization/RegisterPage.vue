@@ -4,6 +4,7 @@ import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import FormFooter from '@/components/authorization/FormFooter.vue'
 import FormHeader from '@/components/authorization/FormHeader.vue'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
 import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
@@ -11,7 +12,6 @@ import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import PasswordInput from '@/components/shared/inputs/PasswordInput.vue'
 import { useAuthStore } from '@/stores/auth.store'
 import { registerSchema } from '@/utils/validation/auth.validation'
-import FormFooter from '@/components/authorization/FormFooter.vue'
 
 const route = useRoute()
 const router = useRouter()
