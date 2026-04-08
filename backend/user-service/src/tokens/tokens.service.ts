@@ -118,10 +118,10 @@ export class TokensService {
     return existingToken;
   }
 
-  async createToken(dto: TokenCreateDto, type: TokenTypes): Promise<Token> {
+  async createToken(dto: TokenCreateDto, type: TokenTypes): Promise<Token | null> {
     const existingToken = await this.getWorkingTokenByEmail(dto.email, type);
 
-    if (existingToken !== null) {
+    if (existingToken !== null && type === 'INVITE') {
       throw new ConflictException('Token already exists');
     }
 
@@ -134,7 +134,7 @@ export class TokensService {
     }
 
     if (!user && type === 'PASSWORD') {
-      throw new NotFoundException('User not found');
+      return null;
     }
 
     const rawToken = this.generateToken();
