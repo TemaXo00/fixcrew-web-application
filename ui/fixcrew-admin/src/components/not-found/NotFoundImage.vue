@@ -6,7 +6,7 @@ import nfimg from '@/assets/images/not-found/nf.png'
   <img
     :src="nfimg"
     alt="Not Found"
-    class="w-60 rotate-27"
+    class="w-60 rotate-27 select-none pointer-events-none"
   >
 </template>
 
