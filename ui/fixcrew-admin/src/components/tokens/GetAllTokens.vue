@@ -122,5 +122,6 @@ onMounted(async () => {
   <ErrorDisplay
     v-if="error"
     :error="error"
+    class="flex flex-col items-center justify-center"
   />
 </template>
