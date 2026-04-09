@@ -4,8 +4,8 @@ import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import FormFooter from '@/components/authorization/FormFooter.vue'
-import FormHeader from '@/components/authorization/FormHeader.vue'
+import AuthFooter from '@/components/authorization/AuthFooter.vue'
+import AuthHeader from '@/components/authorization/AuthHeader.vue'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
 import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
@@ -43,7 +43,7 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <FormHeader name="Create an account" />
+  <AuthHeader name="Create an account" />
   <form
     class="flex flex-col gap-3"
     @submit.prevent="onSubmit"
@@ -117,7 +117,7 @@ const onSubmit = handleSubmit(async (values) => {
       name="Sign up"
       :is-loading="authStore.isLoading"
     />
-    <FormFooter
+    <AuthFooter
       name="Already have account?"
       link="/auth/login"
       link-name="Login"

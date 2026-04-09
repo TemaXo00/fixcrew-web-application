@@ -3,8 +3,8 @@ import type { AuthRestoreSendType } from '@/types/auth.types'
 import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
-import FormFooter from '@/components/authorization/FormFooter.vue'
-import FormHeader from '@/components/authorization/FormHeader.vue'
+import AuthFooter from '@/components/authorization/AuthFooter.vue'
+import AuthHeader from '@/components/authorization/AuthHeader.vue'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
 import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
@@ -30,7 +30,7 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <FormHeader name="Restore account" />
+  <AuthHeader name="Restore account" />
   <form
     class="flex flex-col gap-3"
     @submit.prevent="onSubmit"
@@ -53,7 +53,7 @@ const onSubmit = handleSubmit(async (values) => {
     />
     <ErrorDisplay :error="authStore.error" />
   </form>
-  <FormFooter
+  <AuthFooter
     name=""
     link-name="Back"
     link="/auth/login"

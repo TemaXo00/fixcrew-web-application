@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import FormBackground from '@/components/authorization/FormBackground.vue'
-import FormWrapper from '@/components/authorization/FormWrapper.vue'
+import AuthBackground from '@/components/authorization/AuthBackground.vue'
+import AuthWrapper from '@/components/authorization/AuthWrapper.vue'
 </script>
 
 <template>
-  <FormWrapper>
-    <FormBackground>
+  <AuthWrapper>
+    <AuthBackground>
       <router-view />
-    </FormBackground>
-  </FormWrapper>
+    </AuthBackground>
+  </AuthWrapper>
 </template>
 
 <style scoped></style>

@@ -4,7 +4,7 @@ import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import FormHeader from '@/components/authorization/FormHeader.vue'
+import AuthHeader from '@/components/authorization/AuthHeader.vue'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
 import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
 import PasswordInput from '@/components/shared/inputs/PasswordInput.vue'
@@ -37,7 +37,7 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <FormHeader name="Restore password" />
+  <AuthHeader name="Restore password" />
   <form
     class="flex flex-col gap-3"
     @submit.prevent="onSubmit"
