@@ -22,7 +22,7 @@ import AreasCard from '@/components/universalComp/AreasCard.vue'
         <AreasCard region="Los Altos" response="35" />
         <AreasCard region="Palo Alto" response="35" />
         <div
-          class="border-4 border-[#EAEAEA] text-gray-600 p-4 sm:p-6 md:p-8 rounded-lg font-bold text-center flex flex-col gap-2 sm:gap-3 col-span-1 sm:col-span-1 lg:col-span-2"
+          class="border-4 border-[#EAEAEA] text-gray-600 p-4 sm:p-6 md:p-8 rounded-lg font-bold text-center text-base sm:text-lg md:text-xl col-span-1 sm:col-span-2 lg:col-span-3 flex flex-col gap-2 sm:gap-3"
         >
           <div class="text-xl sm:text-2xl md:text-3xl font-sans font-semibold">Get In Touch</div>
           <div class="text-sm sm:text-base">Call Us available 24/7</div>
