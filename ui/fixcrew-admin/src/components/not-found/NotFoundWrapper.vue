@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="bg-container flex items-center justify-center min-h-screen min-w-screen">
+  <div class="flex flex-col items-start medium:items-center gap-15">
     <slot />
   </div>
 </template>

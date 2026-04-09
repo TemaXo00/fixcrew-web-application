@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import NFActions from '@/components/not-found/NFActions.vue'
-import NFBackground from '@/components/not-found/NFBackground.vue'
-import NFHeader from '@/components/not-found/NFHeader.vue'
-import NFText from '@/components/not-found/NFText.vue'
-import NFWrapper from '@/components/not-found/NFWrapper.vue'
+import NotFoundActions from '@/components/not-found/NotFoundActions.vue'
+import NotFoundBg from '@/components/not-found/NotFoundBg.vue'
+import NotFoundImage from '@/components/not-found/NotFoundImage.vue'
+import NotFoundText from '@/components/not-found/NotFoundText.vue'
+import NotFoundWrapper from '@/components/not-found/NotFoundWrapper.vue'
 </script>
 
 <template>
-  <NFWrapper>
-    <NFBackground>
-      <NFHeader />
-      <NFText />
-      <NFActions />
-    </NFBackground>
-  </NFWrapper>
+  <NotFoundBg>
+    <NotFoundWrapper>
+      <NotFoundImage />
+      <NotFoundText />
+      <NotFoundActions />
+    </NotFoundWrapper>
+  </NotFoundBg>
 </template>
 
 <style scoped></style>
