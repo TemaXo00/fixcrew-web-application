@@ -3,6 +3,9 @@ import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString, IsUUID } from 'class-vali
 export class CreateMasterDto {
   @IsNotEmpty()
   @IsString()
+  name: string
+  @IsNotEmpty()
+  @IsString()
   @IsUUID(4)
   master_id: string;
   @IsNotEmpty()

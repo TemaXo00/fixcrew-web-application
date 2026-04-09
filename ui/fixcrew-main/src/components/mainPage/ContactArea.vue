@@ -5,7 +5,7 @@ const formData = reactive({
   name: '',
   phoneNumber: '',
   email: '',
-  address: '',
+  zip: '',
   message: '',
 })
 
@@ -21,7 +21,7 @@ const validateForm = () => {
   if (!formData.name.trim()) newErrors.name = 'Name is required'
   if (!formData.phoneNumber.trim()) newErrors.phoneNumber = 'Phone number is required'
   if (!formData.email.trim()) newErrors.email = 'Email is required'
-  if (!formData.address.trim()) newErrors.address = 'Address is required'
+  if (!formData.zip.trim()) newErrors.zip = 'Zip-code is required'
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (formData.email && !emailRegex.test(formData.email)) {
@@ -33,10 +33,9 @@ const validateForm = () => {
     newErrors.phoneNumber = 'Invalid phone number. Example: +1 123-456-7890'
   }
 
-  const streetRegex =
-    /^\d+\s+(?:[A-Za-z]+\.?\s+)?[A-Za-z\s]+(?:Street|St|Avenue|Ave|Boulevard|Blvd|Drive|Dr|Lane|Ln|Road|Rd|Court|Ct|Circle|Cir|Way|Place|Pl|Terrace|Ter|Parkway|Pkwy|Highway|Hwy)(?:\s+(?:[NSEW]|North|South|East|West))?(?:,\s*|$|[\s#]+(?:Apt|Suite|Ste|Unit|#)\s*\w+)?$/i
-  if (formData.address && !streetRegex.test(formData.address)) {
-    newErrors.address = 'Invalid address format. Example: 123 Sunset Boulevard'
+  const zipRegex = /^\d{5}(?:-\d{4})?$/
+  if (formData.zip && !zipRegex.test(formData.zip)) {
+    newErrors.zip = 'Invalid ZIP code. Example: 12345 or 12345-6789'
   }
 
   if (!termsOfService.value) newErrors.termsOfService = 'You must accept the terms'
@@ -70,7 +69,7 @@ const submitForm = () => {
           <div class="relative flex-1 w-full">
             <input
               type="text"
-              placeholder="Name"
+              placeholder="Name*"
               v-model="formData.name"
               class="w-full border-2 bg-white border-[#EAEAEA] pt-5 p-5 resize-none hover:border-gray-500 rounded-2xl"
             />
@@ -81,7 +80,7 @@ const submitForm = () => {
           <div class="relative flex-1 w-full">
             <input
               type="tel"
-              placeholder="Phone"
+              placeholder="Phone*"
               v-model="formData.phoneNumber"
               class="w-full border-2 bg-white border-[#EAEAEA] pt-5 p-5 resize-none hover:border-gray-500 rounded-2xl"
             />
@@ -94,24 +93,13 @@ const submitForm = () => {
         </div>
         <div class="relative w-full max-w-2xl">
           <input
-            type="email"
-            placeholder="E-mail"
-            v-model="formData.email"
-            class="w-full border-2 bg-white border-[#EAEAEA] pt-5 p-5 resize-none hover:border-gray-500 rounded-2xl"
-          />
-          <span v-if="errors.email" class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
-            errors.email
-          }}</span>
-        </div>
-        <div class="relative w-full max-w-2xl">
-          <input
             type="text"
-            placeholder="Address"
-            v-model="formData.address"
+            placeholder="Zip*"
+            v-model="formData.zip"
             class="w-full border-2 bg-white border-[#EAEAEA] pt-5 p-5 resize-none hover:border-gray-500 rounded-2xl"
           />
-          <span v-if="errors.address" class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
-            errors.address
+          <span v-if="errors.zip" class="absolute text-red-500 text-xs bottom-[-18px] left-2">{{
+            errors.zip
           }}</span>
         </div>
         <div class="relative w-full max-w-2xl">

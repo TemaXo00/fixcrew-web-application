@@ -11,46 +11,93 @@ datasource db {
 model Order {
   id String @id @default(uuid(4))
 
-  name String
-
+  name  String
   phone String
-  email String
+  email String?
 
-  address String
-
-  message   String
+  address   String
+  message   String?
   photo_ids String[]
 
+  date     String?
+  startMin Int?
+  endMin   Int?
+  duration Int?
+
+  region_id String?
+  region    Region? @relation(fields: [region_id], references: [id], onDelete: Cascade)
+
   master_id String?
-  master    knownMasters? @relation(fields: [master_id], references: [id])
+  master    KnownMasters? @relation(fields: [master_id], references: [id], onDelete: Cascade)
 
   status Statuses @default(CREATED)
   price  Int      @default(0)
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt()
-
-  @@map("orders")
-  @@index([master_id, phone, email])
-}
-
-model knownMasters {
-  id String @id @default(uuid(4))
-
-  master_id    String @unique
-  email        String @unique
-  phone_number String @unique
-
-  scheduleFrom DateTime?
-  sheduleTo    DateTime?
-
-  orders Order[]
+  reminder_job_id String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
+  @@index([master_id])
+  @@index([region_id])
+  @@index([date])
+  @@index([date, startMin])
+  @@index([status])
+  @@index([name])
+  @@map("orders")
+}
+
+model KnownMasters {
+  id String @id @default(uuid(4))
+
+  master_id String @unique
+
+  name         String
+  email        String @unique
+  phone_number String @unique
+
+  regions   Region[]
+  schedules MastersSchedule[]
+  orders    Order[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([created_at])
   @@map("known_masters")
-  @@index([master_id, email, phone_number])
+}
+
+model MastersSchedule {
+  id String @id @default(uuid(4))
+
+  master_id String
+  master    KnownMasters @relation(fields: [master_id], references: [id], onDelete: Cascade)
+
+  dayOfWeek Int
+  startMin  Int
+  endMin    Int
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([master_id, dayOfWeek])
+  @@index([master_id, dayOfWeek])
+  @@index([dayOfWeek, startMin, endMin])
+  @@map("masters_schedule")
+}
+
+model Region {
+  id        String @id @default(uuid(4))
+  region_id String @unique
+  name      String @unique
+
+  masters KnownMasters[]
+  orders  Order[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("regions")
 }
 
 enum Statuses {

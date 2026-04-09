@@ -30,36 +30,14 @@ export class MinioService implements OnModuleInit {
     return this.client.getObject(bucket, key);
   }
 
-  async getPresignedUrl(bucket: string, key: string, expires = 300): Promise<string> {
-    return await this.client.presignedUrl('GET', bucket, key, expires);
-  }
-
   async deleteObject(bucket: string, key: string): Promise<void> {
     await this.client.removeObject(bucket, key);
   }
 
-  async ensureBucket(bucket: string, isPublic: boolean): Promise<void> {
+  async ensureBucket(bucket: string): Promise<void> {
     const exists = await this.client.bucketExists(bucket);
-
     if (!exists) {
       await this.client.makeBucket(bucket);
-
-      if (isPublic) {
-        await this.client.setBucketPolicy(
-          bucket,
-          JSON.stringify({
-            Version: '2012-10-17',
-            Statement: [
-              {
-                Effect: 'Allow',
-                Principal: '*',
-                Action: ['s3:GetObject'],
-                Resource: [`arn:aws:s3:::${bucket}/*`],
-              },
-            ],
-          }),
-        );
-      }
     }
   }
 }

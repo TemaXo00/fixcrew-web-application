@@ -1,64 +1,64 @@
 <script setup lang="ts">
-import type { AuthRestoreType } from '@/types/auth.types.ts'
-import { computed, reactive, ref } from 'vue'
+import type { AuthRestoreType } from '@/types/auth.types'
+import { toTypedSchema } from '@vee-validate/yup'
+import { useForm } from 'vee-validate'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { userRoutes } from '@/api/configs.api.ts'
-import FormBackground from '@/components/authorization/FormBackground.vue'
 import FormHeader from '@/components/authorization/FormHeader.vue'
-import FormWrapper from '@/components/authorization/FormWrapper.vue'
-import ButtonComponent from '@/components/shared/ButtonComponent.vue'
-import InputComponent from '@/components/shared/InputComponent.vue'
+import AccentButton from '@/components/shared/buttons/AccentButton.vue'
+import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import PasswordInput from '@/components/shared/inputs/PasswordInput.vue'
+import { useAuthStore } from '@/stores/auth.store'
+import { restoreSchema } from '@/utils/validation/auth.validation'
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 
-const token = computed(() => route.query.token || null)
-const isLoading = ref<boolean>(false)
-const password = reactive<AuthRestoreType>({
-  password: '',
+const token = computed(() => route.query.token as string | null)
+
+const { defineField, handleSubmit, errors } = useForm<AuthRestoreType>({
+  validationSchema: toTypedSchema(restoreSchema),
 })
 
-const submitForm = async (): Promise<void> => {
-  isLoading.value = true
+const [password, passwordAttrs] = defineField('password')
 
+const onSubmit = handleSubmit(async (values) => {
   if (!token.value) {
-    isLoading.value = false
+    authStore.setError('Invalid restore link')
     return
   }
-
   try {
-    await userRoutes.patch(`/auth/restore/${token.value}`, password)
-    await router.push('/login')
+    await authStore.restore(token.value, values)
+    await router.push('/auth/login')
   }
-  catch (error) {
-    isLoading.value = false
-    throw error
-  }
-}
+  catch {}
+})
 </script>
 
 <template>
-    <FormWrapper>
-        <FormBackground>
-            <FormHeader name="Restore password" />
-            <form
-                class="flex flex-col gap-3"
-                @submit.prevent="submitForm"
-            >
-                <InputComponent
-                    v-model="password.password"
-                    name="Password"
-                    type="password"
-                    place-text="Pass@wd123"
-                    :is-necessary="true"
-                />
-                <ButtonComponent
-                    name="Restore"
-                    :is-loading="isLoading"
-                />
-            </form>
-        </FormBackground>
-    </FormWrapper>
+  <FormHeader name="Restore password" />
+  <form
+    class="flex flex-col gap-3"
+    @submit.prevent="onSubmit"
+  >
+    <PasswordInput
+      v-model="password"
+      v-bind="passwordAttrs"
+      name="Password"
+      place-text="Pass@wd123"
+      :is-necessary="true"
+    />
+    <span
+      v-if="errors.password"
+      class="text-red-500 text-sm -mt-2 mb-2"
+    >{{
+      errors.password
+    }}</span>
+    <AccentButton
+      name="Restore"
+      :is-loading="authStore.isLoading"
+    />
+    <ErrorDisplay :error="authStore.error" />
+  </form>
 </template>
-
-<style scoped></style>

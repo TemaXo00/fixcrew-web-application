@@ -32,18 +32,18 @@ export class TokensController {
   }
 
   @Post('password')
-  async createPasswordToken(@Body() dto: TokenCreateDto): Promise<Token> {
+  async createPasswordToken(@Body() dto: TokenCreateDto): Promise<Token | null> {
     return await this.tokensService.createToken(dto, 'PASSWORD')
   }
 
   @Post('invite')
-  async createInviteToken(@Body() dto: TokenCreateDto): Promise<Token> {
+  async createInviteToken(@Body() dto: TokenCreateDto): Promise<Token | null> {
     return await this.tokensService.createToken(dto, 'INVITE')
   }
 
-  @Put(':token')
-  async revokeToken(@Param('token') token: string): Promise<void> {
-    return await this.tokensService.revokeUserToken(token)
+  @Put(':id')
+  async revokeToken(@Param('id') id: string): Promise<Token> {
+    return await this.tokensService.revokeUserToken(id)
   }
 
   @Delete()

@@ -3,15 +3,14 @@ import { ConfigModule } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
 
-import { MailModule } from './mail/mail.module';
-
+import { AuthModule } from './auth/auth.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MailModule,
     PrometheusModule.register({
       path: '/metrics',
       defaultLabels: {
@@ -31,6 +30,8 @@ import { MailModule } from './mail/mail.module';
         },
       },
     }),
+    AuthModule,
+    OrderModule,
   ],
   controllers: [],
   providers: [],

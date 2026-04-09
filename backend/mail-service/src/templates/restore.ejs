@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title></title>
+    <%- include ('components/style.ejs') %>
+</head>
+<body>
+<h1>Restore your account</h1>
+<p>To restore access to account and change password, follow the link:</p>
+<button>
+    <a href="<%= ui_link %>/auth/restore/use?token=<%= token %>">Restore</a>
+</button>
+</body>
+</html>

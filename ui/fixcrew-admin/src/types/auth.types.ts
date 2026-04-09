@@ -12,3 +12,7 @@ export type AuthLoginType = Pick<AuthRegister, 'email' | 'password'>
 export type AuthRestoreType = Pick<AuthRegister, 'password'>
 
 export type AuthRestoreSendType = Pick<AuthRegister, 'email'>
+
+export interface AuthResponseType {
+  access_token: string
+}
