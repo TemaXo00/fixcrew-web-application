@@ -10,6 +10,11 @@
   src: url("./fonts/Inter.ttf");
 }
 
+@font-face {
+  font-family: "BakbakOne";
+  src: url("./fonts/BakbakOne.ttf");
+}
+
 @theme {
   --color-accent: #00B4D8;
   --color-muted-accent: #0077B6;
@@ -19,10 +24,15 @@
 
   --font-primary: Inter, sans-serif;
   --font-secondary: Roboto, sans-serif;
+  --font-accent: BakbakOne, sans-serif;
 
   --breakpoint-smaller: 320px;
   --breakpoint-small: 480px;
   --breakpoint-medium: 768px;
   --breakpoint-large: 1200px;
   --breakpoint-xl: 1440px;
+}
+
+body {
+  font-family: var(--font-primary), sans-serif;
 }
