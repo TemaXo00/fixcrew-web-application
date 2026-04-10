@@ -73,8 +73,10 @@ const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString()
       />
     </div>
   </div>
+
   <ErrorDisplay
     v-if="error"
     :error="error"
+    class="flex flex-col items-center justify-center"
   />
 </template>

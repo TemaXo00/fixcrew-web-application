@@ -46,7 +46,11 @@ defineExpose({
 
 <template>
   <div>
-    <div v-if="isOpen" class="fixed inset-0 bg-black/50 z-40 medium:hidden" @click="closeSidebar" />
+    <div
+      v-if="isOpen"
+      class="fixed inset-0 bg-black/50 z-40 medium:hidden"
+      @click="closeSidebar"
+    />
 
     <SidebarWrapper
       class="fixed top-0 left-0 h-full z-50 transform transition-transform duration-300 medium:translate-x-0 medium:relative"
