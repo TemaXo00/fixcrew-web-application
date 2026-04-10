@@ -6,6 +6,7 @@ import RegisterPage from '@/pages/authorization/RegisterPage.vue'
 import RestorePage from '@/pages/authorization/RestorePage.vue'
 import RestoreSendPage from '@/pages/authorization/RestoreSendPage.vue'
 import DashboardPage from '@/pages/dashboard/DashboardPage.vue'
+import RegionsPage from '@/pages/dashboard/RegionsPage.vue'
 import TokensPage from '@/pages/dashboard/TokensPage.vue'
 import NotFound from '@/pages/NotFound.vue'
 
@@ -15,15 +16,8 @@ const router = createRouter({
     {
       path: '/auth',
       component: AuthLayout,
+      redirect: '/auth/login',
       children: [
-        {
-          path: '/:pathMatch(.*)*',
-          name: 'NotFound',
-          component: NotFound,
-          meta: {
-            title: 'Not Found',
-          },
-        },
         {
           path: 'register',
           name: 'Register',
@@ -77,6 +71,15 @@ const router = createRouter({
           component: TokensPage,
           meta: {
             title: 'Tokens',
+            showInSidebar: true,
+          },
+        },
+        {
+          path: 'regions',
+          name: 'Regions',
+          component: RegionsPage,
+          meta: {
+            title: 'Regions',
             showInSidebar: true,
           },
         },

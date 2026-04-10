@@ -50,9 +50,9 @@ const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString()
 
 <template>
   <div
-    class="flex flex-col medium:grid xl:grid-cols-5 large:grid-cols-4 justify-between gap-3 items-start large:items-center border border-accent min-h-20 p-3 rounded-lg text-sm small:text-lg"
+    class="flex flex-col medium:grid xl:grid-cols-5 large:grid-cols-4 justify-between gap-5 items-start large:items-center border border-accent min-h-20 p-3 rounded-lg text-sm small:text-lg"
   >
-    <p class="font-black text-accent break-all min-w-37.5 large:min-w-50">
+    <p class="font-bold text-accent break-all min-w-37.5 large:min-w-50">
       {{ props.email }}
     </p>
     <p class="font-medium text-dimmed min-w-20">

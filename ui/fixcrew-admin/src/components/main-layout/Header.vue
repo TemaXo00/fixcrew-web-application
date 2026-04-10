@@ -17,7 +17,7 @@ const emit = defineEmits<{
       >
         <Bars3Icon class="w-6 h-6" />
       </button>
-      <h1 class="text-lg font-semibold text-muted-accent font-sans">
+      <h1 class="text-lg font-semibold font-secondary text-muted-accent">
         Admin Panel
       </h1>
       <div class="w-9" />

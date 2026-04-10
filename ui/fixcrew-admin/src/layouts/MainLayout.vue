@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import Header from '@/components/main/Header.vue'
-import MainView from '@/components/main/MainView.vue'
-import MainWrapper from '@/components/main/MainWrapper.vue'
-import Sidebar from '@/components/main/sidebar/Sidebar.vue'
+import Header from '@/components/main-layout/Header.vue'
+import MainView from '@/components/main-layout/MainView.vue'
+import MainWrapper from '@/components/main-layout/MainWrapper.vue'
+import Sidebar from '@/components/main-layout/sidebar/Sidebar.vue'
 
 const sidebarRef = ref<InstanceType<typeof Sidebar> | null>(null)
 

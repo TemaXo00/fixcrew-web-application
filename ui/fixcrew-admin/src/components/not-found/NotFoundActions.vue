@@ -9,14 +9,14 @@ const goBack = () => router.go(-1)
 </script>
 
 <template>
-  <div class="flex flex-col items-start medium:items-center gap-5">
+  <div class="flex flex-col items-center gap-5">
     <OutlineButton
-      class="text-2xl px-12 py-4"
+      class="text-lg medium:text-2xl medium:px-12 medium:py-4 border-2 medium:border-4"
       name="Back"
       @click="goBack"
     />
     <button
-      class="text-lg text-muted-accent font-normal underline hover:text-muted-accent/80 transition-all duration-300"
+      class="text-sm medium:text-lg text-muted-accent font-normal font-secondary underline hover:text-muted-accent/80 transition-all duration-300"
       @click="goHome"
     >
       Go to home

@@ -17,11 +17,11 @@ defineProps<Props>()
     <SpinnerLoader v-if="isLoading" />
     <p
       v-if="!isLoading"
-      class="font-black text-container text-lg mobile:text-xl"
+      class="font-bold text-container text-lg mobile:text-xl"
     >
       {{ value ?? 0 }}
     </p>
-    <p class="font-normal text-container text-sm mobile:text-lg text-center">
+    <p class="font-semibold text-container text-sm mobile:text-lg text-center">
       {{ name }}
     </p>
   </div>

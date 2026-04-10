@@ -15,7 +15,7 @@ defineProps<Props>()
       alt="Logo"
       class="h-15 pointer-events-none select-none"
     >
-    <h1 class="text-4xl font-primary font-bold text-muted-accent pointer-events-none select-none">
+    <h1 class="text-4xl font-secondary font-bold text-muted-accent pointer-events-none select-none">
       {{ name }}
     </h1>
   </div>
