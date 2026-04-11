@@ -7,3 +7,99 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Article {
+  id String @id @default(uuid(4))
+
+  name String
+  slug String
+
+  cover_id   String
+  short_desc String
+  content    String
+
+  tags Tags[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Tags {
+  id String @id @default(uuid(4))
+
+  name String
+
+  articles Article[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum ArticleStatuses {
+  UPLOADED
+  DRAFT
+}
+
+model Article {
+  id String @id @default(uuid(4))
+
+  name String
+  slug String
+
+  cover_id   String
+  short_desc String
+  content    String
+
+  tags Tags[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Tags {
+  id String @id @default(uuid(4))
+
+  name String
+
+  articles Article[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum ArticleStatuses {
+  UPLOADED
+  DRAFT
+}
+
+model Article {
+  id String @id @default(uuid(4))
+
+  name String
+  slug String
+
+  cover_id   String
+  short_desc String
+  content    String
+
+  tags Tags[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Tags {
+  id String @id @default(uuid(4))
+
+  name String
+
+  articles Article[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum ArticleStatuses {
+  UPLOADED
+  DRAFT
+}
