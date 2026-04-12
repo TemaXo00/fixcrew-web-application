@@ -12,22 +12,27 @@ model Article {
   id String @id @default(uuid(4))
 
   name String
-  slug String
+  slug String @unique
 
   cover_id   String
   short_desc String
-  content    String
+  content    String @db.Text
 
-  tags Tags[]
+  tags   Tag[]
+  status ArticleStatuses
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  @@index([slug])
+  @@index([created_at])
+  @@index([status])
 }
 
-model Tags {
+model Tag {
   id String @id @default(uuid(4))
 
-  name String
+  name String @unique
 
   articles Article[]
 
@@ -38,4 +43,5 @@ model Tags {
 enum ArticleStatuses {
   UPLOADED
   DRAFT
+  ARCHIVED
 }

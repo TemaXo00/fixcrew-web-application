@@ -14,6 +14,8 @@ model Region {
   name         String @unique
   avg_response Int
 
+  is_active Boolean @default(true)
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -25,12 +27,13 @@ model Service {
   id String @id @default(uuid(4))
 
   name        String @unique
-  description String
+  description String @db.Text
 
-  price          Int @default(0)
-  sale_percent   Int @default(0)
-  total_discount Int
-  avg_time       Int
+  price        Int  @default(0)
+  sale_percent Int  @default(0)
+  avg_time     Int?
+
+  is_active Boolean @default(true)
 
   category_id String?
   category    Category? @relation(fields: [category_id], references: [id])
@@ -45,13 +48,16 @@ model Service {
 model Category {
   id String @id @default(uuid(4))
 
-  name String
+  name  String
+  slug  String
+  order Int    @default(0)
 
   services Service[]
 
   parent_id String?
-  parent    Category?  @relation("CategoriesAndSub", fields: [parent_id], references: [id])
+  parent    Category?  @relation("CategoriesAndSub", fields: [parent_id], references: [id], onDelete: SetNull)
   sub       Category[] @relation("CategoriesAndSub")
 
+  @@unique([name, parent_id])
   @@map("categories")
 }
