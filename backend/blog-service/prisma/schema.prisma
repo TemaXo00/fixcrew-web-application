@@ -7,3 +7,41 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Article {
+  id String @id @default(uuid(4))
+
+  name String
+  slug String @unique
+
+  cover_id   String
+  short_desc String
+  content    String @db.Text
+
+  tags   Tag[]
+  status ArticleStatuses
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([slug])
+  @@index([created_at])
+  @@index([status])
+}
+
+model Tag {
+  id String @id @default(uuid(4))
+
+  name String @unique
+
+  articles Article[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum ArticleStatuses {
+  UPLOADED
+  DRAFT
+  ARCHIVED
+}
