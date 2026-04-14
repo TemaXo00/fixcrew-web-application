@@ -8,7 +8,6 @@ services:
       redis-server
       --appendonly yes
       --maxmemory-policy allkeys-lru
-    restart: unless-stopped
     networks:
       - backend
     healthcheck:
@@ -29,7 +28,6 @@ services:
     volumes:
       - minio_data:/data
     command: server /data --console-address ":9001"
-    restart: unless-stopped
     networks:
       - storage
       - backend
@@ -49,7 +47,6 @@ services:
     volumes:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
-    restart: unless-stopped
     networks:
       - monitoring
       - backend
@@ -63,7 +60,6 @@ services:
     volumes:
       - ./config/loki-config.yml:/etc/loki/loki-config.yml:ro
       - loki-data:/loki
-    restart: unless-stopped
     networks:
       - monitoring
 
@@ -75,7 +71,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./config/promtail-config.yml:/etc/promtail/config.yml:ro
     command: -config.file=/etc/promtail/config.yml
-    restart: unless-stopped
     networks:
       - monitoring
     depends_on:
@@ -108,7 +103,6 @@ services:
       GF_PLUGINS_PREINSTALL_DISABLED: "true"
     volumes:
       - grafana-data:/var/lib/grafana
-    restart: unless-stopped
     networks:
       - monitoring
       - backend
@@ -130,7 +124,6 @@ services:
     volumes:
       - ./ui/fixcrew-main:/app
       - /app/node_modules
-    restart: unless-stopped
     networks:
       - frontend
 
@@ -148,7 +141,6 @@ services:
     volumes:
       - ./ui/fixcrew-admin:/app
       - /app/node_modules
-    restart: unless-stopped
     networks:
       - frontend
 
@@ -166,7 +158,6 @@ services:
     volumes:
       - ./backend/gateway-service:/app
       - /app/node_modules
-    restart: unless-stopped
     networks:
       - backend
       - frontend
@@ -279,7 +270,6 @@ services:
     volumes:
       - ./backend/blog-service:/app
       - /app/node_modules
-    restart: unless-stopped
     networks:
       - backend
       - storage
@@ -304,7 +294,6 @@ services:
     volumes:
       - ./backend/file-service:/app
       - /app/node_modules
-    restart: unless-stopped
     networks:
       - backend
       - storage
@@ -332,7 +321,6 @@ services:
     volumes:
       - ./backend/info-service:/app
       - /app/node_modules
-    restart: unless-stopped
     networks:
       - backend
     depends_on:
@@ -358,7 +346,6 @@ services:
     volumes:
       - ./backend/mail-service:/app
       - /app/node_modules
-    restart: unless-stopped
     networks:
       - backend
     depends_on:
@@ -383,7 +370,6 @@ services:
     volumes:
       - ./backend/order-service:/app
       - /app/node_modules
-    restart: unless-stopped
     networks:
       - backend
     depends_on:
@@ -414,7 +400,6 @@ services:
     volumes:
       - ./backend/user-service:/app
       - /app/node_modules
-    restart: unless-stopped
     networks:
       - backend
     depends_on:
