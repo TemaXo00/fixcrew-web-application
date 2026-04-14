@@ -6,7 +6,7 @@ export const externalApi: AxiosInstance = axios.create({
   timeout: 5000,
 })
 
-export const userApi: AxiosInstance = axios.create({
-  baseURL: `${baseUrl}/user`,
+export const internalApi: AxiosInstance = axios.create({
+  baseURL: `${baseUrl}`,
   timeout: 5000,
 })
