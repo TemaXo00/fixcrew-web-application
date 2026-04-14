@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue'
 import { extractApiError } from '@/api/error-handler.api.ts'
 import { regionsApi } from '@/api/info/regions.api.ts'
 import RegionItem from '@/components/regions/RegionItem.vue'
+import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
 import SpinnerLoader from '@/components/shared/SpinnerLoader.vue'
 import Title from '@/components/shared/Title.vue'
 
@@ -68,6 +69,11 @@ onMounted(async () => {
       @deleted="handleRegionDeleted"
     />
   </div>
+  <ErrorDisplay
+    v-if="error"
+    :error="error"
+    class="flex items-center justify-center"
+  />
 </template>
 
 <style scoped></style>
