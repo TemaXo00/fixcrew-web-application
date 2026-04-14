@@ -39,11 +39,11 @@ const deleteTokens = async () => {
 
 <template>
   <div class="flex flex-col items-start gap-3">
-    <p class="text-red-400 text-xl">
+    <p class="text-red-400">
       Are you really sure want to delete tokens? Action remove all tokens with statuses:
       <span class="font-semibold">'REVOKED', 'EXPIRED', 'USED'</span>
     </p>
-    <p class="text-red-500 text-lg font-black">
+    <p class="text-red-500 font-semibold">
       This action cannot be undone later!
     </p>
     <div class="flex flex-col medium:flex-row items-center gap-3">

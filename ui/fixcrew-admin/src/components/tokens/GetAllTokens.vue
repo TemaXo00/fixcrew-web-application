@@ -7,6 +7,7 @@ import { tokenApi } from '@/api/user/tokens.api.ts'
 import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
 import Pagination from '@/components/shared/Pagination.vue'
 import SpinnerLoader from '@/components/shared/SpinnerLoader.vue'
+import Title from '@/components/shared/Title.vue'
 import TokenItem from '@/components/tokens/TokenItem.vue'
 
 const tokens = ref<PaginatedResponse<Token>>()
@@ -89,7 +90,7 @@ onMounted(async () => {
     >
       Updating...
     </div>
-
+    <Title title="Tokens" />
     <TokenItem
       v-for="token in tokens?.items"
       :key="token.id"

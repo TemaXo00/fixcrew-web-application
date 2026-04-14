@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue'
 import { extractApiError } from '@/api/error-handler.api.ts'
 import { tokenApi } from '@/api/user/tokens.api.ts'
 import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import Title from '@/components/shared/Title.vue'
 import StatsCard from '@/components/tokens/StatsCard.vue'
 
 const stats = ref<TokensStats>()
@@ -46,33 +47,36 @@ onMounted(async () => {
   </div>
   <div
     v-else
-    class="flex flex-col xl:flex-row items-center justify-center gap-3"
+    class="flex flex-col gap-2"
   >
-    <StatsCard
-      :value="stats?.all"
-      name="All Tokens"
-      :is-loading="isLoading"
-    />
-    <StatsCard
-      :value="stats?.created"
-      name="Created Tokens"
-      :is-loading="isLoading"
-    />
-    <StatsCard
-      :value="stats?.used"
-      name="Used Tokens"
-      :is-loading="isLoading"
-    />
-    <StatsCard
-      :value="stats?.revoked"
-      name="Revoked Tokens"
-      :is-loading="isLoading"
-    />
-    <StatsCard
-      :value="stats?.expired"
-      name="Expired Tokens"
-      :is-loading="isLoading"
-    />
+    <Title title="Token Stats" />
+    <div class="flex flex-col xl:flex-row items-center justify-center gap-3">
+      <StatsCard
+        :value="stats?.all"
+        name="All Tokens"
+        :is-loading="isLoading"
+      />
+      <StatsCard
+        :value="stats?.created"
+        name="Created Tokens"
+        :is-loading="isLoading"
+      />
+      <StatsCard
+        :value="stats?.used"
+        name="Used Tokens"
+        :is-loading="isLoading"
+      />
+      <StatsCard
+        :value="stats?.revoked"
+        name="Revoked Tokens"
+        :is-loading="isLoading"
+      />
+      <StatsCard
+        :value="stats?.expired"
+        name="Expired Tokens"
+        :is-loading="isLoading"
+      />
+    </div>
   </div>
 </template>
 

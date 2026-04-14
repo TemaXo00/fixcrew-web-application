@@ -50,7 +50,7 @@ const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString()
 
 <template>
   <div
-    class="flex flex-col medium:grid xl:grid-cols-5 large:grid-cols-4 justify-between gap-5 items-start large:items-center border border-accent min-h-20 p-3 rounded-lg text-sm small:text-lg"
+    class="flex flex-col medium:grid xl:grid-cols-5 large:grid-cols-4 justify-between gap-5 items-start large:items-center border border-accent min-h-20 p-3 rounded-lg"
   >
     <p class="font-bold text-accent break-all min-w-37.5 large:min-w-50">
       {{ props.email }}
@@ -61,7 +61,7 @@ const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString()
     <p class="font-medium text-accent min-w-20">
       {{ props.type.toLowerCase() }}
     </p>
-    <p class="font-medium text-muted-accent text-xs smaller:text-sm small:text-base min-w-25">
+    <p class="font-medium text-muted-accent min-w-25">
       {{ formatDate(expiresAt) }}
     </p>
     <div class="min-w-25">
