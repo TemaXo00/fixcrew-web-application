@@ -1,5 +1,21 @@
 <script setup lang="ts">
 import AreasCard from '@/components/universalComp/AreasCard.vue'
+import type { RegionInterface } from '@/interfaces/regions.interface.ts'
+import { onMounted, ref } from 'vue'
+import { regionsApi } from '@/api/routes/regions.api.ts'
+const regions = ref<RegionInterface[]>()
+
+const getRegions = async (): Promise<void> => {
+  try {
+    regions.value = await regionsApi.getRegions()
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+onMounted(async () => {
+  await getRegions()
+})
 </script>
 
 <template>
@@ -14,13 +30,12 @@ import AreasCard from '@/components/universalComp/AreasCard.vue'
 
     <div class="w-full flex flex-col mt-6 sm:mt-8 md:mt-10">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-        <AreasCard region="Los Gatos" response="15" />
-        <AreasCard region="San Jose" response="30" />
-        <AreasCard region="Cupertino" response="35" />
-        <AreasCard region="Mountain View" response="35" />
-        <AreasCard region="Campbell" response="30" />
-        <AreasCard region="Los Altos" response="35" />
-        <AreasCard region="Palo Alto" response="35" />
+        <AreasCard
+          v-for="region in regions"
+          :key="region.id"
+          :region="region.name"
+          :response="region.avg_response"
+        />
         <div
           class="border-4 border-[#EAEAEA] text-gray-600 p-4 sm:p-6 md:p-8 rounded-lg font-bold text-center text-base sm:text-lg md:text-xl col-span-1 sm:col-span-2 lg:col-span-3 flex flex-col gap-2 sm:gap-3"
         >

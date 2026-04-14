@@ -1,7 +1,7 @@
 <script setup lang="ts">
 interface Props {
   region: string,
-  response: string,
+  response: number,
 }
 
 defineProps<Props>()
