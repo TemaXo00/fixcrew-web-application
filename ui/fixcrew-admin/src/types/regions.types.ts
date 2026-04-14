@@ -1,7 +1,7 @@
 export interface RegionResponseType {
   id: string
   name: string
-  avg_response: string
+  avg_response: number
 }
 
 export type RegionCreateType = Pick<RegionResponseType, 'name' | 'avg_response'>
