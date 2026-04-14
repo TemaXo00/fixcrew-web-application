@@ -4,7 +4,7 @@ export const refrigeratorMock: InfoInterface = {
   id: "1",
   title: "Refrigerators",
   description: "Text",
-  photoUrl: "@/assets/images/url.png",
+  photoUrl: "@/assets/images/",
   prices: [
     {
       id: "1",

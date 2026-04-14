@@ -5,7 +5,13 @@
   --color-main: #00B4D8;
 
   --font-sans: 'Inter', sans-serif;
-  --font-highlite: 'sans-serif', 'Inter', 'text-2xl'
+  --font-highlite: 'sans-serif', 'Inter', 'text-2xl';
+  --font-bakbak: 'Bakbak', sans-serif;
+}
+
+@font-face {
+  font-family: 'Bakbak';
+  src: url('./fonts/BakbakOne-Regular.ttf');
 }
 /*.section__request-wrapper {*/
 /*  max-width: 1440px;*/

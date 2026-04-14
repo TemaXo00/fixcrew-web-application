@@ -20,7 +20,7 @@ if (slug.value !== 'info') {
 <template>
   <TopHeader />
   <BottomHeader />
-  <InfoComponent />
+  <InfoComponent :info="refrigeratorMock" />
   <FooterComponent />
 </template>
 
