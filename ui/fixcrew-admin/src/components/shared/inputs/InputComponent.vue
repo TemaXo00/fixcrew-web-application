@@ -4,7 +4,7 @@ interface InputProps {
   isNecessary?: boolean
   type: string
   placeText: string
-  modelValue: string
+  modelValue: unknown
 }
 defineProps<InputProps>()
 const emit = defineEmits<{
