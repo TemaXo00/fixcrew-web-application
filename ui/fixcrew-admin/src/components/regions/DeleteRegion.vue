@@ -4,7 +4,7 @@ import { extractApiError } from '@/api/error-handler.api.ts'
 import { regionsApi } from '@/api/info/regions.api.ts'
 import DangerousButton from '@/components/shared/buttons/DangerousButton.vue'
 import OutlineButton from '@/components/shared/buttons/OutlineButton.vue'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 
 interface Props {
   id: string
@@ -22,19 +22,22 @@ const closeWindow = (): void => {
 }
 
 const isLoading = ref<boolean>(false)
-const error = ref<string>()
+const errorCode = ref<number | null>(null)
+const errorMessage = ref<string>('')
 
 const deleteRegion = async (id: string): Promise<void> => {
   try {
     isLoading.value = true
-    error.value = ''
+    errorCode.value = null
+    errorMessage.value = ''
     await regionsApi.deleteRegion(id)
     emits('deleted', id)
     closeWindow()
   }
   catch (err) {
     const apiError = extractApiError(err)
-    error.value = apiError.message
+    errorCode.value = apiError.statusCode
+    errorMessage.value = apiError.message
   }
   finally {
     isLoading.value = false
@@ -58,12 +61,14 @@ const deleteRegion = async (id: string): Promise<void> => {
     />
     <DangerousButton
       name="Delete region"
+      :is-loading="isLoading"
       @click="deleteRegion(id)"
     />
   </div>
-  <ErrorDisplay
-    v-if="error"
-    :error="error"
+  <ErrorCode
+    v-if="errorCode"
+    :message="errorMessage"
+    :code="errorCode"
   />
 </template>
 

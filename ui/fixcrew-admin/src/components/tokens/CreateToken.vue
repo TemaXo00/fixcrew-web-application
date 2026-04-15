@@ -7,7 +7,8 @@ import { extractApiError } from '@/api/error-handler.api'
 import { tokenApi } from '@/api/user/tokens.api.ts'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
 import OutlineButton from '@/components/shared/buttons/OutlineButton.vue'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
+import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import { tokenValidation } from '@/utils/validation/token.validation.ts'
 
@@ -17,7 +18,8 @@ const emits = defineEmits<{
 }>()
 
 const isLoading = ref<boolean>(false)
-const error = ref<string>('')
+const errorCode = ref<number | null>(null)
+const errorMessage = ref<string>('')
 
 const closeWindow = () => {
   emits('close')
@@ -31,7 +33,8 @@ const [email, emailAttrs] = defineField('email')
 
 const inviteSubmit = handleSubmit(async (values) => {
   isLoading.value = true
-  error.value = ''
+  errorCode.value = null
+  errorMessage.value = ''
 
   try {
     await tokenApi.createInviteToken(values)
@@ -41,7 +44,8 @@ const inviteSubmit = handleSubmit(async (values) => {
   }
   catch (err) {
     const apiError = extractApiError(err)
-    error.value = apiError.message
+    errorMessage.value = apiError.message
+    errorCode.value = apiError.statusCode
   }
   finally {
     isLoading.value = false
@@ -50,7 +54,10 @@ const inviteSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <form @submit="inviteSubmit">
+  <form
+    class="flex flex-col gap-3"
+    @submit="inviteSubmit"
+  >
     <InputComponent
       v-model="email"
       name="Email"
@@ -59,7 +66,7 @@ const inviteSubmit = handleSubmit(async (values) => {
       :is-necessary="true"
       v-bind="emailAttrs"
     />
-    <ErrorDisplay
+    <ErrorShort
       v-if="errors.email"
       :error="errors.email"
     />
@@ -74,9 +81,10 @@ const inviteSubmit = handleSubmit(async (values) => {
         @click="closeWindow"
       />
     </div>
-    <ErrorDisplay
-      v-if="error"
-      :error="error"
+    <ErrorCode
+      v-if="errorCode"
+      :message="errorMessage"
+      :code="errorCode"
     />
   </form>
 </template>

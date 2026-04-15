@@ -7,7 +7,8 @@ import { extractApiError } from '@/api/error-handler.api.ts'
 import { regionsApi } from '@/api/info/regions.api.ts'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
 import OutlineButton from '@/components/shared/buttons/OutlineButton.vue'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
+import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import { updateRegionSchema } from '@/utils/validation/region.validation.ts'
 
@@ -27,7 +28,7 @@ const closeWindow = (): void => {
 }
 
 const isLoading = ref<boolean>(false)
-const error = ref<string>()
+const error = ref<number | null>(null)
 
 const { defineField, handleSubmit, errors, resetForm } = useForm<RegionUpdateType>({
   validationSchema: toTypedSchema(updateRegionSchema),
@@ -38,7 +39,7 @@ const [response, responseAttrs] = defineField('avg_response')
 const updateRegion = handleSubmit(async (values) => {
   try {
     isLoading.value = true
-    error.value = ''
+    error.value = null
     const updatedRegion = await regionsApi.updateRegion(props.id, values)
     resetForm()
     emits('updated', updatedRegion)
@@ -46,7 +47,7 @@ const updateRegion = handleSubmit(async (values) => {
   }
   catch (err) {
     const apiError = extractApiError(err)
-    error.value = apiError.message
+    error.value = apiError.statusCode
   }
   finally {
     isLoading.value = false
@@ -64,7 +65,7 @@ const updateRegion = handleSubmit(async (values) => {
       :is-necessary="true"
       v-bind="responseAttrs"
     />
-    <ErrorDisplay
+    <ErrorShort
       v-if="errors.avg_response"
       :error="errors.avg_response"
     />
@@ -75,12 +76,13 @@ const updateRegion = handleSubmit(async (values) => {
       />
       <AccentButton
         name="Submit"
+        :is-loading="isLoading"
         @click="updateRegion"
       />
     </div>
-    <ErrorDisplay
+    <ErrorCode
       v-if="error"
-      :error="error"
+      :code="error"
     />
   </div>
 </template>

@@ -4,23 +4,23 @@ import { onMounted, ref } from 'vue'
 import { extractApiError } from '@/api/error-handler.api.ts'
 import { regionsApi } from '@/api/info/regions.api.ts'
 import RegionItem from '@/components/regions/RegionItem.vue'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 import SpinnerLoader from '@/components/shared/SpinnerLoader.vue'
 import Title from '@/components/shared/Title.vue'
 
 const regions = ref<RegionResponseType[]>([])
 const isLoading = ref<boolean>(false)
-const error = ref<string>('')
+const error = ref<number | null>(null)
 
 const fetchRegions = async () => {
   try {
     isLoading.value = true
-    error.value = ''
+    error.value = null
     regions.value = await regionsApi.getRegions()
   }
   catch (err: any) {
     const apiError = extractApiError(err)
-    error.value = apiError.message
+    error.value = apiError.statusCode
   }
   finally {
     isLoading.value = false
@@ -69,9 +69,9 @@ onMounted(async () => {
       @deleted="handleRegionDeleted"
     />
   </div>
-  <ErrorDisplay
+  <ErrorCode
     v-if="error"
-    :error="error"
+    :code="error"
     class="flex items-center justify-center"
   />
 </template>

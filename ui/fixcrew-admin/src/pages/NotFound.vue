@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import NotFoundActions from '@/components/not-found/NotFoundActions.vue'
-import NotFoundBg from '@/components/not-found/NotFoundBg.vue'
-import NotFoundImage from '@/components/not-found/NotFoundImage.vue'
-import NotFoundText from '@/components/not-found/NotFoundText.vue'
-import NotFoundWrapper from '@/components/not-found/NotFoundWrapper.vue'
+import NotFoundActions from '@/components/layout-not-found/NotFoundActions.vue'
+import NotFoundBg from '@/components/layout-not-found/NotFoundBg.vue'
+import NotFoundImage from '@/components/layout-not-found/NotFoundImage.vue'
+import NotFoundText from '@/components/layout-not-found/NotFoundText.vue'
+import NotFoundWrapper from '@/components/layout-not-found/NotFoundWrapper.vue'
 </script>
 
 <template>

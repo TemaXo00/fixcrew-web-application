@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AuthBackground from '@/components/authorization/AuthBackground.vue'
-import AuthWrapper from '@/components/authorization/AuthWrapper.vue'
+import AuthBackground from '@/components/layout-auth/AuthBackground.vue'
+import AuthWrapper from '@/components/layout-auth/AuthWrapper.vue'
 </script>
 
 <template>

@@ -3,10 +3,10 @@ import type { AuthRestoreSendType } from '@/types/auth.types'
 import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
-import AuthFooter from '@/components/authorization/AuthFooter.vue'
-import AuthHeader from '@/components/authorization/AuthHeader.vue'
+import AuthFooter from '@/components/layout-auth/AuthFooter.vue'
+import AuthHeader from '@/components/layout-auth/AuthHeader.vue'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import { useAuthStore } from '@/stores/auth.store'
 import { restoreSendSchema } from '@/utils/validation/auth.validation'
@@ -43,15 +43,14 @@ const onSubmit = handleSubmit(async (values) => {
       place-text="example@example.com"
       :is-necessary="true"
     />
-    <span
+    <ErrorShort
       v-if="errors.email"
-      class="text-red-500 text-sm -mt-2 mb-2"
-    >{{ errors.email }}</span>
+      :error="errors.email"
+    />
     <AccentButton
       name="Send email"
       :is-loading="authStore.isLoading"
     />
-    <ErrorDisplay :error="authStore.error" />
   </form>
   <AuthFooter
     name=""
