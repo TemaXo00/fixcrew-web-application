@@ -6,7 +6,6 @@ import { useRouter } from 'vue-router'
 import AuthFooter from '@/components/layout-auth/AuthFooter.vue'
 import AuthHeader from '@/components/layout-auth/AuthHeader.vue'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
-import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import { useAuthStore } from '@/stores/auth.store'
@@ -51,11 +50,6 @@ const onSubmit = handleSubmit(async (values) => {
     <AccentButton
       name="Send email"
       :is-loading="authStore.isLoading"
-    />
-    <ErrorCode
-      v-if="authStore.errorCode"
-      :message="authStore.errorMessage"
-      :code="authStore.errorCode"
     />
   </form>
   <AuthFooter

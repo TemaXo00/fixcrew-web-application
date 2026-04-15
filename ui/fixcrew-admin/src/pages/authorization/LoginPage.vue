@@ -60,12 +60,13 @@ const onSubmit = handleSubmit(async (values) => {
       name="Log in"
       :is-loading="authStore.isLoading"
     />
-    <ErrorCode
-      v-if="authStore.errorCode"
-      :message="authStore.errorMessage"
-      :code="authStore.errorCode"
-    />
   </form>
+  <ErrorCode
+    v-if="authStore.errorCode"
+    :message="authStore.errorMessage"
+    :code="authStore.errorCode"
+    class="mt-5"
+  />
   <AuthFooter
     name="Forgot Password?"
     link-name="Restore"

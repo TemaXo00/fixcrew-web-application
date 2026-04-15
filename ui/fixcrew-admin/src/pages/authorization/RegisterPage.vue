@@ -112,15 +112,16 @@ const onSubmit = handleSubmit(async (values) => {
       name="Sign up"
       :is-loading="authStore.isLoading"
     />
-    <AuthFooter
-      name="Already have account?"
-      link="/auth/login"
-      link-name="Login"
-    />
-    <ErrorCode
-      v-if="authStore.errorCode"
-      :message="authStore.errorMessage"
-      :code="authStore.errorCode"
-    />
   </form>
+  <ErrorCode
+    v-if="authStore.errorCode"
+    :message="authStore.errorMessage"
+    :code="authStore.errorCode"
+    class="mt-5"
+  />
+  <AuthFooter
+    name="Already have account?"
+    link="/auth/login"
+    link-name="Login"
+  />
 </template>
