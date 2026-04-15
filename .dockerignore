@@ -33,4 +33,4 @@ docker-compose*.yml
 .env*
 !.env.example
 
-backend/*/prisma/generated/
+api/*/prisma/generated/
