@@ -4,7 +4,7 @@ import { extractApiError } from '@/api/error-handler.api.ts'
 import { tokenApi } from '@/api/user/tokens.api.ts'
 import DangerousButton from '@/components/shared/buttons/DangerousButton.vue'
 import OutlineButton from '@/components/shared/buttons/OutlineButton.vue'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 
 const emits = defineEmits<{
   (e: 'close'): void
@@ -12,7 +12,8 @@ const emits = defineEmits<{
 }>()
 
 const isLoading = ref<boolean>(false)
-const error = ref<string>('')
+const errorCode = ref<number | null>(null)
+const errorMessage = ref<string>('')
 
 const closeWindow = () => {
   emits('close')
@@ -20,7 +21,8 @@ const closeWindow = () => {
 
 const deleteTokens = async () => {
   isLoading.value = true
-  error.value = ''
+  errorCode.value = null
+  errorMessage.value = ''
 
   try {
     await tokenApi.removeTokens()
@@ -29,7 +31,8 @@ const deleteTokens = async () => {
   }
   catch (err) {
     const apiError = extractApiError(err)
-    error.value = apiError.message
+    errorMessage.value = apiError.message
+    errorCode.value = apiError.statusCode
   }
   finally {
     isLoading.value = false
@@ -57,9 +60,10 @@ const deleteTokens = async () => {
         @click="closeWindow"
       />
     </div>
-    <ErrorDisplay
-      v-if="error"
-      :error="error"
+    <ErrorCode
+      v-if="errorCode"
+      :message="errorMessage"
+      :code="errorCode"
     />
   </div>
 </template>

@@ -6,7 +6,8 @@ import { ref } from 'vue'
 import { extractApiError } from '@/api/error-handler.api.ts'
 import { regionsApi } from '@/api/info/regions.api.ts'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
+import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import Title from '@/components/shared/Title.vue'
 import { createRegionSchema } from '@/utils/validation/region.validation.ts'
@@ -16,7 +17,8 @@ const emit = defineEmits<{
 }>()
 
 const isLoading = ref<boolean>(false)
-const error = ref<string>('')
+const errorMessage = ref<string>('')
+const errorCode = ref<number | null>(null)
 
 const { defineField, handleSubmit, errors, resetForm } = useForm<RegionCreateType>({
   validationSchema: toTypedSchema(createRegionSchema),
@@ -28,14 +30,16 @@ const [response, responseAttrs] = defineField('avg_response')
 const createRegion = handleSubmit(async (values) => {
   try {
     isLoading.value = true
-    error.value = ''
+    errorMessage.value = ''
+    errorCode.value = null
     const newRegion = await regionsApi.createRegion(values)
     resetForm()
     emit('created', newRegion)
   }
   catch (err) {
     const apiError = extractApiError(err)
-    error.value = apiError.message
+    errorMessage.value = apiError.message
+    errorCode.value = apiError.statusCode
   }
   finally {
     isLoading.value = false
@@ -59,7 +63,7 @@ const createRegion = handleSubmit(async (values) => {
           :is-necessary="true"
           v-bind="nameAttrs"
         />
-        <ErrorDisplay
+        <ErrorShort
           v-if="errors.name"
           :error="errors.name"
         />
@@ -73,7 +77,7 @@ const createRegion = handleSubmit(async (values) => {
           :is-necessary="true"
           v-bind="responseAttrs"
         />
-        <ErrorDisplay
+        <ErrorShort
           v-if="errors.avg_response"
           :error="errors.avg_response"
         />
@@ -85,7 +89,11 @@ const createRegion = handleSubmit(async (values) => {
       type="submit"
     />
   </form>
-  <ErrorDisplay :error="error" />
+  <ErrorCode
+    v-if="errorCode"
+    :message="errorMessage"
+    :code="errorCode"
+  />
 </template>
 
 <style scoped></style>

@@ -4,7 +4,7 @@ import type { Token } from '@/types/token.types.ts'
 import { onMounted, ref } from 'vue'
 import { extractApiError } from '@/api/error-handler.api.ts'
 import { tokenApi } from '@/api/user/tokens.api.ts'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 import Pagination from '@/components/shared/Pagination.vue'
 import SpinnerLoader from '@/components/shared/SpinnerLoader.vue'
 import Title from '@/components/shared/Title.vue'
@@ -12,19 +12,19 @@ import TokenItem from '@/components/tokens/TokenItem.vue'
 
 const tokens = ref<PaginatedResponse<Token>>()
 const isLoading = ref<boolean>(false)
-const error = ref<string>('')
+const errorCode = ref<number | null>(null)
 const currentPage = ref<number>(1)
 const limit = ref<number>(10)
 
 const fetchTokens = async () => {
   try {
     isLoading.value = true
-    error.value = ''
+    errorCode.value = null
     tokens.value = await tokenApi.getTokens({ page: currentPage.value, limit: limit.value })
   }
   catch (err: any) {
     const apiError = extractApiError(err)
-    error.value = apiError.message
+    errorCode.value = apiError.statusCode
   }
   finally {
     isLoading.value = false
@@ -73,12 +73,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div
-    v-if="isLoading && !tokens"
-    class="flex items-center justify-center border-accent border p-10 rounded-lg"
-  >
-    <SpinnerLoader />
-  </div>
+  <SpinnerLoader v-if="isLoading && !tokens" />
 
   <div
     v-else
@@ -102,12 +97,10 @@ onMounted(async () => {
       @revoked="handleTokenRevoked"
     />
 
-    <div
-      v-if="!tokens?.items?.length && !isLoading"
-      class="text-center py-8 text-container"
-    >
-      No tokens found
-    </div>
+    <ErrorCode
+      v-if="errorCode"
+      :code="errorCode"
+    />
 
     <Pagination
       :current-page="tokens?.page || currentPage"
@@ -119,10 +112,4 @@ onMounted(async () => {
       @next="handleNext"
     />
   </div>
-
-  <ErrorDisplay
-    v-if="error"
-    :error="error"
-    class="flex flex-col items-center justify-center"
-  />
 </template>

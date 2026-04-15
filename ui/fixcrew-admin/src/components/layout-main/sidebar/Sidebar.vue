@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import SidebarLink from '@/components/main-layout/sidebar/SidebarLink.vue'
-import SidebarWrapper from '@/components/main-layout/sidebar/SidebarWrapper.vue'
+import SidebarLink from '@/components/layout-main/sidebar/SidebarLink.vue'
+import SidebarWrapper from '@/components/layout-main/sidebar/SidebarWrapper.vue'
 
 const router = useRouter()
 const isOpen = ref(false)

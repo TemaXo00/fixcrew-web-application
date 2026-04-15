@@ -4,10 +4,11 @@ import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import AuthFooter from '@/components/authorization/AuthFooter.vue'
-import AuthHeader from '@/components/authorization/AuthHeader.vue'
+import AuthFooter from '@/components/layout-auth/AuthFooter.vue'
+import AuthHeader from '@/components/layout-auth/AuthHeader.vue'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
+import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import PasswordInput from '@/components/shared/inputs/PasswordInput.vue'
 import { useAuthStore } from '@/stores/auth.store'
@@ -31,7 +32,7 @@ const [password, passwordAttrs] = defineField('password')
 
 const onSubmit = handleSubmit(async (values) => {
   if (!token.value) {
-    authStore.setError('Invalid registration link')
+    authStore.setError('Invalid registration link', 400)
     return
   }
   try {
@@ -56,10 +57,10 @@ const onSubmit = handleSubmit(async (values) => {
       place-text="John"
       :is-necessary="true"
     />
-    <span
+    <ErrorShort
       v-if="errors.name"
-      class="text-red-500 text-sm -mt-2 mb-2"
-    >{{ errors.name }}</span>
+      :error="errors.name"
+    />
     <InputComponent
       v-model="surname"
       v-bind="surnameAttrs"
@@ -68,12 +69,10 @@ const onSubmit = handleSubmit(async (values) => {
       place-text="Doe"
       :is-necessary="true"
     />
-    <span
+    <ErrorShort
       v-if="errors.surname"
-      class="text-red-500 text-sm -mt-2 mb-2"
-    >{{
-      errors.surname
-    }}</span>
+      :error="errors.surname"
+    />
     <InputComponent
       v-model="phone_number"
       v-bind="phoneAttrs"
@@ -82,12 +81,10 @@ const onSubmit = handleSubmit(async (values) => {
       place-text="xxx-xxx-xxxx"
       :is-necessary="true"
     />
-    <span
+    <ErrorShort
       v-if="errors.phone_number"
-      class="text-red-500 text-sm -mt-2 mb-2"
-    >{{
-      errors.phone_number
-    }}</span>
+      :error="errors.phone_number"
+    />
     <InputComponent
       v-model="email"
       v-bind="emailAttrs"
@@ -96,10 +93,10 @@ const onSubmit = handleSubmit(async (values) => {
       place-text="example@example.com"
       :is-necessary="true"
     />
-    <span
+    <ErrorShort
       v-if="errors.email"
-      class="text-red-500 text-sm -mt-2 mb-2"
-    >{{ errors.email }}</span>
+      :error="errors.email"
+    />
     <PasswordInput
       v-model="password"
       v-bind="passwordAttrs"
@@ -107,12 +104,10 @@ const onSubmit = handleSubmit(async (values) => {
       place-text="Pass@wd123"
       :is-necessary="true"
     />
-    <span
+    <ErrorShort
       v-if="errors.password"
-      class="text-red-500 text-sm -mt-2 mb-2"
-    >{{
-      errors.password
-    }}</span>
+      :error="errors.password"
+    />
     <AccentButton
       name="Sign up"
       :is-loading="authStore.isLoading"
@@ -122,6 +117,10 @@ const onSubmit = handleSubmit(async (values) => {
       link="/auth/login"
       link-name="Login"
     />
-    <ErrorDisplay :error="authStore.error" />
+    <ErrorCode
+      v-if="authStore.errorCode"
+      :message="authStore.errorMessage"
+      :code="authStore.errorCode"
+    />
   </form>
 </template>

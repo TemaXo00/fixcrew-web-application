@@ -3,22 +3,23 @@ import type { TokensStats } from '@/types/token.types.ts'
 import { onMounted, ref } from 'vue'
 import { extractApiError } from '@/api/error-handler.api.ts'
 import { tokenApi } from '@/api/user/tokens.api.ts'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 import Title from '@/components/shared/Title.vue'
 import StatsCard from '@/components/tokens/StatsCard.vue'
 
 const stats = ref<TokensStats>()
 const isLoading = ref<boolean>(false)
-const error = ref<string>('')
+const errorCode = ref<number | null>(null)
 
 const fetchStats = async () => {
   try {
+    errorCode.value = null
     isLoading.value = true
     stats.value = await tokenApi.getTokenStats()
   }
   catch (err: any) {
     const apiError = extractApiError(err)
-    error.value = apiError.message
+    errorCode.value = apiError.statusCode
   }
   finally {
     isLoading.value = false
@@ -39,12 +40,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div
-    v-if="error"
-    class="flex items-center justify-center p-12"
-  >
-    <ErrorDisplay :error="error" />
-  </div>
+  <ErrorCode
+    v-if="errorCode"
+    :code="errorCode"
+  />
   <div
     v-else
     class="flex flex-col gap-2"

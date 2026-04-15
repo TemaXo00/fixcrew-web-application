@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { extractApiError } from '@/api/error-handler.api.ts'
 import { tokenApi } from '@/api/user/tokens.api.ts'
 import DangerousButton from '@/components/shared/buttons/DangerousButton.vue'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
@@ -12,7 +12,8 @@ const emit = defineEmits<{
 }>()
 
 const isLoading = ref<boolean>(false)
-const error = ref<string>('')
+const errorCode = ref<number | null>(null)
+const errorMessage = ref<string>('')
 const localStatus = ref(props.status)
 
 interface Props {
@@ -29,7 +30,8 @@ const tokenRevoke = ref<TokenRevokeType>({
 
 const revokeToken = async () => {
   isLoading.value = true
-  error.value = ''
+  errorMessage.value = ''
+  errorCode.value = null
 
   try {
     await tokenApi.revokeToken(tokenRevoke.value)
@@ -38,7 +40,8 @@ const revokeToken = async () => {
   }
   catch (err: any) {
     const apiError = extractApiError(err)
-    error.value = apiError.message
+    errorMessage.value = apiError.message
+    errorCode.value = apiError.statusCode
   }
   finally {
     isLoading.value = false
@@ -74,9 +77,9 @@ const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString()
     </div>
   </div>
 
-  <ErrorDisplay
-    v-if="error"
-    :error="error"
-    class="flex flex-col items-center justify-center"
+  <ErrorCode
+    v-if="errorCode"
+    :message="errorMessage"
+    :code="errorCode"
   />
 </template>

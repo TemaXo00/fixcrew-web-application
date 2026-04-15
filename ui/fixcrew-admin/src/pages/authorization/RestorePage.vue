@@ -4,9 +4,10 @@ import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import AuthHeader from '@/components/authorization/AuthHeader.vue'
+import AuthHeader from '@/components/layout-auth/AuthHeader.vue'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
-import ErrorDisplay from '@/components/shared/ErrorDisplay.vue'
+import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
+import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import PasswordInput from '@/components/shared/inputs/PasswordInput.vue'
 import { useAuthStore } from '@/stores/auth.store'
 import { restoreSchema } from '@/utils/validation/auth.validation'
@@ -25,7 +26,7 @@ const [password, passwordAttrs] = defineField('password')
 
 const onSubmit = handleSubmit(async (values) => {
   if (!token.value) {
-    authStore.setError('Invalid restore link')
+    authStore.setError('Invalid restore link', 400)
     return
   }
   try {
@@ -49,16 +50,18 @@ const onSubmit = handleSubmit(async (values) => {
       place-text="Pass@wd123"
       :is-necessary="true"
     />
-    <span
+    <ErrorShort
       v-if="errors.password"
-      class="text-red-500 text-sm -mt-2 mb-2"
-    >{{
-      errors.password
-    }}</span>
+      :error="errors.password"
+    />
     <AccentButton
       name="Restore"
       :is-loading="authStore.isLoading"
     />
-    <ErrorDisplay :error="authStore.error" />
+    <ErrorCode
+      v-if="authStore.errorCode"
+      :message="authStore.errorMessage"
+      :code="authStore.errorCode"
+    />
   </form>
 </template>
