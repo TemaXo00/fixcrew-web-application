@@ -17,6 +17,10 @@ import { UpdateNameDto } from './dto/update-name.dto';
 import { UpdatePriceDto } from './dto/update-price.dto';
 import { UpdateSalePercentDto } from './dto/update-sale-percent.dto';
 import { ServicesService } from './services.service';
+import {
+  PaginatedResponseDto,
+  PaginationDto,
+} from '../common/dto/pagination.dto';
 
 @Controller('services')
 export class ServicesController {
@@ -24,12 +28,9 @@ export class ServicesController {
 
   @Get()
   async getServices(
-    @Query('category_id') category_id?: string,
-  ): Promise<Service[]> {
-    if (category_id) {
-      return await this.servicesService.getServicesByCategory(category_id);
-    }
-    return await this.servicesService.getServices();
+    @Query() pagination: PaginationDto,
+  ): Promise<PaginatedResponseDto<Service>> {
+    return this.servicesService.getServices(pagination);
   }
 
   @Get('active')
@@ -64,7 +65,10 @@ export class ServicesController {
   }
 
   @Patch(':id/description')
-  async updateDescription(@Param('id') id: string, @Body() dto: UpdateDescriptionDto): Promise<Service> {
+  async updateDescription(
+    @Param('id') id: string,
+    @Body() dto: UpdateDescriptionDto,
+  ): Promise<Service> {
     return await this.servicesService.updateDescription(id, dto);
   }
 

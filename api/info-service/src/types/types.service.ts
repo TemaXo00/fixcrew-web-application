@@ -13,7 +13,11 @@ export class TypesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getTypes(): Promise<Type[]> {
-    return this.prisma.type.findMany();
+    return this.prisma.type.findMany({
+      include: {
+        categories: true,
+      }
+    });
   }
 
   async getTypeById(id: string): Promise<Type> {

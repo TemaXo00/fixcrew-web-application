@@ -19,7 +19,12 @@ export class CategoriesService {
   ) {}
 
   async getCategories(): Promise<Category[]> {
-    return this.prisma.category.findMany();
+    return this.prisma.category.findMany({
+      include: {
+        services: true,
+        type: true
+      }
+    });
   }
 
   async getCategoriesByType(type_id: string): Promise<Category[]> {
@@ -29,6 +34,7 @@ export class CategoriesService {
       where: { type_id },
       include: {
         services: true,
+        type: true
       },
     });
   }
@@ -94,6 +100,10 @@ export class CategoriesService {
     return this.prisma.category.update({
       where: { id },
       data: { type_id: dto.type_id },
+      include: {
+        services: true,
+        type: true,
+      }
     });
   }
 

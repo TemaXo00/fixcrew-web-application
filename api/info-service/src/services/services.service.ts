@@ -6,6 +6,10 @@ import {
 import { Service } from '@prisma-gen/client';
 
 import { CategoriesService } from '../categories/categories.service';
+import {
+  PaginatedResponseDto,
+  PaginationDto,
+} from '../common/dto/pagination.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -21,21 +25,40 @@ export class ServicesService {
     private readonly categories: CategoriesService,
   ) {}
 
-  async getServices(): Promise<Service[]> {
-    return this.prisma.service.findMany();
-  }
+  async getServices(
+    pagination: PaginationDto,
+  ): Promise<PaginatedResponseDto<Service>> {
+    const [items, total] = await Promise.all([
+      this.prisma.service.findMany({
+        skip: pagination.skip,
+        take: pagination.take,
+        include: {
+          category: {
+            include: {
+              type: true,
+            },
+          },
+        },
+        orderBy: {
+          created_at: 'desc',
+        },
+      }),
+      this.prisma.service.count(),
+    ]);
 
-  async getServicesByCategory(category_id: string): Promise<Service[]> {
-    await this.categories.getById(category_id);
-
-    return this.prisma.service.findMany({
-      where: { category_id },
-    });
+    return new PaginatedResponseDto(items, total, pagination);
   }
 
   async getActiveServices(): Promise<Service[]> {
     return this.prisma.service.findMany({
       where: { is_active: true },
+      include: {
+        category: {
+          include: {
+            type: true,
+          },
+        },
+      },
     });
   }
 
@@ -79,6 +102,13 @@ export class ServicesService {
         is_active: dto.is_active ?? true,
         category_id: dto.category_id,
       },
+      include: {
+        category: {
+          include: {
+            type: true,
+          },
+        },
+      },
     });
   }
 
@@ -88,6 +118,13 @@ export class ServicesService {
     return this.prisma.service.update({
       where: { id },
       data: { price: dto.price },
+      include: {
+        category: {
+          include: {
+            type: true,
+          },
+        },
+      },
     });
   }
 
@@ -108,18 +145,33 @@ export class ServicesService {
     return this.prisma.service.update({
       where: { id },
       data: { name: dto.name },
+      include: {
+        category: {
+          include: {
+            type: true,
+          },
+        },
+      },
     });
   }
 
-  async updateDescription(id: string, dto: UpdateDescriptionDto): Promise<Service> {
+  async updateDescription(
+    id: string,
+    dto: UpdateDescriptionDto,
+  ): Promise<Service> {
     await this.getById(id);
 
     return this.prisma.service.update({
-      where: {
-        id
-      },
+      where: { id },
       data: { description: dto.description },
-    })
+      include: {
+        category: {
+          include: {
+            type: true,
+          },
+        },
+      },
+    });
   }
 
   async updateSalePercent(
@@ -131,6 +183,13 @@ export class ServicesService {
     return this.prisma.service.update({
       where: { id },
       data: { sale_percent: dto.sale_percent },
+      include: {
+        category: {
+          include: {
+            type: true,
+          },
+        },
+      },
     });
   }
 
@@ -141,6 +200,13 @@ export class ServicesService {
     return this.prisma.service.update({
       where: { id },
       data: { category_id: dto.category_id },
+      include: {
+        category: {
+          include: {
+            type: true,
+          },
+        },
+      },
     });
   }
 
@@ -150,6 +216,13 @@ export class ServicesService {
     return this.prisma.service.update({
       where: { id },
       data: { is_active: !service.is_active },
+      include: {
+        category: {
+          include: {
+            type: true,
+          },
+        },
+      },
     });
   }
 
@@ -158,6 +231,13 @@ export class ServicesService {
 
     return this.prisma.service.delete({
       where: { id },
+      include: {
+        category: {
+          include: {
+            type: true,
+          },
+        },
+      },
     });
   }
 }
