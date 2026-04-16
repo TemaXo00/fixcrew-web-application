@@ -8,6 +8,6 @@ import { TypesModule } from '../types/types.module';
   imports: [TypesModule],
   controllers: [CategoriesController],
   providers: [CategoriesService],
-  exports: [CategoriesModule],
+  exports: [CategoriesService],
 })
 export class CategoriesModule {}
