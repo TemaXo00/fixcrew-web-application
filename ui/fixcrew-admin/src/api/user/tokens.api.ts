@@ -1,5 +1,5 @@
-import type { PaginatedResponse } from '@/types/pagination.types.ts'
-import type { InviteSendType, Token, TokenRevokeType, TokensStats } from '@/types/token.types.ts'
+import type { PaginatedResponse } from '@/types/shared/pagination.types.ts'
+import type { InviteSendType, Token, TokenRevokeType, TokensStats } from '@/types/user/token.types.ts'
 import api from '@/api/configs.api.ts'
 
 export const tokenApi = {

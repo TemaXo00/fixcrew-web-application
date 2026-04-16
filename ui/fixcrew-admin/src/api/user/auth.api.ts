@@ -4,7 +4,7 @@ import type {
   AuthResponseType,
   AuthRestoreSendType,
   AuthRestoreType,
-} from '@/types/auth.types.ts'
+} from '@/types/user/auth.types.ts'
 import api from '../configs.api.ts'
 
 export const authApi = {

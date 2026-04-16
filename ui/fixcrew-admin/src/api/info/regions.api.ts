@@ -2,7 +2,7 @@ import type {
   RegionCreateType,
   RegionResponseType,
   RegionUpdateType,
-} from '@/types/regions.types.ts'
+} from '@/types/info/regions.types.ts'
 import api from '@/api/configs.api.ts'
 
 export const regionsApi = {

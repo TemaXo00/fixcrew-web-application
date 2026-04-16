@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AuthRestoreType } from '@/types/auth.types'
+import type { AuthRestoreType } from '@/types/user/auth.types.ts'
 import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
@@ -10,7 +10,7 @@ import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import PasswordInput from '@/components/shared/inputs/PasswordInput.vue'
 import { useAuthStore } from '@/stores/auth.store'
-import { restoreSchema } from '@/utils/validation/auth.validation'
+import { restoreSchema } from '@/utils/validation/user/auth.validation.ts'
 
 const route = useRoute()
 const router = useRouter()

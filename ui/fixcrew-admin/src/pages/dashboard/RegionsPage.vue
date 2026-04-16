@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RegionResponseType } from '@/types/regions.types.ts'
+import type { RegionResponseType } from '@/types/info/regions.types.ts'
 import { ref } from 'vue'
 import CreateRegions from '@/components/regions/CreateRegions.vue'
 import GetAllRegions from '@/components/regions/GetAllRegions.vue'

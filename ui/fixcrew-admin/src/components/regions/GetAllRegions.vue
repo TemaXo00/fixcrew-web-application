@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RegionResponseType } from '@/types/regions.types.ts'
+import type { RegionResponseType } from '@/types/info/regions.types.ts'
 import { onMounted, ref } from 'vue'
 import { extractApiError } from '@/api/error-handler.api.ts'
 import { regionsApi } from '@/api/info/regions.api.ts'

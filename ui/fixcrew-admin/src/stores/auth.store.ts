@@ -3,7 +3,7 @@ import type {
   AuthRegister,
   AuthRestoreSendType,
   AuthRestoreType,
-} from '@/types/auth.types'
+} from '@/types/user/auth.types.ts'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { authApi } from '@/api/user/auth.api.ts'

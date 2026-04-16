@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AuthRestoreSendType } from '@/types/auth.types'
+import type { AuthRestoreSendType } from '@/types/user/auth.types.ts'
 import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
@@ -9,7 +9,7 @@ import AccentButton from '@/components/shared/buttons/AccentButton.vue'
 import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import { useAuthStore } from '@/stores/auth.store'
-import { restoreSendSchema } from '@/utils/validation/auth.validation'
+import { restoreSendSchema } from '@/utils/validation/user/auth.validation.ts'
 
 const router = useRouter()
 const authStore = useAuthStore()

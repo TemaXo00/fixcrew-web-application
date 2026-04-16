@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RegionCreateType, RegionResponseType } from '@/types/regions.types.ts'
+import type { RegionCreateType, RegionResponseType } from '@/types/info/regions.types.ts'
 import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { ref } from 'vue'
@@ -10,7 +10,7 @@ import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import Title from '@/components/shared/Title.vue'
-import { createRegionSchema } from '@/utils/validation/region.validation.ts'
+import { createRegionSchema } from '@/utils/validation/info/region.validation.ts'
 
 const emit = defineEmits<{
   (e: 'created', region: RegionResponseType): void

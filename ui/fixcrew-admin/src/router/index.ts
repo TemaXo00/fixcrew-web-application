@@ -5,6 +5,7 @@ import LoginPage from '@/pages/authorization/LoginPage.vue'
 import RegisterPage from '@/pages/authorization/RegisterPage.vue'
 import RestorePage from '@/pages/authorization/RestorePage.vue'
 import RestoreSendPage from '@/pages/authorization/RestoreSendPage.vue'
+import CatalogPage from '@/pages/dashboard/CatalogPage.vue'
 import DashboardPage from '@/pages/dashboard/DashboardPage.vue'
 import RegionsPage from '@/pages/dashboard/RegionsPage.vue'
 import TokensPage from '@/pages/dashboard/TokensPage.vue'
@@ -80,6 +81,15 @@ const router = createRouter({
           component: RegionsPage,
           meta: {
             title: 'Regions',
+            showInSidebar: true,
+          },
+        },
+        {
+          path: 'catalog',
+          name: 'Catalog',
+          component: CatalogPage,
+          meta: {
+            title: 'Catalog',
             showInSidebar: true,
           },
         },

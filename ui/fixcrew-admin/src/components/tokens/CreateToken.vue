@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { InviteSendType } from '@/types/token.types.ts'
+import type { InviteSendType } from '@/types/user/token.types.ts'
 import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { ref } from 'vue'
@@ -10,7 +10,7 @@ import OutlineButton from '@/components/shared/buttons/OutlineButton.vue'
 import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
-import { tokenValidation } from '@/utils/validation/token.validation.ts'
+import { tokenValidation } from '@/utils/validation/user/token.validation.ts'
 
 const emits = defineEmits<{
   (e: 'close'): void

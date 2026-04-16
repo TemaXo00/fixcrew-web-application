@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AuthRegister } from '@/types/auth.types'
+import type { AuthRegister } from '@/types/user/auth.types.ts'
 import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
@@ -12,7 +12,7 @@ import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import PasswordInput from '@/components/shared/inputs/PasswordInput.vue'
 import { useAuthStore } from '@/stores/auth.store'
-import { registerSchema } from '@/utils/validation/auth.validation'
+import { registerSchema } from '@/utils/validation/user/auth.validation.ts'
 
 const route = useRoute()
 const router = useRouter()

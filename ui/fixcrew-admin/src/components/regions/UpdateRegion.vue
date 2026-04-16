@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RegionResponseType, RegionUpdateType } from '@/types/regions.types.ts'
+import type { RegionResponseType, RegionUpdateType } from '@/types/info/regions.types.ts'
 import { toTypedSchema } from '@vee-validate/yup'
 import { useForm } from 'vee-validate'
 import { ref } from 'vue'
@@ -10,7 +10,7 @@ import OutlineButton from '@/components/shared/buttons/OutlineButton.vue'
 import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
-import { updateRegionSchema } from '@/utils/validation/region.validation.ts'
+import { updateRegionSchema } from '@/utils/validation/info/region.validation.ts'
 
 interface Props {
   id: string

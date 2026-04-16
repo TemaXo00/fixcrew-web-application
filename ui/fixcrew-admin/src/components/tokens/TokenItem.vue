@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TokenRevokeType } from '@/types/token.types.ts'
+import type { TokenRevokeType } from '@/types/user/token.types.ts'
 import { ref } from 'vue'
 import { extractApiError } from '@/api/error-handler.api.ts'
 import { tokenApi } from '@/api/user/tokens.api.ts'
