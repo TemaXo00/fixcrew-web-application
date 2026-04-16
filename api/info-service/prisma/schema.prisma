@@ -23,6 +23,35 @@ model Region {
   @@map("regions")
 }
 
+model Type {
+  id String @id @default(uuid(4))
+
+  name String
+
+  categories Category[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("types")
+}
+
+model Category {
+  id String @id @default(uuid(4))
+
+  name        String
+
+  type_id String
+  type Type @relation(fields: [type_id], references: [id])
+
+  services Service[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("categories")
+}
+
 model Service {
   id String @id @default(uuid(4))
 
@@ -35,29 +64,12 @@ model Service {
 
   is_active Boolean @default(true)
 
-  category_id String?
-  category    Category? @relation(fields: [category_id], references: [id])
+  category_id String
+  category Category @relation(fields: [category_id], references: [id])
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
   @@index([name])
   @@map("services")
-}
-
-model Category {
-  id String @id @default(uuid(4))
-
-  name  String
-  slug  String
-  order Int    @default(0)
-
-  services Service[]
-
-  parent_id String?
-  parent    Category?  @relation("CategoriesAndSub", fields: [parent_id], references: [id], onDelete: SetNull)
-  sub       Category[] @relation("CategoriesAndSub")
-
-  @@unique([name, parent_id])
-  @@map("categories")
 }
