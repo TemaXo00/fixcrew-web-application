@@ -4,8 +4,11 @@ import { TerminusModule } from '@nestjs/terminus';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
 
+import { CategoriesModule } from './categories/categories.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RegionsModule } from './regions/regions.module';
+import { ServicesModule } from './services/services.module';
+import { TypesModule } from './types/types.module';
 
 @Module({
   imports: [
@@ -34,6 +37,9 @@ import { RegionsModule } from './regions/regions.module';
     TerminusModule,
     PrismaModule,
     RegionsModule,
+    TypesModule,
+    CategoriesModule,
+    ServicesModule,
   ],
   controllers: [],
   providers: [],

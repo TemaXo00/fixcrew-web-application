@@ -26,7 +26,7 @@ model Region {
 model Type {
   id String @id @default(uuid(4))
 
-  name String
+  name String @unique
 
   categories Category[]
 
@@ -39,10 +39,10 @@ model Type {
 model Category {
   id String @id @default(uuid(4))
 
-  name        String
+  name String
 
   type_id String
-  type Type @relation(fields: [type_id], references: [id])
+  type    Type   @relation(fields: [type_id], references: [id], onDelete: Cascade)
 
   services Service[]
 
@@ -65,7 +65,7 @@ model Service {
   is_active Boolean @default(true)
 
   category_id String
-  category Category @relation(fields: [category_id], references: [id])
+  category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
