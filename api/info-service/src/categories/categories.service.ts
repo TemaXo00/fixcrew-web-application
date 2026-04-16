@@ -63,6 +63,10 @@ export class CategoriesService {
         name: dto.name,
         type_id: dto.type_id,
       },
+      include: {
+        services: true,
+        type: true
+      }
     });
 
     if (existingName) {
@@ -132,6 +136,10 @@ export class CategoriesService {
       where: {
         id,
       },
+      include: {
+        services: true,
+        type: true,
+      }
     });
   }
 
