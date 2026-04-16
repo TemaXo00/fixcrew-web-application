@@ -43,72 +43,55 @@ const handleServiceDeleted = (deletedId: string) => {
   closeAll()
 }
 
-const formatPrice = (price: number): string =>
-  new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(price / 100)
+const formatPrice = (price: number): string => `$${price.toFixed(2)}`
 
-const calculateDiscountedPrice = (price: number, salePercent: number): number =>
-  price - (price * salePercent) / 100
+const calculateDiscountedPrice = (price: number, salePercent: number): number => price - (price * salePercent) / 100
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 p-4 border border-accent rounded-lg">
-    <div class="flex flex-col gap-3 large:grid large:grid-cols-3 large:gap-4">
-      <div class="flex flex-col">
-        <p class="font-bold text-accent break-all text-lg">
-          {{ props.name }}
-        </p>
-        <p class="text-sm text-dimmed mt-1">
-          Category:
-          <span class="bg-muted-accent text-container px-2 py-0.5 rounded-md text-xs font-semibold">
-            {{ props.category?.name || 'N/A' }}
-          </span>
-        </p>
-      </div>
-      <div class="flex flex-col">
-        <div class="flex items-center gap-2 flex-wrap">
-          <span class="font-medium text-dimmed">Price:</span>
-          <span
-            v-if="props.sale_percent > 0"
-            class="line-through text-dimmed"
-          >
-            {{ formatPrice(props.price) }}
-          </span>
-          <span class="font-bold text-accent text-lg">
-            {{ formatPrice(calculateDiscountedPrice(props.price, props.sale_percent)) }}
-          </span>
-          <span
-            v-if="props.sale_percent > 0"
-            class="bg-muted-accent text-container px-2 py-0.5 rounded-md text-xs font-semibold"
-          >
-            -{{ props.sale_percent }}%
-          </span>
-        </div>
-        <p
-          v-if="props.avg_time"
-          class="text-sm text-dimmed mt-1"
-        >
-          Avg time:
-          <span class="bg-muted-accent text-container px-2 py-0.5 rounded-md text-xs font-semibold">
-            {{ props.avg_time }} min
-          </span>
-        </p>
-      </div>
-      <div class="flex items-center">
+  <div class="flex flex-col gap-3 p-4 border border-accent rounded-lg">
+    <div class="flex flex-col gap-1">
+      <p class="font-bold text-accent text-lg break-all">
+        {{ props.name }}
+      </p>
+      <p class="text-dimmed text-sm">
+        {{ props.description }}
+      </p>
+      <p class="text-sm">
+        Status:
         <span
-          :class="props.is_active ? 'bg-muted-accent' : 'bg-dimmed'"
-          class="px-3 py-1 rounded-full text-white text-xs font-semibold w-fit"
+          :class="props.is_active ? 'text-muted-accent' : 'text-dimmed'"
+          class="font-semibold"
         >
           {{ props.is_active ? 'Active' : 'Inactive' }}
         </span>
-      </div>
+      </p>
     </div>
 
-    <p class="text-dimmed text-sm line-clamp-2">
-      {{ props.description }}
-    </p>
+    <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-dimmed">
+      <p>Category: {{ props.category?.name || 'N/A' }}</p>
+      <p v-if="props.avg_time">
+        Avg time: {{ props.avg_time }} min
+      </p>
+      <p class="flex items-center gap-2">
+        Price:
+        <span
+          v-if="props.sale_percent > 0"
+          class="line-through"
+        >
+          {{ formatPrice(props.price) }}
+        </span>
+        <span class="font-bold text-accent">
+          {{ formatPrice(calculateDiscountedPrice(props.price, props.sale_percent)) }}
+        </span>
+        <span
+          v-if="props.sale_percent > 0"
+          class="text-muted-accent"
+        >
+          -{{ props.sale_percent }}%
+        </span>
+      </p>
+    </div>
 
     <div class="flex flex-wrap gap-3 mt-2">
       <OutlineButton

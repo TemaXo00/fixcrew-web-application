@@ -42,15 +42,12 @@ const handleCategoryDeleted = (deletedId: string) => {
 
 <template>
   <div class="flex flex-col gap-4 p-4 border border-accent rounded-lg">
-    <div class="flex flex-col gap-2 small:flex-row small:justify-between small:items-center">
+    <div class="flex flex-col gap-2 small:flex-row items-center">
       <p class="font-bold text-accent break-all text-lg">
-        {{ props.name }}
+        {{ props.name }} -
       </p>
-      <p class="font-medium text-dimmed text-sm">
-        Type:
-        <span class="bg-muted-accent text-container px-2 py-0.5 rounded-md text-xs font-semibold">
-          {{ props.type?.name || 'N/A' }}
-        </span>
+      <p class="text-muted-accent text-lg font-semibold">
+        Type: {{ props.type?.name || 'N/A' }}
       </p>
     </div>
 
