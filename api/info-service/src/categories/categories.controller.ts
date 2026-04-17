@@ -28,11 +28,6 @@ export class CategoriesController {
     return this.categoriesService.getCategories();
   }
 
-  @Get(':id')
-  async getCategoryById(@Param('id') id: string): Promise<Category> {
-    return this.categoriesService.getById(id);
-  }
-
   @Post()
   async createCategory(@Body() dto: CreateCategoryDto): Promise<Category> {
     return this.categoriesService.createCategory(dto);
