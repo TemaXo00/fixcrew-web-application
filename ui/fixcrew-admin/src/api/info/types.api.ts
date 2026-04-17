@@ -7,11 +7,6 @@ export const typesApi = {
     return data
   },
 
-  async getTypeById(id: string): Promise<TypeResponseType> {
-    const { data } = await api.get<TypeResponseType>(`/info/types/${id}`)
-    return data
-  },
-
   async createType(type: TypeCreateType): Promise<TypeResponseType> {
     const { data } = await api.post<TypeResponseType>('/info/types', type)
     return data

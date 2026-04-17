@@ -18,16 +18,6 @@ export const servicesApi = {
     return data
   },
 
-  async getActiveServices(): Promise<ServiceResponseType[]> {
-    const { data } = await api.get<ServiceResponseType[]>('/info/services/active')
-    return data
-  },
-
-  async getServiceById(id: string): Promise<ServiceResponseType> {
-    const { data } = await api.get<ServiceResponseType>(`/info/services/${id}`)
-    return data
-  },
-
   async createService(service: ServiceCreateType): Promise<ServiceResponseType> {
     const { data } = await api.post<ServiceResponseType>('/info/services', service)
     return data
