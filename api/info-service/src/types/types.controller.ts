@@ -21,11 +21,6 @@ export class TypesController {
     return await this.typesService.getTypes();
   }
 
-  @Get(':id')
-  async getById(@Param('id') id: string): Promise<Type> {
-    return await this.typesService.getTypeById(id);
-  }
-
   @Post()
   async createType(@Body() dto: TypeDto): Promise<Type> {
     return await this.typesService.createType(dto);

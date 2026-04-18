@@ -13,11 +13,6 @@ export const categoriesApi = {
     return data
   },
 
-  async getCategoryById(id: string): Promise<CategoryResponseType> {
-    const { data } = await api.get<CategoryResponseType>(`/info/categories/${id}`)
-    return data
-  },
-
   async createCategory(category: CategoryCreateType): Promise<CategoryResponseType> {
     const { data } = await api.post<CategoryResponseType>('/info/categories', category)
     return data

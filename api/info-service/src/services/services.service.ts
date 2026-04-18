@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Service } from '@prisma-gen/client';
+import slugify from 'slugify';
 
 import { CategoriesService } from '../categories/categories.service';
 import {
@@ -81,6 +82,18 @@ export class ServicesService {
     return existingService;
   }
 
+  async getBySlug(slug: string): Promise<Service> {
+    const existingService = await this.prisma.service.findUnique({
+      where: { slug },
+    })
+
+    if (!existingService) {
+      throw new NotFoundException('Service not found');
+    }
+
+    return existingService;
+  }
+
   async createService(dto: CreateServiceDto): Promise<Service> {
     await this.categories.getById(dto.category_id);
 
@@ -95,6 +108,7 @@ export class ServicesService {
     return this.prisma.service.create({
       data: {
         name: dto.name,
+        slug: slugify(dto.name, {lower: true}),
         description: dto.description,
         price: dto.price,
         sale_percent: dto.sale_percent ?? 0,
@@ -144,7 +158,7 @@ export class ServicesService {
 
     return this.prisma.service.update({
       where: { id },
-      data: { name: dto.name },
+      data: { name: dto.name, slug: slugify(dto.name, {lower: true}), },
       include: {
         category: {
           include: {

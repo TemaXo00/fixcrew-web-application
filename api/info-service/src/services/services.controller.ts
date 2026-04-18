@@ -38,9 +38,9 @@ export class ServicesController {
     return await this.servicesService.getActiveServices();
   }
 
-  @Get(':id')
-  async getServiceById(@Param('id') id: string): Promise<Service> {
-    return await this.servicesService.getById(id);
+  @Get(':slug')
+  async getServiceBySlug(@Param('slug') slug: string): Promise<Service> {
+    return await this.servicesService.getBySlug(slug)
   }
 
   @Post()
