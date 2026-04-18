@@ -16,6 +16,7 @@ import { UpdateMasterDto } from './dto/update-master.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { UpdatePriceDto } from './dto/update-price.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
+import { CalendarInterface } from './interfaces/calendar.interface';
 import { OrdersService } from './orders.service';
 import {
   PaginatedResponseDto,
@@ -31,6 +32,14 @@ export class OrdersController {
     @Query() pagination: PaginationDto,
   ): Promise<PaginatedResponseDto<Order>> {
     return this.ordersService.getAllOrders(pagination);
+  }
+
+  @Get('master/:master_id/pending')
+  async getPendingOrdersByMaster(
+    @Param('master_id') master_id: string,
+    @Query() pagination: PaginationDto,
+  ): Promise<PaginatedResponseDto<CalendarInterface>> {
+    return this.ordersService.getPendingOrdersByMaster(master_id, pagination);
   }
 
   @Get(':id')

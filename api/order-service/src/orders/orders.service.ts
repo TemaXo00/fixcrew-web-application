@@ -17,6 +17,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateDateDto } from './dto/update-date.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { CalendarInterface } from './interfaces/calendar.interface';
 
 import type { Order, KnownMasters } from '@prisma-gen/client';
 import type { Queue } from 'bull';
@@ -104,6 +105,62 @@ export class OrdersService {
     return order;
   }
 
+  async getPendingOrdersByMaster(
+    master_id: string,
+    pagination: PaginationDto,
+  ): Promise<PaginatedResponseDto<CalendarInterface>> {
+    const { search, dateFrom, dateTo, sortBy, sortOrder } = pagination;
+
+    const where: {
+      master_id: string;
+      status: 'PENDING';
+      OR?: { name?: object; phone?: object; email?: object }[];
+      date?: { gte?: string; lte?: string };
+    } = {
+      master_id,
+      status: 'PENDING',
+    };
+
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { phone: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    if (dateFrom || dateTo) {
+      where.date = {};
+      if (dateFrom) {
+        where.date.gte = dateFrom;
+      }
+      if (dateTo) {
+        where.date.lte = dateTo;
+      }
+    }
+
+    const orderBy: Record<string, 'asc' | 'desc'> = {};
+    if (sortBy && sortOrder) {
+      orderBy[sortBy] = sortOrder;
+    } else {
+      orderBy.date = 'asc';
+    }
+
+    const [items, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where,
+        skip: pagination.skip,
+        take: pagination.take,
+        orderBy,
+      }),
+      this.prisma.order.count({ where }),
+    ]);
+
+    const calendarItems = items.map((order) => this.parseDataToCalendar(order));
+
+    return new PaginatedResponseDto(calendarItems, total, pagination);
+  }
+
   async createOrder(dto: CreateOrderDto): Promise<Order> {
     if (dto.photo_ids.length > 5) {
       throw new BadRequestException('Max 5 photos allowed');
@@ -116,6 +173,7 @@ export class OrdersService {
         email: dto.email,
         address: dto.address,
         message: dto.message,
+        region_id: dto.region_id,
         photo_ids: dto.photo_ids,
         status: Statuses.CREATED,
       },
@@ -133,13 +191,6 @@ export class OrdersService {
       throw new BadRequestException('endMin must be greater than startMin');
     }
 
-    const region = await this.prisma.region.findUnique({
-      where: { id: dto.region_id },
-    });
-    if (!region) {
-      throw new NotFoundException('Region not found');
-    }
-
     const master = await this.prisma.knownMasters.findUnique({
       where: { master_id: dto.master_id },
       include: { regions: true, schedules: true },
@@ -153,7 +204,7 @@ export class OrdersService {
       dto.date,
       dto.startMin,
       dto.endMin,
-      dto.region_id,
+      order.region_id,
     );
 
     const updatedOrder = await this.prisma.order.update({
@@ -163,7 +214,6 @@ export class OrdersService {
         startMin: dto.startMin,
         endMin: dto.endMin,
         duration,
-        region_id: dto.region_id,
         master_id: master.id,
         status: Statuses.PENDING,
       },
@@ -376,7 +426,7 @@ export class OrdersService {
 
   private async sendMasterReplacedNotification(
     oldMaster: KnownMasters,
-    order: Order
+    order: Order,
   ): Promise<void> {
     this.mailClient.emit('order.master', {
       id: order.id,
@@ -463,6 +513,24 @@ export class OrdersService {
   private minutesToTime(minutes: number): string {
     const h = Math.floor(minutes / 60);
     const m = minutes % 60;
-    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:00`;
+  }
+
+  private parseDataToCalendar(order: Order): CalendarInterface {
+    if (order.startMin === null || order.endMin === null) {
+      throw new BadRequestException('Start or end min are not assigned');
+    }
+
+    const start = this.minutesToTime(order.startMin);
+    const end = this.minutesToTime(order.endMin);
+
+    return {
+      id: order.id,
+      client_name: order.name,
+      client_email: order.email ? order.email : undefined,
+      client_phone: order.phone,
+      start: `${order.date}T${start}`,
+      end: `${order.date}T${end}`,
+    };
   }
 }

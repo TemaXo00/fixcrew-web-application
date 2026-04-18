@@ -27,9 +27,5 @@ export class UpdateOrderDto {
 
   @IsString()
   @IsNotEmpty()
-  region_id: string;
-
-  @IsString()
-  @IsNotEmpty()
   master_id: string;
 }

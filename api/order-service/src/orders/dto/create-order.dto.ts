@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUUID,
 } from 'class-validator';
 
 export class CreateOrderDto {
@@ -27,6 +28,11 @@ export class CreateOrderDto {
   @IsString()
   @IsOptional()
   message?: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsUUID(4)
+  region_id: string;
 
   @IsArray()
   @IsString({ each: true })
