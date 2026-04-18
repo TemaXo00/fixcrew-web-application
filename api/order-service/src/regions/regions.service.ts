@@ -10,7 +10,7 @@ export class RegionsService {
   async createRegion(dto: CreateRegionDto): Promise<void> {
     const existing = await this.prisma.region.findUnique({
       where: {
-        region_id: dto.region_id,
+        id: dto.region_id,
         name: dto.name,
       }
     })
@@ -21,7 +21,7 @@ export class RegionsService {
 
     await this.prisma.region.create({
       data: {
-        region_id: dto.region_id,
+        id: dto.region_id,
         name: dto.name,
       }
     })
@@ -30,7 +30,7 @@ export class RegionsService {
   async removeRegion(region_id: string): Promise<void> {
     const existing = await this.prisma.region.findUnique({
       where: {
-        region_id: region_id,
+        id: region_id,
       }
     })
 
@@ -40,7 +40,7 @@ export class RegionsService {
 
     await this.prisma.region.delete({
       where: {
-        region_id: region_id,
+        id: region_id,
       }
     })
   }

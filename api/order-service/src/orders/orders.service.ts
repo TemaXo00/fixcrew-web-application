@@ -166,6 +166,15 @@ export class OrdersService {
       throw new BadRequestException('Max 5 photos allowed');
     }
 
+    if (dto.region_id) {
+      const region = await this.prisma.region.findUnique({
+        where: { id: dto.region_id },
+      });
+      if (!region) {
+        throw new BadRequestException('Region not found');
+      }
+    }
+
     return this.prisma.order.create({
       data: {
         name: dto.name,
@@ -192,7 +201,7 @@ export class OrdersService {
     }
 
     const master = await this.prisma.knownMasters.findUnique({
-      where: { master_id: dto.master_id },
+      where: { id: dto.master_id },
       include: { regions: true, schedules: true },
     });
     if (!master) {
@@ -307,7 +316,7 @@ export class OrdersService {
 
     const oldMasterId = order.master_id;
     const newMaster = await this.prisma.knownMasters.findUnique({
-      where: { master_id: newMasterId },
+      where: { id: newMasterId },
       include: { regions: true, schedules: true },
     });
     if (!newMaster) {

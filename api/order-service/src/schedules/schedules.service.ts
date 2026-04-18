@@ -18,7 +18,7 @@ export class SchedulesService {
     dto: SetScheduleDto,
   ): Promise<MastersSchedule[]> {
     const master = await this.prisma.knownMasters.findUnique({
-      where: { master_id },
+      where: { id: master_id },
     });
     if (!master) {
       throw new NotFoundException('Master not found');
@@ -49,7 +49,7 @@ export class SchedulesService {
     dto: SetScheduleDto,
   ): Promise<MastersSchedule[]> {
     const master = await this.prisma.knownMasters.findUnique({
-      where: { master_id },
+      where: { id: master_id },
     });
     if (!master) {
       throw new NotFoundException('Master not found');
@@ -87,7 +87,7 @@ export class SchedulesService {
 
   async removeSchedule(master_id: string, dayOfWeek: number): Promise<void> {
     const master = await this.prisma.knownMasters.findUnique({
-      where: { master_id },
+      where: { id: master_id },
     });
     if (!master) {
       throw new NotFoundException('Master not found');
@@ -103,7 +103,7 @@ export class SchedulesService {
 
   async getSchedule(master_id: string): Promise<MastersSchedule[]> {
     const master = await this.prisma.knownMasters.findUnique({
-      where: { master_id },
+      where: { id: master_id },
     });
     if (!master) {
       throw new NotFoundException('Master not found');

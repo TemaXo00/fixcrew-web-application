@@ -36,7 +36,7 @@ export class MastersService {
   async getMasterById(master_id: string): Promise<KnownMasters> {
     const master = await this.prisma.knownMasters.findUnique({
       where: {
-        master_id: master_id,
+        id: master_id,
       },
       include: {
         schedules: true,
@@ -71,7 +71,7 @@ export class MastersService {
     await this.prisma.knownMasters.create({
       data: {
         name: dto.name,
-        master_id: dto.master_id,
+        id: dto.master_id,
         email: dto.email,
         phone_number: dto.phone_number,
       },
@@ -83,7 +83,7 @@ export class MastersService {
 
     await this.prisma.knownMasters.delete({
       where: {
-        master_id: master_id,
+        id: master_id,
       },
     });
   }
@@ -96,7 +96,7 @@ export class MastersService {
 
     const regions = await this.prisma.region.findMany({
       where: {
-        region_id: {
+        id: {
           in: region_ids,
         },
       },
@@ -107,7 +107,7 @@ export class MastersService {
     }
 
     return this.prisma.knownMasters.update({
-      where: { master_id: master_id },
+      where: { id: master_id },
       data: {
         regions: {
           set: regions.map((region) => ({ id: region.id })),
@@ -127,7 +127,7 @@ export class MastersService {
 
     const regions = await this.prisma.region.findMany({
       where: {
-        region_id: {
+        id: {
           in: region_ids,
         },
       },
@@ -138,7 +138,7 @@ export class MastersService {
     }
 
     return this.prisma.knownMasters.update({
-      where: { master_id: master_id },
+      where: { id: master_id },
       data: {
         regions: {
           connect: regions.map((region) => ({ id: region.id })),

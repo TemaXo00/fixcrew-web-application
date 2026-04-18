@@ -25,7 +25,7 @@ model Order {
   duration Int?
 
   region_id String
-  region    Region? @relation(fields: [region_id], references: [id], onDelete: Cascade)
+  region    Region @relation(fields: [region_id], references: [id], onDelete: Cascade)
 
   master_id String?
   master    KnownMasters? @relation(fields: [master_id], references: [id], onDelete: Cascade)
@@ -48,9 +48,7 @@ model Order {
 }
 
 model KnownMasters {
-  id String @id @default(uuid(4))
-
-  master_id String @unique
+  id String @id
 
   name         String
   email        String @unique
@@ -87,9 +85,8 @@ model MastersSchedule {
 }
 
 model Region {
-  id        String @id @default(uuid(4))
-  region_id String @unique
-  name      String @unique
+  id   String @id
+  name String @unique
 
   masters KnownMasters[]
   orders  Order[]
