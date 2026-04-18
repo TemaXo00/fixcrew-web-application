@@ -42,6 +42,14 @@ export class OrdersController {
     return this.ordersService.getPendingOrdersByMaster(master_id, pagination);
   }
 
+  @Get('master/:master_id/history')
+  async getMasterOrdersHistory(
+    @Param('master_id') master_id: string,
+    @Query() pagination: PaginationDto,
+  ): Promise<PaginatedResponseDto<Order>> {
+    return this.ordersService.getOrdersByMaster(master_id, pagination);
+  }
+
   @Get(':id')
   async getOrderById(@Param('id') id: string): Promise<Order> {
     return this.ordersService.getOrderById(id);

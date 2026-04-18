@@ -105,6 +105,59 @@ export class OrdersService {
     return order;
   }
 
+  async getOrdersByMaster(
+    masterId: string,
+    pagination: PaginationDto,
+  ): Promise<PaginatedResponseDto<Order>> {
+    const { search, dateFrom, dateTo, sortBy, sortOrder } = pagination;
+
+    const where: {
+      master_id: string;
+      OR?: { name?: object; phone?: object; email?: object }[];
+      date?: { gte?: string; lte?: string };
+    } = {
+      master_id: masterId,
+    };
+
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { phone: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    if (dateFrom || dateTo) {
+      where.date = {};
+      if (dateFrom) {
+        where.date.gte = dateFrom;
+      }
+      if (dateTo) {
+        where.date.lte = dateTo;
+      }
+    }
+
+    const orderBy: Record<string, 'asc' | 'desc'> = {};
+    if (sortBy && sortOrder) {
+      orderBy[sortBy] = sortOrder;
+    } else {
+      orderBy.date = 'asc';
+    }
+
+    const [items, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where,
+        skip: pagination.skip,
+        take: pagination.take,
+        orderBy,
+        include: { region: true },
+      }),
+      this.prisma.order.count({ where }),
+    ]);
+
+    return new PaginatedResponseDto(items, total, pagination);
+  }
+
   async getPendingOrdersByMaster(
     master_id: string,
     pagination: PaginationDto,
@@ -200,6 +253,21 @@ export class OrdersService {
       throw new BadRequestException('endMin must be greater than startMin');
     }
 
+    const regionId = dto.region_id || order.region_id;
+    if (!regionId) {
+      throw new BadRequestException('Region not assigned');
+    }
+
+    if (dto.region_id) {
+      const region = await this.prisma.region.findUnique({
+        where: { id: dto.region_id },
+      });
+
+      if (!region) {
+        throw new BadRequestException('Region not found');
+      }
+    }
+
     const master = await this.prisma.knownMasters.findUnique({
       where: { id: dto.master_id },
       include: { regions: true, schedules: true },
@@ -213,7 +281,7 @@ export class OrdersService {
       dto.date,
       dto.startMin,
       dto.endMin,
-      order.region_id,
+      regionId,
     );
 
     const updatedOrder = await this.prisma.order.update({
@@ -225,6 +293,7 @@ export class OrdersService {
         duration,
         master_id: master.id,
         status: Statuses.PENDING,
+        ...(dto.region_id && { region_id: dto.region_id }),
       },
       include: { master: true, region: true },
     });
@@ -416,8 +485,8 @@ export class OrdersService {
 
     this.mailClient.emit('order.pending', {
       id: order.id,
-      name: order.master.name,
-      email: order.email,
+      name: order.name,
+      email: order.master.email,
       date: order.date,
       time: `${startTime} - ${endTime}`,
     });

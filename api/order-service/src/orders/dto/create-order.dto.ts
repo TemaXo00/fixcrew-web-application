@@ -29,10 +29,10 @@ export class CreateOrderDto {
   @IsOptional()
   message?: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsOptional()
   @IsUUID(4)
-  region_id: string;
+  region_id?: string;
 
   @IsArray()
   @IsString({ each: true })

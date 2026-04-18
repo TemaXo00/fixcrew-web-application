@@ -5,6 +5,8 @@ import {
   Matches,
   Min,
   Max,
+  IsOptional,
+  IsUUID,
 } from 'class-validator';
 
 export class UpdateOrderDto {
@@ -24,6 +26,11 @@ export class UpdateOrderDto {
   @Min(0)
   @Max(1440)
   endMin: number;
+
+  @IsOptional()
+  @IsString()
+  @IsUUID(4)
+  region_id?: string;
 
   @IsString()
   @IsNotEmpty()
