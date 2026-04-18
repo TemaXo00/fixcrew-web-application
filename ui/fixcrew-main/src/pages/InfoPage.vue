@@ -9,6 +9,8 @@ import type { ServiceInterface } from '@/interfaces/service.interface.ts'
 import { servicesApi } from '@/api/routes/services.api.ts'
 import { extractApiError } from '@/api/error-handler.api.ts'
 import SpinnerLoader from '@/components/universalComp/SpinnerLoader.vue'
+import ErrorCode from '@/components/universalComp/ErrorCode.vue'
+
 const route = useRoute()
 const router = useRouter()
 const slug = ref<string | string[] | undefined>(route.params.slug)
@@ -43,8 +45,9 @@ onMounted(async() => {
 <template>
   <TopHeader />
   <BottomHeader />
-  <div v-if="isLoading" class="flex flex-col items-center justify-center h-screen w-screen">
-    <SpinnerLoader class="w-25 h-25"/>
+  <div v-if="isLoading || errorCode" class="flex flex-col items-center justify-center h-screen w-screen">
+    <SpinnerLoader class="w-25 h-25" v-if="isLoading"/>
+    <ErrorCode v-if="errorCode" :code="errorCode" message="Something Went Wrong" />
   </div>
   <InfoComponent :info="service" />
   <FooterComponent />
