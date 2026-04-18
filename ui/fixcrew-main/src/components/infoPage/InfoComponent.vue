@@ -1,28 +1,19 @@
 <script setup lang="ts">
-import { refrigeratorMock } from '@/mocks/info.mock.ts'
-import type { InfoInterface } from '@/interfaces/info.interface.ts'
+import { VueMarked } from '@hackingzhang/vue-marked'
+import type { ServiceInterface } from '@/interfaces/service.interface.ts'
+import { computed } from 'vue'
 
 const props = defineProps<{
-  info: InfoInterface
+  info: ServiceInterface | null
 }>()
+
+const markdown = computed(() => props.info?.description || '')
 </script>
 
 <template>
-  {{ props.info.photoUrl }}
+  {{ props.info?.name }}
 
-  {{ props.info.title }}
-  {{ props.info.description }}
-
-  <table>
-    <tr>
-      <td>Name</td>
-      <td>Price</td>
-    </tr>
-    <tr v-for="price in props.info.prices" :key="price.id">
-      <td>{{ price.name }}</td>
-      <td>{{ price.price }}</td>
-    </tr>
-  </table>
+  <vue-marked color-scheme="light" :markdown="markdown" />
 </template>
 
 <style scoped></style>

@@ -1,26 +1,52 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
-import { ref } from 'vue'
-import { refrigeratorMock } from '@/mocks/info.mock.ts'
+import { onMounted, ref } from 'vue'
 import TopHeader from '@/components/TopHeader.vue'
 import BottomHeader from '@/components/BottomHeader.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import InfoComponent from '@/components/infoPage/InfoComponent.vue'
+import type { ServiceInterface } from '@/interfaces/service.interface.ts'
+import { servicesApi } from '@/api/routes/services.api.ts'
+import { extractApiError } from '@/api/error-handler.api.ts'
+import SpinnerLoader from '@/components/universalComp/SpinnerLoader.vue'
 const route = useRoute()
 const router = useRouter()
-const slug = ref(route.params.slug)
+const slug = ref<string | string[] | undefined>(route.params.slug)
+const errorMessage = ref<string>('')
+const errorCode = ref<number | null>(null)
 
-if (slug.value !== 'info') {
-  router.replace({name: 'NotFound'})
-}
+const isLoading = ref<boolean>(false)
 
+const service = ref<ServiceInterface | null>(null)
 
+onMounted(async() => {
+  try {
+    isLoading.value = true
+    errorMessage.value = ''
+    errorCode.value = null
+    service.value = await servicesApi.getServiceBySlug(slug.value)
+  }
+  catch(error) {
+    const apiError = extractApiError(error)
+    errorMessage.value = apiError.message
+    errorCode.value = apiError.statusCode
+    if (errorCode.value === 404) {
+      await router.push({ name: 'NotFound' })
+    }
+  }
+  finally {
+    isLoading.value = false
+  }
+})
 </script>
 
 <template>
   <TopHeader />
   <BottomHeader />
-  <InfoComponent :info="refrigeratorMock" />
+  <div v-if="isLoading" class="flex flex-col items-center justify-center h-screen w-screen">
+    <SpinnerLoader class="w-25 h-25"/>
+  </div>
+  <InfoComponent :info="service" />
   <FooterComponent />
 </template>
 

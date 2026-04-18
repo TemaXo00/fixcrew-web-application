@@ -91,6 +91,10 @@ export class ServicesService {
       throw new NotFoundException('Service not found');
     }
 
+    if (!existingService.is_active) {
+      throw new NotFoundException('Service not active');
+    }
+
     return existingService;
   }
 

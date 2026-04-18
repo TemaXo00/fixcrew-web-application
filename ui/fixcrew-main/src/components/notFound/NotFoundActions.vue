@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const goHome = () => router.push('/')
-const goBack = () => router.go(-1)
+const goBack = () => router.back()
 </script>
 
 <template>

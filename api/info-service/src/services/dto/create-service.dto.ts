@@ -2,6 +2,7 @@ import {
   IsBoolean,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   IsUUID,
@@ -23,7 +24,7 @@ export class CreateServiceDto {
   description: string;
 
   @IsNotEmpty()
-  @IsInt()
+  @IsNumber()
   @Min(0)
   price: number;
 
