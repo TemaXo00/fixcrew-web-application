@@ -27,6 +27,7 @@ export const createServiceSchema = yup.object({
     .min(0, 'Average time cannot be negative')
     .optional(),
   category_id: yup.string().uuid('Invalid category ID').required('Category is required'),
+  cover_id: yup.string().uuid('Invalid cover ID').nullable().optional(),
 })
 
 export const updateServicePriceSchema = yup.object({

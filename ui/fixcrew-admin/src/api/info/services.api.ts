@@ -2,6 +2,7 @@ import type {
   ServiceCreateType,
   ServiceResponseType,
   ServiceUpdateCategoryType,
+  ServiceUpdateCoverType,
   ServiceUpdateDescriptionType,
   ServiceUpdateNameType,
   ServiceUpdatePriceType,
@@ -51,6 +52,11 @@ export const servicesApi = {
 
   async updateCategory(id: string, dto: ServiceUpdateCategoryType): Promise<ServiceResponseType> {
     const { data } = await api.patch<ServiceResponseType>(`/info/services/${id}/category`, dto)
+    return data
+  },
+
+  async updateCover(id: string, dto: ServiceUpdateCoverType): Promise<ServiceResponseType> {
+    const { data } = await api.patch<ServiceResponseType>(`/info/services/${id}/cover`, dto)
     return data
   },
 

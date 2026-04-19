@@ -10,10 +10,12 @@ import { servicesApi } from '@/api/info/services.api.ts'
 import AccentButton from '@/components/shared/buttons/AccentButton.vue'
 import ErrorCode from '@/components/shared/errors/ErrorCode.vue'
 import ErrorShort from '@/components/shared/errors/ErrorShort.vue'
+import FileInput from '@/components/shared/inputs/FileInput.vue'
 import InputComponent from '@/components/shared/inputs/InputComponent.vue'
 import SelectComponent from '@/components/shared/inputs/SelectComponent.vue'
 import TextareaComponent from '@/components/shared/inputs/TextareaComponent.vue'
 import Title from '@/components/shared/Title.vue'
+import { FileVisibilityEnum } from '@/types/file/files.types'
 import { createServiceSchema } from '@/utils/validation/info/service.validation.ts'
 
 const emit = defineEmits<{
@@ -25,7 +27,7 @@ const errorMessage = ref<string>('')
 const errorCode = ref<number | null>(null)
 const categories = ref<CategoryResponseType[]>([])
 
-const { defineField, handleSubmit, errors, resetForm } = useForm<ServiceCreateType>({
+const { defineField, handleSubmit, errors, resetForm, setFieldValue } = useForm<ServiceCreateType>({
   validationSchema: toTypedSchema(createServiceSchema),
 })
 
@@ -35,9 +37,14 @@ const [price, priceAttrs] = defineField('price')
 const [sale_percent, saleAttrs] = defineField('sale_percent')
 const [avg_time, avgTimeAttrs] = defineField('avg_time')
 const [category_id, categoryAttrs] = defineField('category_id')
+const [cover_id, coverAttrs] = defineField('cover_id')
 
 const fetchCategories = async () => {
   categories.value = await categoriesApi.getCategories()
+}
+
+const handleCoverUpload = (id: string) => {
+  setFieldValue('cover_id', id)
 }
 
 const createService = handleSubmit(async (values) => {
@@ -47,6 +54,7 @@ const createService = handleSubmit(async (values) => {
     errorCode.value = null
     const newService = await servicesApi.createService(values)
     resetForm()
+    setFieldValue('cover_id', null)
     emit('created', newService)
   }
   catch (err) {
@@ -99,6 +107,20 @@ onMounted(async () => {
           :error="errors.description"
         />
       </div>
+
+      <FileInput
+        v-model="cover_id"
+        v-bind="coverAttrs"
+        name="Cover Image"
+        bucket="services"
+        :visibility="FileVisibilityEnum.public"
+        :max-size-mb="5"
+        @upload-success="handleCoverUpload"
+      />
+      <ErrorShort
+        v-if="errors.cover_id"
+        :error="errors.cover_id"
+      />
 
       <div class="flex flex-col gap-4">
         <div class="flex flex-col">

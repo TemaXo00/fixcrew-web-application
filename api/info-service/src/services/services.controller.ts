@@ -89,8 +89,6 @@ export class ServicesController {
     return await this.servicesService.updateCover(id, dto);
   }
 
-
-
   @Patch(':id/category')
   async updateCategory(
     @Param('id') id: string,

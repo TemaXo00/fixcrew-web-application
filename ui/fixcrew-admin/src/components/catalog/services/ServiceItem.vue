@@ -3,6 +3,7 @@ import type { ServiceResponseType } from '@/types/info/services.types'
 import { ref } from 'vue'
 import DeleteService from '@/components/catalog/services/DeleteService.vue'
 import ToggleServiceActive from '@/components/catalog/services/ToggleServiceActive.vue'
+import UpdateCover from '@/components/catalog/services/UpdateCover.vue'
 import UpdateServiceCategory from '@/components/catalog/services/UpdateServiceCategory.vue'
 import UpdateServiceDescription from '@/components/catalog/services/UpdateServiceDescription.vue'
 import UpdateServiceName from '@/components/catalog/services/UpdateServiceName.vue'
@@ -10,6 +11,8 @@ import UpdateServicePrice from '@/components/catalog/services/UpdateServicePrice
 import UpdateServiceSalePercent from '@/components/catalog/services/UpdateServiceSalePercent.vue'
 import DangerousButton from '@/components/shared/buttons/DangerousButton.vue'
 import OutlineButton from '@/components/shared/buttons/OutlineButton.vue'
+import FileImage from '@/components/shared/FileImage.vue'
+import { FileVisibilityEnum } from '@/types/file/files.types'
 
 const props = defineProps<ServiceResponseType>()
 
@@ -45,15 +48,27 @@ const handleServiceDeleted = (deletedId: string) => {
 
 const formatPrice = (price: number): string => `$${price.toFixed(2)}`
 
-const calculateDiscountedPrice = (price: number, salePercent: number): number => price - (price * salePercent) / 100
+const calculateDiscountedPrice = (price: number, salePercent: number): number =>
+  price - (price * salePercent) / 100
 </script>
 
 <template>
   <div class="flex flex-col gap-3 p-4 border border-accent rounded-lg">
+    <FileImage
+      v-if="props.cover_id"
+      :file-id="props.cover_id"
+      :visibility="FileVisibilityEnum.public"
+      class-name="w-20 h-20 object-cover rounded"
+    />
     <div class="flex flex-col gap-1">
-      <p class="font-bold text-accent text-lg break-all">
-        {{ props.name }}
-      </p>
+      <div class="flex flex-row items-center gap-5">
+        <p class="font-bold text-accent text-lg break-all">
+          {{ props.name }}
+        </p>
+        <p class="text-dimmed text-sm font-normal">
+          ({{ props.slug }})
+        </p>
+      </div>
       <p class="text-dimmed text-sm">
         {{ props.description }}
       </p>
@@ -120,6 +135,11 @@ const calculateDiscountedPrice = (price: number, salePercent: number): number =>
         @click="handleOpen('category')"
       />
       <OutlineButton
+        name="Cover"
+        class="px-4 py-2"
+        @click="handleOpen('cover')"
+      />
+      <OutlineButton
         :name="props.is_active ? 'Deactivate' : 'Activate'"
         class="px-4 py-2"
         @click="handleOpen('toggle')"
@@ -163,6 +183,13 @@ const calculateDiscountedPrice = (price: number, salePercent: number): number =>
       v-if="activeModal === 'category'"
       :id="props.id"
       :current-category-id="props.category_id"
+      @close="closeAll"
+      @updated="handleServiceUpdated"
+    />
+    <UpdateCover
+      v-if="activeModal === 'cover'"
+      :id="props.id"
+      :current-cover-id="props.cover_id"
       @close="closeAll"
       @updated="handleServiceUpdated"
     />

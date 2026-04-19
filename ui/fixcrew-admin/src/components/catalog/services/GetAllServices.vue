@@ -113,6 +113,7 @@ onMounted(async () => {
         :id="service.id"
         :key="service.id"
         :name="service.name"
+        :slug="service.slug"
         :description="service.description"
         :price="service.price"
         :sale_percent="service.sale_percent"
@@ -120,6 +121,7 @@ onMounted(async () => {
         :is_active="service.is_active"
         :category_id="service.category_id"
         :category="service.category"
+        :cover_id="service.cover_id"
         @updated="handleServiceUpdated"
         @deleted="handleServiceDeleted"
       />

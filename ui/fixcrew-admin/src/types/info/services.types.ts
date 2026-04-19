@@ -3,7 +3,9 @@ import type { CategoryResponseType } from './categories.types'
 export interface ServiceResponseType {
   id: string
   name: string
+  slug: string
   description: string
+  cover_id: string | null
   price: number
   sale_percent: number
   avg_time: number | null
@@ -14,7 +16,7 @@ export interface ServiceResponseType {
 
 export type ServiceCreateType = Pick<
   ServiceResponseType,
-  'name' | 'description' | 'price' | 'category_id'
+  'name' | 'description' | 'price' | 'category_id' | 'cover_id'
 > & {
   sale_percent?: number
   avg_time?: number
@@ -26,3 +28,4 @@ export type ServiceUpdateNameType = Pick<ServiceResponseType, 'name'>
 export type ServiceUpdateDescriptionType = Pick<ServiceResponseType, 'description'>
 export type ServiceUpdateSalePercentType = Pick<ServiceResponseType, 'sale_percent'>
 export type ServiceUpdateCategoryType = Pick<ServiceResponseType, 'category_id'>
+export type ServiceUpdateCoverType = Pick<ServiceResponseType, 'cover_id'>
