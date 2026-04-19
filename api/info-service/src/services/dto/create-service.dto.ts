@@ -23,6 +23,11 @@ export class CreateServiceDto {
   @MinLength(15)
   description: string;
 
+  @IsOptional()
+  @IsString()
+  @IsUUID(4)
+  cover_id?: string;
+
   @IsNotEmpty()
   @IsNumber()
   @Min(0)

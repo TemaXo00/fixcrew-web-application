@@ -12,6 +12,7 @@ import { Service } from '@prisma-gen/client';
 
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { UpdateCoverDto } from './dto/update-cover.dto';
 import { UpdateDescriptionDto } from './dto/update-description.dto';
 import { UpdateNameDto } from './dto/update-name.dto';
 import { UpdatePriceDto } from './dto/update-price.dto';
@@ -79,6 +80,16 @@ export class ServicesController {
   ): Promise<Service> {
     return await this.servicesService.updateSalePercent(id, dto);
   }
+
+  @Patch(':id/cover')
+  async updateCover(
+    @Param('id') id: string,
+    @Body() dto: UpdateCoverDto,
+  ): Promise<Service> {
+    return await this.servicesService.updateCover(id, dto);
+  }
+
+
 
   @Patch(':id/category')
   async updateCategory(

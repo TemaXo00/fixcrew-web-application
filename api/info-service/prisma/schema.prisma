@@ -59,6 +59,8 @@ model Service {
   slug        String @unique
   description String @db.Text
 
+  cover_id String?
+
   price        Int  @default(0)
   sale_percent Int  @default(0)
   avg_time     Int?

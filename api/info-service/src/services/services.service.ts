@@ -14,6 +14,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { UpdateCoverDto } from './dto/update-cover.dto';
 import { UpdateDescriptionDto } from './dto/update-description.dto';
 import { UpdateNameDto } from './dto/update-name.dto';
 import { UpdatePriceDto } from './dto/update-price.dto';
@@ -113,6 +114,7 @@ export class ServicesService {
       data: {
         name: dto.name,
         slug: slugify(dto.name, {lower: true}),
+        cover_id: dto.cover_id,
         description: dto.description,
         price: dto.price,
         sale_percent: dto.sale_percent ?? 0,
@@ -209,6 +211,24 @@ export class ServicesService {
         },
       },
     });
+  }
+
+  async updateCover(id: string, dto: UpdateCoverDto): Promise<Service> {
+    await this.getById(id)
+
+    return this.prisma.service.update({
+      where: { id },
+      data: {
+        cover_id: dto.cover_id,
+      },
+      include: {
+        category: {
+          include: {
+            type: true,
+          }
+        }
+      }
+    })
   }
 
   async updateCategory(id: string, dto: UpdateCategoryDto): Promise<Service> {
