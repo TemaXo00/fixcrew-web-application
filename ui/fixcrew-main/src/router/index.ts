@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainPage from '@/pages/MainPage.vue'
 import BookingPage from '@/pages/BookingPage.vue'
-import InfoPage from '@/pages/InfoPage.vue'
+import ServicePage from '@/pages/ServicePage.vue'
 import NotFoundPage from '@/pages/NotFoundPage.vue'
 
 const router = createRouter({
@@ -24,9 +24,9 @@ const router = createRouter({
       }
     },
     {
-      name: 'Info',
-      path: '/info/:slug',
-      component: InfoPage,
+      name: 'Service',
+      path: '/service/:slug',
+      component: ServicePage,
     },
     {
       name: 'NotFound',

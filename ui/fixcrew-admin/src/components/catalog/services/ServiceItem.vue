@@ -58,10 +58,10 @@ const calculateDiscountedPrice = (price: number, salePercent: number): number =>
       v-if="props.cover_id"
       :file-id="props.cover_id"
       :visibility="FileVisibilityEnum.public"
-      class-name="w-20 h-20 object-cover rounded"
+      class-name="h-25 aspect-video object-cover rounded"
     />
     <div class="flex flex-col gap-1">
-      <div class="flex flex-row items-center gap-5">
+      <div class="flex flex-col medium:flex-row items-start medium:items-center gap-1 medium:gap-5">
         <p class="font-bold text-accent text-lg break-all">
           {{ props.name }}
         </p>
@@ -70,7 +70,7 @@ const calculateDiscountedPrice = (price: number, salePercent: number): number =>
         </p>
       </div>
       <p class="text-dimmed text-sm">
-        {{ props.description }}
+        Content: {{ props.description.length > 100 ? `${props.description.slice(0, 100)}...` : props.description }}
       </p>
       <p class="text-sm">
         Status:
