@@ -34,3 +34,5 @@ docker-compose*.yml
 !.env.example
 
 server/*/prisma/generated/
+
+.vite/
