@@ -22,5 +22,5 @@ tmp/
 temp/
 .cache/
 docker-compose-*.yml
-api/*/prisma/generated/
+server/*/prisma/generated/
 .nx/

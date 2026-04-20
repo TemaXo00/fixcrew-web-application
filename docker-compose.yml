@@ -9,7 +9,7 @@ services:
       --appendonly yes
       --maxmemory-policy allkeys-lru
     networks:
-      - api
+      - server
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -30,7 +30,7 @@ services:
     command: server /data --console-address ":9001"
     networks:
       - storage
-      - api
+      - server
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 10s
@@ -49,7 +49,7 @@ services:
       - prometheus-data:/prometheus
     networks:
       - monitoring
-      - api
+      - server
 
   loki:
     image: grafana/loki:main-d36987e
@@ -83,7 +83,7 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBIT_MQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBIT_MQ_PASSWORD}
     networks:
-      - api
+      - server
     healthcheck:
       test: ["CMD", "rabbitmqctl", "status"]
       interval: 10s
@@ -105,7 +105,7 @@ services:
       - grafana-data:/var/lib/grafana
     networks:
       - monitoring
-      - api
+      - server
     depends_on:
       - prometheus
       - loki
@@ -122,7 +122,7 @@ services:
     ports:
       - "${UI_MAIN_PORT}:5173"
     volumes:
-      - ./ui/fixcrew-main:/app
+      - ./client/fixcrew-main:/app
       - /app/node_modules
     networks:
       - frontend
@@ -139,7 +139,7 @@ services:
     ports:
       - "${UI_ADMIN_PORT}:5173"
     volumes:
-      - ./ui/fixcrew-admin:/app
+      - ./client/fixcrew-admin:/app
       - /app/node_modules
     networks:
       - frontend
@@ -156,10 +156,10 @@ services:
     ports:
       - "${GATEWAY_SERVICE_PORT}:3000"
     volumes:
-      - ./api/gateway-service:/app
+      - ./server/gateway-service:/app
       - /app/node_modules
     networks:
-      - api
+      - server
       - frontend
 
   user-db:
@@ -174,7 +174,7 @@ services:
     volumes:
       - user_data:/var/lib/postgresql
     networks:
-      - api
+      - server
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${USER_DB_USER} -d ${USER_DB_NAME}"]
       interval: 5s
@@ -193,7 +193,7 @@ services:
     volumes:
       - blog_data:/var/lib/postgresql
     networks:
-      - api
+      - server
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${BLOG_DB_USER} -d ${BLOG_DB_NAME}"]
       interval: 5s
@@ -212,7 +212,7 @@ services:
     volumes:
       - info_data:/var/lib/postgresql
     networks:
-      - api
+      - server
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${INFO_DB_USER} -d ${INFO_DB_NAME}"]
       interval: 5s
@@ -231,7 +231,7 @@ services:
     volumes:
       - order_data:/var/lib/postgresql
     networks:
-      - api
+      - server
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${ORDER_DB_USER} -d ${ORDER_DB_NAME}"]
       interval: 5s
@@ -250,7 +250,7 @@ services:
     volumes:
       - file_data:/var/lib/postgresql
     networks:
-      - api
+      - server
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${FILE_DB_USER} -d ${FILE_DB_NAME}"]
       interval: 5s
@@ -268,10 +268,10 @@ services:
       DATABASE_URL: ${BLOG_DB_URL}
       REDIS_URL: ${REDIS_URL}
     volumes:
-      - ./api/blog-service:/app
+      - ./server/blog-service:/app
       - /app/node_modules
     networks:
-      - api
+      - server
       - storage
     depends_on:
       redis:
@@ -292,10 +292,10 @@ services:
       MINIO_USER: ${MINIO_USER}
       MINIO_PASSWORD: ${MINIO_PASSWORD}
     volumes:
-      - ./api/file-service:/app
+      - ./server/file-service:/app
       - /app/node_modules
     networks:
-      - api
+      - server
       - storage
     depends_on:
       minio:
@@ -319,10 +319,10 @@ services:
       RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
       ORDER_QUEUE: ${ORDER_QUEUE}
     volumes:
-      - ./api/info-service:/app
+      - ./server/info-service:/app
       - /app/node_modules
     networks:
-      - api
+      - server
     depends_on:
       redis:
         condition: service_healthy
@@ -344,10 +344,10 @@ services:
       RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
       MAIL_QUEUE: ${MAIL_QUEUE}
     volumes:
-      - ./api/mail-service:/app
+      - ./server/mail-service:/app
       - /app/node_modules
     networks:
-      - api
+      - server
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -368,10 +368,10 @@ services:
       INFO_QUEUE: ${INFO_QUEUE}
       MAIL_QUEUE: ${MAIL_QUEUE}
     volumes:
-      - ./api/order-service:/app
+      - ./server/order-service:/app
       - /app/node_modules
     networks:
-      - api
+      - server
     depends_on:
       redis:
         condition: service_healthy
@@ -398,10 +398,10 @@ services:
       MAIL_QUEUE: ${MAIL_QUEUE}
       ORDER_QUEUE: ${ORDER_QUEUE}
     volumes:
-      - ./api/user-service:/app
+      - ./server/user-service:/app
       - /app/node_modules
     networks:
-      - api
+      - server
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -411,7 +411,7 @@ services:
 networks:
   frontend:
     driver: bridge
-  api:
+  server:
     driver: bridge
   storage:
     driver: bridge
