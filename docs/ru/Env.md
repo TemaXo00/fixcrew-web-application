@@ -84,10 +84,10 @@ INFO_QUEUE=info-service-queue      # Очередь информации
 # Apps
 APPS_PROTOCOL="http"                                                                 # Протокол                                 
 APPS_ENTRYPOINT="localhost"                                                          # Точка входа
-GATEWAY_URL="${APPS_PROTOCOL}://${APPS_ENTRYPOINT}:${GATEWAY_SERVICE_PORT}..."
-CORS_ALLOWED_ORIGINS="${APPS_PROTOCOL}://${APPS_ENTRYPOINT}:${UI_ADMIN_PORT}..."
-MAIL_UI_LINK="${APPS_PROTOCOL}://${APPS_ENTRYPOINT}:${UI_ADMIN_PORT}"
-COOKIE_DOMAIN="${APPS_ENTRYPOINT}"
+GATEWAY_URL="${APPS_PROTOCOL}://${APPS_ENTRYPOINT}:${GATEWAY_SERVICE_PORT}..."       # Ссылка на точку входа в API
+CORS_ALLOWED_ORIGINS="${APPS_PROTOCOL}://${APPS_ENTRYPOINT}:${UI_ADMIN_PORT}..."     # Разрешеные CORS домены
+MAIL_UI_LINK="${APPS_PROTOCOL}://${APPS_ENTRYPOINT}:${UI_ADMIN_PORT}"                # Ссылка на панель администратора для почтового сервиса
+COOKIE_DOMAIN="${APPS_ENTRYPOINT}"                                                   # Домен для создания Cookie
 MAIL_USER=user                                                                       # Логин SMTP
 MAIL_PASSWORD=password                                                               # Пароль SMTP
 JWT_SECRET=secret                                                                    # Секрет для JWT-токенов
@@ -104,5 +104,4 @@ USER_DB_USER=user              # Логин пользователя БД User
 USER_DB_PASSWORD=12345678      # Пароль пользователя БД User
 USER_DB_NAME=users             # Название базы данных
 USER_DB_URL="..."              # URL для доступа из API
-
 ```
