@@ -22,7 +22,6 @@ Thumbs.db
 .oxlintrc.json
 eslint..c.onfig.mjs
 eslint.config.ts
-README.md
 
 .nx/
 .git/
