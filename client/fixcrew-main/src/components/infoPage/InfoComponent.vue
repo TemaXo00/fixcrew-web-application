@@ -2,8 +2,8 @@
 import { VueMarked } from '@hackingzhang/vue-marked'
 import type { ServiceInterface } from '@/interfaces/service.interface.ts'
 import { computed } from 'vue'
-import InfoHeader from '@/components/infoPage/InfoHeader.vue'
-import InfoSubHeader from '@/components/infoPage/InfoSubHeader.vue'
+import InfoHeadline from '@/components/infoPage/InfoHeadline.vue'
+import InfoSubHeadline from '@/components/infoPage/InfoSubHeadline.vue'
 
 const props = defineProps<{
   info: ServiceInterface | null
@@ -14,10 +14,8 @@ const markdown = computed(() => props.info?.description || '')
 
 <template>
   <div class="flex flex-col items-center gap-10 mt-20">
-    <InfoHeader :name="props.info?.name" :cover_id="props.info?.cover_id" />
-    <InfoSubHeader
-      :price="props.info?.price"
-      :sale_percent="props.info?.sale_percent"
+    <InfoHeadline :name="props.info?.name" :cover_id="props.info?.cover_id" />
+    <InfoSubHeadline
       :avg_time="props.info?.avg_time"
     />
 
