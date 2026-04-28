@@ -16,6 +16,8 @@ model Region {
 
   is_active Boolean @default(true)
 
+  zip_codes Zip[]
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -75,4 +77,20 @@ model Service {
 
   @@index([name])
   @@map("services")
+}
+
+model Zip {
+  id String @id @default(uuid(4))
+
+  code Int @unique
+
+  region_id String
+  region    Region @relation(fields: [region_id], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([region_id])
+  @@index([code])
+  @@map("zipcodes")
 }
