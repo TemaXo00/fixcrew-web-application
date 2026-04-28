@@ -66,7 +66,11 @@ export class ZipService {
 
   async assignZipToNewRegion(code: number, dto: AssignRegionDto): Promise<Zip> {
     await this.region.getRegionById(dto.region_id);
-    await this.getZipByCode(code)
+    const existingZip = await this.getZipByCode(code)
+
+    if (existingZip.region_id === dto.region_id) {
+      throw new ConflictException('Zip already in this region')
+    }
 
     return this.prisma.zip.update({
       data: {
