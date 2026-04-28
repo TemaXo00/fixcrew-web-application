@@ -39,5 +39,6 @@ import { RegionsService } from './regions.service';
   ],
   controllers: [RegionsController],
   providers: [RegionsService],
+  exports: [RegionsService],
 })
 export class RegionsModule {}
