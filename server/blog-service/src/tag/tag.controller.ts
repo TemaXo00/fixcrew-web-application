@@ -28,7 +28,7 @@ export class TagController {
   }
 
   @Put(':id')
-  async updateTag(@Param() id: string, @Body() dto: ManipulateTagDto): Promise<Tag> {
+  async updateTag(@Param('id') id: string, @Body() dto: ManipulateTagDto): Promise<Tag> {
     return await this.tagService.updateTagName(id, dto)
   }
 
