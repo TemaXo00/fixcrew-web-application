@@ -14,9 +14,10 @@ model Article {
   name String
   slug String @unique
 
-  cover_id   String
-  short_desc String
-  content    String @db.Text
+  cover_id    String
+  short_desc  String
+  content     String @db.Text
+  views_count Int    @default(0)
 
   tags   Tag[]
   status ArticleStatuses
