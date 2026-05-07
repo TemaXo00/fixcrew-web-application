@@ -52,8 +52,6 @@ const submitForm = () => {
 </script>
 
 <template>
-  <div class="bg-[url(@/assets/images/form-bg.jpg)] bg-cover bg-center min-h-screen rounded-2xl">
-    <div class="relative z-10 w-full max-w-4xl mx-auto px-4 py-8 sm:py-12 md:py-16">
       <form
         @submit.prevent="submitForm"
         class="flex flex-col items-center gap-5 p-6 sm:p-8 md:p-10 shadow-lg bg-[#E7E7E7] rounded-2xl w-full"
@@ -147,8 +145,6 @@ const submitForm = () => {
           Book now
         </button>
       </form>
-    </div>
-  </div>
 </template>
 
 <style scoped></style>
