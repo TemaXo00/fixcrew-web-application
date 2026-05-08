@@ -33,7 +33,7 @@ export class TagService {
         articles: {
           take: 10,
           orderBy: {
-            views_count: 'desc'
+            created_at: 'desc'
           }
         }
       }
