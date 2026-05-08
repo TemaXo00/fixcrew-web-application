@@ -63,8 +63,6 @@ model Service {
 
   cover_id String?
 
-  price        Int  @default(0)
-  sale_percent Int  @default(0)
   avg_time     Int?
 
   is_active Boolean @default(true)
