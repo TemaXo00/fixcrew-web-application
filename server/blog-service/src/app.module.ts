@@ -4,6 +4,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
 
+import { ArticleModule } from './article/article.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { TagModule } from './tag/tag.module';
 
@@ -34,6 +35,7 @@ import { TagModule } from './tag/tag.module';
     TerminusModule,
     PrismaModule,
     TagModule,
+    ArticleModule,
   ],
   controllers: [],
   providers: [],
