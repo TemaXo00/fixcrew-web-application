@@ -16,12 +16,25 @@ export const useAuthStore = defineStore('auth', () => {
 
   const setAccessToken = (token: string) => {
     accessToken.value = token
-    localStorage.setItem('token', accessToken.value)
   }
 
   const clearAccessToken = () => {
     accessToken.value = null
-    localStorage.removeItem('token')
+  }
+
+  const init = async (): Promise<boolean> => {
+    if (accessToken.value)
+      return true
+
+    try {
+      const response = await authApi.refresh()
+      accessToken.value = response.access_token
+      return true
+    }
+    catch {
+      accessToken.value = null
+      return false
+    }
   }
 
   const setError = (message: string, code: number | null = null) => {
@@ -126,6 +139,7 @@ export const useAuthStore = defineStore('auth', () => {
     errorCode,
     setAccessToken,
     clearAccessToken,
+    init,
     setError,
     clearError,
     register,

@@ -10,6 +10,7 @@ import DashboardPage from '@/pages/dashboard/DashboardPage.vue'
 import RegionsPage from '@/pages/dashboard/RegionsPage.vue'
 import TokensPage from '@/pages/dashboard/TokensPage.vue'
 import NotFound from '@/pages/NotFound.vue'
+import { useAuthStore } from '@/stores/auth.store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,6 +26,7 @@ const router = createRouter({
           component: RegisterPage,
           meta: {
             title: 'Register',
+            requiresGuest: true,
           },
         },
         {
@@ -33,6 +35,7 @@ const router = createRouter({
           component: LoginPage,
           meta: {
             title: 'Login',
+            requiresGuest: true,
           },
         },
         {
@@ -41,6 +44,7 @@ const router = createRouter({
           component: RestoreSendPage,
           meta: {
             title: 'Restore send',
+            requiresGuest: true,
           },
         },
         {
@@ -49,6 +53,7 @@ const router = createRouter({
           component: RestorePage,
           meta: {
             title: 'Restore',
+            requiresGuest: true,
           },
         },
       ],
@@ -56,6 +61,9 @@ const router = createRouter({
     {
       path: '/',
       component: MainLayout,
+      meta: {
+        requiresAuth: true,
+      },
       children: [
         {
           path: '',
@@ -106,12 +114,24 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to, from, next) => {
   const baseTitle: string = 'Admin'
-
   document.title = to.meta.title ? `${baseTitle} - ${to.meta.title}` : baseTitle
 
-  return true
+  const authStore = useAuthStore()
+
+  if (to.meta.requiresAuth && !authStore.accessToken) {
+    const refreshed = await authStore.init()
+    if (!refreshed) {
+      return next('/auth/login')
+    }
+  }
+
+  if (to.meta.requiresGuest && authStore.accessToken) {
+    return next('/')
+  }
+
+  next()
 })
 
 export default router
