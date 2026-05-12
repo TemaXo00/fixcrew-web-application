@@ -148,6 +148,9 @@ export class AuthService {
       );
 
       if (!isValid) {
+        await this.prisma.session.delete({
+          where: { id: session.id },
+        });
         this.setCookies(res, '', new Date(0));
         throw new UnauthorizedException('Invalid session');
       }
@@ -158,16 +161,34 @@ export class AuthService {
       });
 
       if (!user || user.status === 'BANNED') {
+        await this.prisma.session.delete({
+          where: { id: session.id },
+        });
         this.setCookies(res, '', new Date(0));
         throw new UnauthorizedException('User invalid');
       }
 
+      // Ротация refresh токена
+      const { access_token, refresh_token } = this.genTokens(
+        user.id,
+        user.role,
+        session.id,
+      );
+
+      const newRefreshTokenHash = await argon2.hash(refresh_token);
+
       await this.prisma.session.update({
         where: { id: session.id },
-        data: { lastActiveAt: new Date() },
+        data: {
+          refreshTokenHash: newRefreshTokenHash,
+          lastActiveAt: new Date(),
+        },
       });
 
-      return this.auth(res, req, user.id, user.role, session.id);
+      const expiresIn = this.date.parseTTL(this.REFRESH_TTL);
+      this.setCookies(res, refresh_token, expiresIn);
+
+      return { access_token };
     } catch {
       this.setCookies(res, '', new Date(0));
       throw new UnauthorizedException('Invalid or expired refresh token');
@@ -185,7 +206,7 @@ export class AuthService {
           where: { id: payload.sessionId },
         });
       } catch {
-        return;
+        // ignore
       }
     }
 
@@ -309,7 +330,7 @@ export class AuthService {
         },
       });
 
-      const expiresIn: Date = this.date.parseTTL(this.REFRESH_TTL);
+      const expiresIn = this.date.parseTTL(this.REFRESH_TTL);
       this.setCookies(res, refresh_token, expiresIn);
 
       const { access_token } = this.genTokens(id, role, sessionId);
@@ -318,21 +339,42 @@ export class AuthService {
 
     const { access_token, refresh_token } = this.genTokens(id, role, sessionId);
 
-    const expiresIn: Date = this.date.parseTTL(this.REFRESH_TTL);
+    const newRefreshTokenHash = await argon2.hash(refresh_token);
+
+    await this.prisma.session.update({
+      where: { id: sessionId },
+      data: {
+        refreshTokenHash: newRefreshTokenHash,
+        lastActiveAt: new Date(),
+      },
+    });
+
+    const expiresIn = this.date.parseTTL(this.REFRESH_TTL);
     this.setCookies(res, refresh_token, expiresIn);
 
     return { access_token };
   }
 
   private setCookies(res: Response, value: string, expires: Date): void {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const isLocalhost = this.COOKIE_DOMAIN === 'localhost';
+
     const options: CookieOptions = {
-      domain: this.COOKIE_DOMAIN,
       httpOnly: true,
       expires,
-      secure: false,
+      secure: isProduction,
       sameSite: 'lax',
+      path: '/',
     };
 
-    res.cookie(`refreshToken`, value, options);
+    if (!isLocalhost && this.COOKIE_DOMAIN) {
+      options.domain = this.COOKIE_DOMAIN;
+    }
+
+    if (value === '') {
+      res.clearCookie('refreshToken', options);
+    } else {
+      res.cookie('refreshToken', value, options);
+    }
   }
 }
