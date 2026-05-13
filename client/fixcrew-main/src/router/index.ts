@@ -3,6 +3,8 @@ import MainPage from '@/pages/MainPage.vue'
 import BookingPage from '@/pages/BookingPage.vue'
 import ServicePage from '@/pages/ServicePage.vue'
 import NotFoundPage from '@/pages/NotFoundPage.vue'
+import TypeDetailedPage from '@/pages/TypeDetailedPage.vue'
+import CategoryDetailedPage from '../pages/CategoryDetailedPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -24,6 +26,16 @@ const router = createRouter({
       }
     },
     {
+      name: 'TypeDetailed',
+      path: '/type/:id',
+      component: TypeDetailedPage,
+    },
+    {
+      name: 'CategoryDetailedPage',
+      path: '/category/:id',
+      component: CategoryDetailedPage,
+    },
+    {
       name: 'Service',
       path: '/service/:slug',
       component: ServicePage,
@@ -32,7 +44,7 @@ const router = createRouter({
       name: 'NotFound',
       path: '/:pathMatch(.*)*',
       component: NotFoundPage,
-    }
+    },
   ],
 })
 
