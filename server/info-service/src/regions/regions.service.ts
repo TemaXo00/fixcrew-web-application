@@ -50,15 +50,7 @@ export class RegionsService {
   }
 
   async updateRegion(id: string, dto: UpdateRegionDto): Promise<Region> {
-    const existingRegion = await this.prisma.region.findUnique({
-      where: {
-        id: id
-      }
-    })
-
-    if (!existingRegion) {
-      throw new NotFoundException('Region not found')
-    }
+    await this.getRegionById(id);
 
     return this.prisma.region.update({
       where: {
@@ -71,13 +63,7 @@ export class RegionsService {
   }
 
   async deleteRegion(id: string): Promise<Region> {
-    const existingRegion = await this.prisma.region.findUnique({
-      where: { id: id }
-    })
-
-    if (!existingRegion) {
-      throw new NotFoundException('Region not found')
-    }
+    await this.getRegionById(id)
 
     const removedRegion = await this.prisma.region.delete({
       where: {id}
@@ -88,5 +74,19 @@ export class RegionsService {
     })
 
     return removedRegion
+  }
+
+  async getRegionById(id: string): Promise<Region> {
+    const region = await this.prisma.region.findUnique({
+      where: {
+        id: id
+      }
+    })
+
+    if (!region) {
+      throw new NotFoundException('Region not found')
+    }
+
+    return region
   }
 }

@@ -17,8 +17,6 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { UpdateCoverDto } from './dto/update-cover.dto';
 import { UpdateDescriptionDto } from './dto/update-description.dto';
 import { UpdateNameDto } from './dto/update-name.dto';
-import { UpdatePriceDto } from './dto/update-price.dto';
-import { UpdateSalePercentDto } from './dto/update-sale-percent.dto';
 
 @Injectable()
 export class ServicesService {
@@ -116,28 +114,10 @@ export class ServicesService {
         slug: slugify(dto.name, {lower: true}),
         cover_id: dto.cover_id,
         description: dto.description,
-        price: dto.price,
-        sale_percent: dto.sale_percent ?? 0,
         avg_time: dto.avg_time,
         is_active: dto.is_active ?? true,
         category_id: dto.category_id,
       },
-      include: {
-        category: {
-          include: {
-            type: true,
-          },
-        },
-      },
-    });
-  }
-
-  async updatePrice(id: string, dto: UpdatePriceDto): Promise<Service> {
-    await this.getById(id);
-
-    return this.prisma.service.update({
-      where: { id },
-      data: { price: dto.price },
       include: {
         category: {
           include: {
@@ -184,25 +164,6 @@ export class ServicesService {
     return this.prisma.service.update({
       where: { id },
       data: { description: dto.description },
-      include: {
-        category: {
-          include: {
-            type: true,
-          },
-        },
-      },
-    });
-  }
-
-  async updateSalePercent(
-    id: string,
-    dto: UpdateSalePercentDto,
-  ): Promise<Service> {
-    await this.getById(id);
-
-    return this.prisma.service.update({
-      where: { id },
-      data: { sale_percent: dto.sale_percent },
       include: {
         category: {
           include: {

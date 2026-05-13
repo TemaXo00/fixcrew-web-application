@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RegionsModule } from './regions/regions.module';
 import { ServicesModule } from './services/services.module';
 import { TypesModule } from './types/types.module';
+import { ZipModule } from './zip/zip.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { TypesModule } from './types/types.module';
     TypesModule,
     CategoriesModule,
     ServicesModule,
+    ZipModule,
   ],
   controllers: [],
   providers: [],
