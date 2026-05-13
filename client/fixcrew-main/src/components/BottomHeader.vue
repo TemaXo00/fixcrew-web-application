@@ -53,10 +53,7 @@ const toggleMenu = () => {
                 <option disabled>General Services</option>
                 <option disabled>General Appliance</option>
               </select>
-              <!--              <span-->
-              <!--                class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"-->
-              <!--                >more...</span-->
-              <!--              >-->
+
               <span
                 class="font-sans hover:bg-white/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md cursor-pointer transition-colors duration-200 text-sm sm:text-base"
                 >Prices</span
@@ -81,37 +78,13 @@ const toggleMenu = () => {
 
       <img src="../assets/images/logo.svg" alt="logo" class="h-8 sm:h-10 md:h-12" />
 
-      <ul class="hidden lg:flex flex-row gap-3 xl:gap-5 text-white font-sans cursor-pointer">
-        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
-          Refrigerators
-        </li>
-        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
-          Washer
-        </li>
-        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
-          Dryers
-        </li>
-        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
-          Prices
-        </li>
-        <li class="hover:text-[#EAEAEA] text-sm xl:text-base whitespace-nowrap font-sans">
-          <select>
-            <option value="">more...</option>
-            <option disabled>Dishwasher</option>
-            <option disabled>Oven/Range</option>
-            <option disabled>Microwave</option>
-            <option disabled>Hood</option>
-            <option disabled>General Services</option>
-            <option disabled>General Appliance</option>
-          </select>
-        </li>
-      </ul>
-
-      <ul class="hidden md:flex flex-row gap-3 xl:gap-5 text-white font-sans cursor-pointer">
-        <li class="hover:text-[#EAEAEA] text-xs xl:text-sm whitespace-nowrap font-sans">
+      <ul
+        class="hidden md:flex flex-row gap-3 xl:gap-5 text-white font-sans cursor-pointer text-lg"
+      >
+        <li class="hover:text-[#EAEAEA] text-lg font-bold xl:text-lg whitespace-nowrap font-sans">
           COMMERCIAL REPAIR
         </li>
-        <li class="hover:text-[#EAEAEA] text-xs xl:text-sm whitespace-nowrap font-sans">
+        <li class="hover:text-[#EAEAEA] text-lg font-bold xl:text-lg whitespace-nowrap font-sans">
           RESIDENTAL REPAIR
         </li>
       </ul>
