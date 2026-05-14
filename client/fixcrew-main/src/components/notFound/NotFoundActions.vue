@@ -1,9 +1,20 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+
 const router = useRouter()
 
 const goHome = () => router.push('/')
-const goBack = () => router.back()
+
+const goBack = () => {
+  router.back()
+
+  setTimeout(() => {
+    const currentRoute = router.currentRoute.value
+    if (currentRoute.name === 'NotFound') {
+      router.push('/')
+    }
+  }, 100)
+}
 </script>
 
 <template>
