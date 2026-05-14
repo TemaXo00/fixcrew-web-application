@@ -4,4 +4,5 @@ export interface ServiceInterface {
   cover_id: string
   description: string
   avg_time?: number
+  category_id?: string
 }
