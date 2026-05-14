@@ -1,5 +1,8 @@
+// configs.api.ts
 import type { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
+import { authApi } from '@/api/user/auth.api.ts'
+import router from '@/router'
 import { useAuthStore } from '@/stores/auth.store'
 
 export const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL
@@ -42,6 +45,12 @@ api.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
     const authStore = useAuthStore()
 
+    const isAuthEndpoint = originalRequest.url?.includes('/auth/')
+
+    if (isAuthEndpoint) {
+      return Promise.reject(error)
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -55,18 +64,17 @@ api.interceptors.response.use(
       isRefreshing = true
 
       try {
-        const { data } = await axios.post<{ access_token: string }>(
-          `${GATEWAY_URL}/auth/refresh`,
-          {},
-          { withCredentials: true },
-        )
+        const data = await authApi.refresh()
         authStore.setAccessToken(data.access_token)
         processQueue(null, data.access_token)
         return api(originalRequest)
       }
       catch (refreshError) {
         processQueue(refreshError as Error, null)
-        authStore.logout()
+        authStore.clearAccessToken()
+        if (!window.location.pathname.includes('/auth/')) {
+          await router.push('/auth/login')
+        }
         return Promise.reject(refreshError)
       }
       finally {

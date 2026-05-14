@@ -4,7 +4,7 @@ import {
   IsOptional,
   IsString,
   IsStrongPassword,
-  IsUrl,
+  IsUUID,
   Length,
   Matches,
 } from 'class-validator';
@@ -38,6 +38,6 @@ export class RegisterDto {
   password: string;
   @IsOptional()
   @IsString()
-  @IsUrl()
+  @IsUUID(4)
   avatar_url?: string;
 }
