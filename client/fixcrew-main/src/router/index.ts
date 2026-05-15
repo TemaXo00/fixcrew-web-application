@@ -5,6 +5,8 @@ import ServicePage from '@/pages/ServicePage.vue'
 import NotFoundPage from '@/pages/NotFoundPage.vue'
 import TypeDetailedPage from '@/pages/TypeDetailedPage.vue'
 import CategoryDetailedPage from '../pages/CategoryDetailedPage.vue'
+import PrivacyPolicy from '@/pages/PrivacyPolicy.vue'
+import AboutPage from '@/pages/AboutPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -39,6 +41,16 @@ const router = createRouter({
       name: 'Service',
       path: '/service/:slug',
       component: ServicePage,
+    },
+    {
+      name: 'PrivacyPolicy',
+      path: '/privacy-policy',
+      component: PrivacyPolicy
+    },
+    {
+      name: 'About',
+      path: '/about',
+      component: AboutPage,
     },
     {
       name: 'NotFound',
