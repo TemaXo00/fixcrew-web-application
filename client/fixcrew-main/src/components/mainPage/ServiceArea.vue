@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import AreasCard from '@/components/universalComp/AreasCard.vue'
 import type { RegionInterface } from '@/interfaces/regions.interface.ts'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { regionsApi } from '@/api/routes/regions.api.ts'
+import { PHONE, PHONE_LINK } from '@/common/constants.ts'
+
 const regions = ref<RegionInterface[]>()
 
 const getRegions = async (): Promise<void> => {
@@ -12,6 +14,17 @@ const getRegions = async (): Promise<void> => {
     console.error(err)
   }
 }
+
+const getTouchSpanClass = computed(() => {
+  if (!regions.value) return 'lg:col-span-3'
+
+  const remaining = regions.value.length % 3
+  if (remaining === 0) return 'lg:col-span-3'
+  if (remaining === 1) return 'lg:col-span-2'
+  if (remaining === 2) return 'lg:col-span-1'
+
+  return 'lg:col-span-3'
+})
 
 onMounted(async () => {
   await getRegions()
@@ -37,17 +50,32 @@ onMounted(async () => {
           :response="region.avg_response"
         />
         <div
-          class="border-4 border-[#EAEAEA] text-gray-600 p-4 sm:p-6 md:p-8 rounded-lg font-bold text-center text-base sm:text-lg md:text-xl col-span-1 sm:col-span-2 lg:col-span-3 flex flex-col gap-2 sm:gap-3"
+          v-if="regions && regions.length % 3 !== 0"
+          class="border-4 border-[#EAEAEA] text-gray-600 p-4 sm:p-6 md:p-8 rounded-lg font-bold text-center text-base sm:text-lg md:text-xl"
+          :class="getTouchSpanClass"
         >
           <div class="text-xl sm:text-2xl md:text-3xl font-sans font-semibold">Get In Touch</div>
           <div class="text-sm sm:text-base">Call Us available 24/7</div>
           <a
-            href="tel:6507197300"
+            :href="PHONE_LINK"
             class="font-semibold whitespace-nowrap underline text-sm sm:text-base"
           >
-            📞 (650) 719-7300
+            📞 {{ PHONE }}
           </a>
         </div>
+      </div>
+      <div
+        v-if="regions && regions.length % 3 === 0"
+        class="border-4 border-[#EAEAEA] text-gray-600 p-4 sm:p-6 md:p-8 rounded-lg font-bold text-center text-base sm:text-lg md:text-xl w-full mt-3 sm:mt-4 md:mt-6"
+      >
+        <div class="text-xl sm:text-2xl md:text-3xl font-sans font-semibold">Get In Touch</div>
+        <div class="text-sm sm:text-base">Call Us available 24/7</div>
+        <a
+          :href="PHONE_LINK"
+          class="font-semibold whitespace-nowrap underline text-sm sm:text-base"
+        >
+          📞 {{ PHONE }}
+        </a>
       </div>
     </div>
   </div>
