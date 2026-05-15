@@ -1,17 +1,19 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { PHONE, PHONE_LINK } from '@/common/constants.ts'
+</script>
 <template>
   <div
     class="flex flex-row justify-between items-center bg-white max-w-auto h-9 sm:h-10 md:h-9 px-4 sm:px-8 md:px-12 lg:px-20"
   >
-    <ul
+    <div
       class="flex flex-row gap-3 sm:gap-4 md:gap-5 text-[#0077B6] font-sans text-xs sm:text-sm md:text-base"
     >
-      <li class="hover:text-blue-300 cursor-pointer transition-colors">blog</li>
-      <li class="hover:text-blue-300 cursor-pointer transition-colors">about</li>
-      <li class="hover:text-blue-300 cursor-pointer transition-colors">contacts</li>
-    </ul>
+      <p class="hover:text-blue-300 cursor-pointer transition-colors">blog</p>
+      <router-link :to="{name: 'About'}" class="hover:text-blue-300 cursor-pointer transition-colors">about</router-link>
+      <p class="hover:text-blue-300 cursor-pointer transition-colors">contacts</p>
+    </div>
     <div class="font-sans text-[#0077B6] font-bold underline text-xs sm:text-sm md:text-base">
-      <a href="tel:6507197300" class="hover:text-red-700 transition-colors">(650)719-7300</a>
+      <a :href="PHONE_LINK" class="hover:text-red-700 transition-colors">{{PHONE}}</a>
     </div>
   </div>
 </template>

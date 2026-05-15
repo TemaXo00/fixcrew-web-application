@@ -70,7 +70,9 @@ watch(
         </div>
       </div>
 
-      <img src="../assets/images/logo.svg" alt="logo" class="h-8 sm:h-10 md:h-12" />
+      <router-link :to="{ name: 'Home' }">
+        <img src="../assets/images/logo.svg" alt="logo" class="h-8 sm:h-10 md:h-12 select-none" />
+      </router-link>
 
       <div
         class="hidden md:flex flex-row gap-3 xl:gap-5 text-white font-sans cursor-pointer text-lg"

@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { PHONE, PHONE_LINK } from '@/common/constants.ts'
+</script>
 
 <template>
   <div
@@ -15,8 +17,8 @@
     <button
       class="bg-[#0077B6] hover:bg-[#005a8c] transition-colors duration-300 rounded-lg px-8 py-4 shadow-lg"
     >
-      <a href="tel:6507197300" class="text-red-400 text-2xl font-semibold whitespace-nowrap">
-        📞 (650) 719-7300
+      <a :href="PHONE_LINK" class="text-red-400 text-2xl font-semibold whitespace-nowrap">
+        📞 {{ PHONE }}
       </a>
     </button>
   </div>

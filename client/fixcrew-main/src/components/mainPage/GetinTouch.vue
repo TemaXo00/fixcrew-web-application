@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { PHONE, PHONE_LINK } from '@/common/constants.ts'
+</script>
 
 <template>
   <div class="flex flex-col items-left bg-[#e7e7e7] p-4 sm:p-6 md:p-8 lg:p-10 rounded-2xl gap-3">
@@ -11,7 +13,9 @@
       class="text-xl sm:text-2xl font-sans flex flex-col gap-3 sm:gap-4 md:gap-5 mb-6 sm:mb-8 md:mb-10 text-center"
     >
       <div class="">Call Us</div>
-      <div><a href="tel:6507197300">(650) 719-7300</a></div>
+      <div>
+        <a :href="PHONE_LINK">{{ PHONE }}</a>
+      </div>
       <div>Available 24/7 for emergency</div>
     </h2>
     <h2 class="text-xl sm:text-2xl font-sans flex flex-col gap-3 sm:gap-4 md:gap-5 text-center">
