@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
+import { APP_DOMAIN } from './src/common/constants'
 
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
@@ -12,7 +13,7 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: ['localhost', '100.103.110.123'],
+    allowedHosts: [APP_DOMAIN],
   },
   optimizeDeps: {
     include: ['axios', 'vue-router'],

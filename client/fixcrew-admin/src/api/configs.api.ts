@@ -1,14 +1,12 @@
-// configs.api.ts
 import type { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import { authApi } from '@/api/user/auth.api.ts'
+import { API_URL } from '@/common/constants.ts'
 import router from '@/router'
 import { useAuthStore } from '@/stores/auth.store'
 
-export const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL
-
 const api: AxiosInstance = axios.create({
-  baseURL: GATEWAY_URL,
+  baseURL: API_URL,
   timeout: 10000,
   withCredentials: true,
 })
