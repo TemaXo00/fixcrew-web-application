@@ -368,15 +368,15 @@ const submitForm = () => {
             Message frequency varies. Reply HELP for help and STOP to stop. I consent to the
             <a
               href="https://client.housecallpro.com/marketing/terms"
-              class="text-blue-600 underline"
+              class="text-blue-600 underline whitespace-nowrap"
               >Terms of Service</a
             >
             and
-            <a
-              href="https://client.housecallpro.com/marketing/privacy"
-              class="text-blue-600 underline"
-              >Privacy Policy</a
-            >.
+            <router-link
+              :to="{ name: 'PrivacyPolicy' }"
+              class="text-blue-600 underline whitespace-nowrap"
+              >Privacy Policy</router-link
+            >
           </div>
           <span class="absolute text-red-500 text-xs bottom-[-18px] left-8">{{
             errors.checkBox

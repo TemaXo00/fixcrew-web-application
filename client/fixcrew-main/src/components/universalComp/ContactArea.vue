@@ -126,11 +126,10 @@ const submitForm = () => {
                   >Terms of Service</a
                 >
                 and
-                <a
-                  href="https://client.housecallpro.com/marketing/privacy"
+                <router-link
+                  :to="{name: 'PrivacyPolicy'}"
                   class="text-blue-600 underline whitespace-nowrap"
-                  >Privacy Policy</a
-                >.
+                >Privacy Policy</router-link>
               </div>
             </div>
           </div>
