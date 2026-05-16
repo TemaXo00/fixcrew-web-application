@@ -25,3 +25,4 @@ docker-compose-*.yml
 server/*/prisma/generated/
 .nx/
 .vite/
+config/ssl/
