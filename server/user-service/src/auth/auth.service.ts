@@ -357,7 +357,6 @@ export class AuthService {
 
   private setCookies(res: Response, value: string, expires: Date): void {
     const isProduction = process.env.NODE_ENV === 'production';
-    const isLocalhost = this.COOKIE_DOMAIN === 'localhost';
 
     const options: CookieOptions = {
       httpOnly: true,
@@ -365,11 +364,8 @@ export class AuthService {
       secure: isProduction,
       sameSite: 'lax',
       path: '/',
+      domain: this.COOKIE_DOMAIN
     };
-
-    if (!isLocalhost && this.COOKIE_DOMAIN) {
-      options.domain = this.COOKIE_DOMAIN;
-    }
 
     if (value === '') {
       res.clearCookie('refreshToken', options);

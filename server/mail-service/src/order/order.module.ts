@@ -15,7 +15,7 @@ import { OrderService } from './order.service';
         transport: {
           host: 'smtp.gmail.com',
           port: 587,
-          secure: false,
+          secure: true,
           auth: {
             user: config.getOrThrow<string>('MAIL_USER'),
             pass: config.getOrThrow<string>('MAIL_PASSWORD'),
