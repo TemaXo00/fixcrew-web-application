@@ -605,7 +605,6 @@ export class OrdersService {
     return {
       id: order.id,
       client_name: order.name,
-      client_email: order.email ? order.email : undefined,
       client_phone: order.phone,
       start: `${order.date}T${start}`,
       end: `${order.date}T${end}`,
