@@ -21,8 +21,7 @@ services:
     volumes:
       - ./config/ssl/conf:/etc/letsencrypt
       - ./config/ssl/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email melnikov.artem294@gmail.com --agree-tos -d app.fixcrew.com
-    restart: unless-stopped
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email artemplayshadow@gmail.com --agree-tos -d api.getfixcrew.com
 
   redis:
     image: redis:8.6.1-alpine
