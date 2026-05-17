@@ -1,11 +1,12 @@
 import axios, { type AxiosInstance } from 'axios'
-import { API_URL } from '@/common/constants.ts'
+
+const apiUrl = import.meta.env.VITE_API_URL
 
 export const externalApi: AxiosInstance = axios.create({
   timeout: 5000,
 })
 
 export const internalApi: AxiosInstance = axios.create({
-  baseURL: API_URL,
+  baseURL: apiUrl,
   timeout: 5000,
 })

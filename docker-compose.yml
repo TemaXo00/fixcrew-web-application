@@ -3,9 +3,16 @@ services:
     image: nginx:1.31.0-alpine
     container_name: fixcrew-nginx
     volumes:
-      - ./config/nginx-config.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx-main.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx-config.conf:/etc/nginx/templates/default.conf.template:ro
       - ./config/ssl/www:/var/www/certbot
       - ./config/ssl/conf:/etc/letsencrypt
+    environment:
+      ADMIN_DOMAIN: ${APPS_ADMIN_DOMAIN}
+      MAIN_DOMAIN: ${APPS_MAIN_DOMAIN}
+      GATEWAY_DOMAIN: ${APPS_GATEWAY_DOMAIN}
+      GRAFANA_DOMAIN: ${APPS_GRAFANA_DOMAIN}
+      MINIO_DOMAIN: ${APPS_MINIO_DOMAIN}
     ports:
       - "443:443"
       - "80:80"
@@ -21,7 +28,16 @@ services:
     volumes:
       - ./config/ssl/conf:/etc/letsencrypt
       - ./config/ssl/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email artemplayshadow@gmail.com --agree-tos -d api.getfixcrew.com
+    entrypoint: /bin/sh -c "certbot certonly --webroot -w /var/www/certbot --force-renewal --email ${CERTBOT_EMAIL} --agree-tos -d ${APPS_MAIN_DOMAIN} -d ${APPS_ADMIN_DOMAIN} -d ${APPS_GATEWAY_DOMAIN} -d ${APPS_GRAFANA_DOMAIN} -d ${APPS_MINIO_DOMAIN}"
+    environment:
+      APPS_MAIN_DOMAIN: ${APPS_MAIN_DOMAIN}
+      APPS_ADMIN_DOMAIN: ${APPS_ADMIN_DOMAIN}
+      APPS_GATEWAY_DOMAIN: ${APPS_GATEWAY_DOMAIN}
+      APPS_GRAFANA_DOMAIN: ${APPS_GRAFANA_DOMAIN}
+      APPS_MINIO_DOMAIN: ${APPS_MINIO_DOMAIN}
+      CERTBOT_EMAIL: ${CERTBOT_EMAIL}
+    networks:
+      - frontend
 
   redis:
     image: redis:8.6.1-alpine
@@ -132,6 +148,8 @@ services:
       args:
         UI_MAIN_PATH: ${UI_MAIN_PATH}
     container_name: fixcrew-ui-main
+    environment:
+      VITE_API_URL: ${GATEWAY_URL}
     volumes:
       - ./client/fixcrew-main:/app
       - /app/node_modules
@@ -145,6 +163,8 @@ services:
       args:
         UI_ADMIN_PATH: ${UI_ADMIN_PATH}
     container_name: fixcrew-ui-admin
+    environment:
+      VITE_API_URL: ${GATEWAY_URL}
     volumes:
       - ./client/fixcrew-admin:/app
       - /app/node_modules

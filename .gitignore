@@ -27,4 +27,5 @@ server/*/prisma/generated/
 .vite/
 config/ssl/
 docker-compose*.yml
-config/nginx-config*.conf
+config/nginx-main-test.conf
+config/nginx-config-test.conf
