@@ -7,7 +7,7 @@ defineProps<{
 <template>
   <p
     v-if="error"
-    class="text-red-500"
+    class="text-red-500 wrap-normal max-w-120"
   >
     {{ error }}
   </p>

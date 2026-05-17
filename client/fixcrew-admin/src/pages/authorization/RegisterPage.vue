@@ -78,7 +78,7 @@ const onSubmit = handleSubmit(async (values) => {
       v-bind="phoneAttrs"
       name="Phone Number"
       type="tel"
-      place-text="xxx-xxx-xxxx"
+      place-text="+1 xxx - xxx - xxxx"
       :is-necessary="true"
     />
     <ErrorShort

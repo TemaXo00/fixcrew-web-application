@@ -18,7 +18,10 @@ export const registerSchema = yup.object({
   phone_number: yup
     .string()
     .required('Phone number is required')
-    .matches(/^\d{3}-\d{3}-\d{4}$/, 'Phone must be xxx-xxx-xxxx'),
+    .matches(
+      /^(\+1\s?)?(\(\d{3}\)|\d{3})[\s\-]?\d{3}[\s\-]?\d{4}$/,
+      'Phone number must be in valid US format (e.g., +1 123-456-7890, 1234567890, (123) 456-7890, 123-456-7890, etc.)',
+    ),
   email: yup.string().email('Invalid email').required('Email is required'),
   password: yup
     .string()
