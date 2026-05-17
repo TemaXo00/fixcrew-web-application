@@ -17,11 +17,12 @@ const views = [
 </script>
 
 <template>
-  <div class="flex gap-2">
+  <div class="flex flex-col medium:flex-row gap-2">
     <OutlineButton
       v-for="view in views"
       :key="view.value"
       :name="view.label"
+      class="text-sm medium:text-base px-3 py-1 medium:px-4 medium:py-2"
       :class="[currentView === view.value ? 'bg-accent text-container' : '']"
       @click="emit('changeView', view.value)"
     />

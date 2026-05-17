@@ -175,11 +175,13 @@ onMounted(async () => {
       class="text-lg text-dimmed"
     />
 
-    <CalendarSwitch
-      @prev="handlePrev"
-      @next="handleNext"
-      @today="handleToday"
-    />
+    <div class="flex flex-col medium:flex-row gap-3 w-full">
+      <CalendarSwitch
+        @prev="handlePrev"
+        @next="handleNext"
+        @today="handleToday"
+      />
+    </div>
 
     <SpinnerLoader v-if="isLoading && !orders.length" />
 
@@ -200,10 +202,12 @@ onMounted(async () => {
       style="height: 550px"
     />
 
-    <CalendarTypes
-      :current-view="currentView"
-      @change-view="handleViewChange"
-    />
+    <div class="flex flex-col medium:flex-row gap-3 w-full">
+      <CalendarTypes
+        :current-view="currentView"
+        @change-view="handleViewChange"
+      />
+    </div>
   </div>
 </template>
 
