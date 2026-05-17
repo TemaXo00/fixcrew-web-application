@@ -4,7 +4,8 @@ services:
     container_name: fixcrew-nginx
     volumes:
       - ./config/nginx-config.conf:/etc/nginx/nginx.conf:ro
-      - ./config/ssl:/etc/nginx/ssl:ro
+      - ./config/ssl/www:/var/www/certbot
+      - ./config/ssl/conf:/etc/letsencrypt
     ports:
       - "443:443"
       - "80:80"
@@ -14,6 +15,14 @@ services:
       - server
       - storage
       - monitoring
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./config/ssl/conf:/etc/letsencrypt
+      - ./config/ssl/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email melnikov.artem294@gmail.com --agree-tos -d app.fixcrew.com
+    restart: unless-stopped
 
   redis:
     image: redis:8.6.1-alpine
