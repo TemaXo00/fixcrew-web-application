@@ -3,6 +3,7 @@ import ServiceCard from '@/components/universalComp/ServiceCard.vue'
 import residentalImage from '@/assets/images/residental.jpg'
 import CommercialRepair from '@/assets/images/commercial.jpg'
 import Booking from '@/assets/images/booking.jpg'
+import { PHONE, PHONE_LINK } from '@/common/constants.ts'
 </script>
 
 <template>
@@ -167,13 +168,14 @@ import Booking from '@/assets/images/booking.jpg'
               1. You can call
               <span>
                 <a
-                  href="tel:6507197300"
+                  :href="PHONE_LINK"
                   class="text-[#0077B6] text-1xl font-semibold whitespace-nowrap"
                 >
-                  650-719-7300
+                  {{ PHONE }}
                 </a>
               </span>
-              or use our <span class="text-[#0077B6]">form</span>
+              or use our
+              <router-link :to="{ name: 'Booking' }" class="text-[#0077B6]">form</router-link>
             </div>
             <div class="text-sm sm:text-base md:text-lg text-[#626262] font-semibold">
               2. Tell us about your problem
@@ -190,9 +192,7 @@ import Booking from '@/assets/images/booking.jpg'
               <div
                 class="font-sans text-[#0077B6] font-bold underline text-xs sm:text-sm md:text-base"
               >
-                <a href="tel:6507197300" class="hover:text-red-700 transition-colors"
-                  >(650)719-7300</a
-                >
+                <a :href="PHONE_LINK" class="hover:text-red-700 transition-colors">{{ PHONE }}</a>
               </div>
               Available 24/7 for emergency repairs
               <span class="text-sm sm:text-base md:text-lg text-[#626262] font-semibold">
