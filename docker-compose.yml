@@ -13,6 +13,8 @@ services:
       GATEWAY_DOMAIN: ${APPS_GATEWAY_DOMAIN}
       GRAFANA_DOMAIN: ${APPS_GRAFANA_DOMAIN}
       MINIO_DOMAIN: ${APPS_MINIO_DOMAIN}
+      BASE_DOMAIN: ${APPS_BASE_DOMAIN}
+      WWW_DOMAIN: ${APPS_WWW_DOMAIN}
     ports:
       - "443:443"
       - "80:80"
@@ -28,13 +30,15 @@ services:
     volumes:
       - ./config/ssl/conf:/etc/letsencrypt
       - ./config/ssl/www:/var/www/certbot
-    entrypoint: /bin/sh -c "certbot certonly --webroot -w /var/www/certbot --force-renewal --email ${CERTBOT_EMAIL} --agree-tos -d ${APPS_MAIN_DOMAIN} -d ${APPS_ADMIN_DOMAIN} -d ${APPS_GATEWAY_DOMAIN} -d ${APPS_GRAFANA_DOMAIN} -d ${APPS_MINIO_DOMAIN}"
+    entrypoint: /bin/sh -c "certbot certonly --webroot -w /var/www/certbot --force-renewal --email ${CERTBOT_EMAIL} --agree-tos -d ${APPS_MAIN_DOMAIN} -d ${APPS_ADMIN_DOMAIN} -d ${APPS_GATEWAY_DOMAIN} -d ${APPS_GRAFANA_DOMAIN} -d ${APPS_MINIO_DOMAIN} -d ${APPS_BASE_DOMAIN} -d ${APPS_WWW_DOMAIN}"
     environment:
       APPS_MAIN_DOMAIN: ${APPS_MAIN_DOMAIN}
       APPS_ADMIN_DOMAIN: ${APPS_ADMIN_DOMAIN}
       APPS_GATEWAY_DOMAIN: ${APPS_GATEWAY_DOMAIN}
       APPS_GRAFANA_DOMAIN: ${APPS_GRAFANA_DOMAIN}
       APPS_MINIO_DOMAIN: ${APPS_MINIO_DOMAIN}
+      APPS_BASE_DOMAIN: ${APPS_BASE_DOMAIN}
+      APPS_WWW_DOMAIN: ${APPS_WWW_DOMAIN}
       CERTBOT_EMAIL: ${CERTBOT_EMAIL}
     networks:
       - frontend
