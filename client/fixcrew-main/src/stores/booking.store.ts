@@ -22,6 +22,10 @@ const STORAGE_KEYS = {
   STATE: 'booking_state',
   CHECK_BOX: 'booking_check_box',
   MARKETING_CONSENT: 'marketingConsent',
+  SELECTED_DATE: 'booking_selected_date',
+  SELECTED_START_MIN: 'booking_selected_start_min',
+  SELECTED_END_MIN: 'booking_selected_end_min',
+  REGION_ID: 'booking_region_id',
 }
 
 const loadFromStorage = <T>(key: string, defaultValue: T): T => {
@@ -66,6 +70,11 @@ export const useBookingStore = defineStore('booking', () => {
   const state = ref(loadFromStorage(STORAGE_KEYS.STATE, ''))
   const checkBox = ref(loadFromStorage(STORAGE_KEYS.CHECK_BOX, false))
 
+  const selectedDate = ref(loadFromStorage<string>(STORAGE_KEYS.SELECTED_DATE, ''))
+  const selectedStartMin = ref(loadFromStorage<number>(STORAGE_KEYS.SELECTED_START_MIN, 0))
+  const selectedEndMin = ref(loadFromStorage<number>(STORAGE_KEYS.SELECTED_END_MIN, 0))
+  const regionId = ref(loadFromStorage<string>(STORAGE_KEYS.REGION_ID, ''))
+
   const setStep = (v: number) => (step.value = v)
   const setType = (v: Types | null) => {
     type.value = v
@@ -74,12 +83,10 @@ export const useBookingStore = defineStore('booking', () => {
       subCategory.value = null
     }
   }
-
   const setCategory = (v: TypesCategories | null) => {
     category.value = v
     if (!v) subCategory.value = null
   }
-
   const setSubCategory = (v: TypesSubCategories | null) => (subCategory.value = v)
   const setDetails = (v: string) => (details.value = v)
 
@@ -103,6 +110,11 @@ export const useBookingStore = defineStore('booking', () => {
   const setState = (v: string) => (state.value = v)
   const setCheckBox = (v: boolean) => (checkBox.value = v)
 
+  const setSelectedDate = (v: string) => (selectedDate.value = v)
+  const setSelectedStartMin = (v: number) => (selectedStartMin.value = v)
+  const setSelectedEndMin = (v: number) => (selectedEndMin.value = v)
+  const setRegionId = (v: string) => (regionId.value = v)
+
   const resetStore = () => {
     step.value = 1
     type.value = null
@@ -122,6 +134,10 @@ export const useBookingStore = defineStore('booking', () => {
     country.value = 'United States'
     state.value = ''
     checkBox.value = false
+    selectedDate.value = ''
+    selectedStartMin.value = 0
+    selectedEndMin.value = 0
+    regionId.value = ''
     Object.values(STORAGE_KEYS).forEach((k) => localStorage.removeItem(k))
   }
 
@@ -145,6 +161,10 @@ export const useBookingStore = defineStore('booking', () => {
     saveToStorage(STORAGE_KEYS.CHECK_BOX, v)
     localStorage.setItem(STORAGE_KEYS.MARKETING_CONSENT, String(v))
   })
+  watch(selectedDate, (v) => saveToStorage(STORAGE_KEYS.SELECTED_DATE, v))
+  watch(selectedStartMin, (v) => saveToStorage(STORAGE_KEYS.SELECTED_START_MIN, v))
+  watch(selectedEndMin, (v) => saveToStorage(STORAGE_KEYS.SELECTED_END_MIN, v))
+  watch(regionId, (v) => saveToStorage(STORAGE_KEYS.REGION_ID, v))
 
   return {
     step,
@@ -165,6 +185,10 @@ export const useBookingStore = defineStore('booking', () => {
     country,
     state,
     checkBox,
+    selectedDate,
+    selectedStartMin,
+    selectedEndMin,
+    regionId,
     setStep,
     setType,
     setCategory,
@@ -187,6 +211,10 @@ export const useBookingStore = defineStore('booking', () => {
     setCountry,
     setState,
     setCheckBox,
+    setSelectedDate,
+    setSelectedStartMin,
+    setSelectedEndMin,
+    setRegionId,
     resetStore,
   }
 })
